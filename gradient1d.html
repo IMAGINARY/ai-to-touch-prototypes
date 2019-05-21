@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+
+        <title>Gradient descent</title>
+        <style type="text/css">
+            body {
+                margin: 0px;
+                padding: 0px;
+                background-color: rgb(10, 0, 30);
+            }
+
+            #CSCanvas {
+              /*16:9*/
+                width: 100vw;
+                height: 56.25vw;
+                max-height: 100vh;
+                max-width: 177.77vh;
+                filter: invert(1);
+            }
+        </style>
+        <script type="text/javascript" src="common/js/Cindy.js"></script>
+
+      <script id="csinit" type="text/x-cindyscript">
+
+
+      f(x) := r0+(x=pi*x/16; sum(1..length(r), k, re(r_k)*cos(k*x)+im(r_k)*sin(k*x)));
+      df(x) := (x=pi*x/16; pi/16*sum(1..length(r), k, -k*re(r_k)*sin(k*x)+k*im(r_k)*cos(k*x)));
+
+xvals = (-160..160)/10;
+reset():=(
+  best = -100;
+  r0 = randomnormal();
+  while(|best|>13,
+    r = apply(1..15,k,randomnormal()/(k^1.3)+i*randomnormal()/(k^1.3));
+
+    forall(xvals, x, if(|f(x)-r0|>|f(best)-r0|, best=x));
+    r = r*(8.5-|r0|)/|f(best)-r0|;//fit screen
+
+    best = xvals_1;
+    forall(xvals, x, if(f(x)<f(best), best=x));
+
+  );
+  pts = [];
+
+  mode = "select";
+  N = 5;
+);
+reset();
+
+      </script>
+      <script id="csdraw" type="text/x-cindyscript">
+      //plot(f(x));
+      //connect(transpose([xvals,apply(xvals,x,f(x))]));
+      //draw((best,f(best)));
+
+if(mode=="select",
+  if((N-length(pts))==0, mode="final"; resetclock());
+
+  drawtext((-15,8), "approach the minimal function value!");
+  drawtext((-15,7), "$"+(N-length(pts))+"$ guess"+if((N-length(pts))==1,"","es")+" left");
+
+  x = mouse().x;
+  y = sin(seconds());
+  draw((x,0),(x,y));
+
+  drawtext((x,0),"$x$");
+  drawtext((x,y),"$f(x)=?$");
+);
+
+if(length(pts)>=2,
+  yourbest = pts_1;
+  forall(pts, x, if(f(x)<f(yourbest),yourbest=x));
+  pb = (yourbest,f(yourbest));
+  draw(pb+(-5,0),pb+(5,0), color->[0,1,1], alpha->.3);
+);
+
+if(mode=="compute",
+  speedfactor = max(5,(1+length(pts)));
+  if(speedfactor*seconds()>2,
+  	mode = "select";
+  );
+  x = pts_(-1);
+  y = min(1,speedfactor*seconds())*f(x);
+
+  drawtext((x,y/10),"$f(x)="+format(f(x),2)+"$", alpha->max(0,1-speedfactor*seconds()));
+  draw((x,0),(x,y));
+  if(speedfactor*seconds()>1,
+    df = df(x);
+    a = (speedfactor*seconds()-1);
+    v = (1,df);
+    v = .5*v/|v|;
+    draw((x,y)-a*v,(x,y)+a*v);
+    drawtext((x,y),"$f'(x)$", alpha->a, angle->arctan2([1,df]), align->"mid");
+
+  );
+);
+
+if(mode=="final",
+  a = min(1,seconds());
+  //plot(f(x),alpha->a);
+  connect(transpose([xvals,apply(xvals,x,f(x))]), alpha->a);
+
+  yourbest = pts_1;
+  forall(pts, x, if(f(x)<f(yourbest),yourbest=x));
+
+  err = |f(best)-f(yourbest)|;
+  if(err<.01,
+    drawtext((0,0),"you have reached the global minimum");
+    ,
+    drawtext((0,0),"you have reached the global minimum up to $" + format(err,3) + "$");
+  );
+
+
+  draw((best,f(best)), size->10, alpha->.3*a);
+  draw((best,f(best)),(best,f(yourbest)), size->3, alpha->.3*a, color->[0,1,1]);
+);
+
+forall(if(mode!="compute",1..length(pts),1..(length(pts)-1)), k,
+  x = pts_k;
+  y = f(x);
+  df = df(x);
+  c = hue(k*sqrt(.3))*.7;
+  draw((x,y),color->c);
+  v = (1,df);
+  v = .5*v/|v|;
+  draw((x,y)-v,(x,y)+v,color->c);
+);
+
+
+      </script>
+      <script id="csmousedown" type="text/x-cindyscript">
+      if(mode=="select" & (N-length(pts))>0,
+   x = mouse().x;
+   pts = pts :> x;
+   mode = "compute";
+   resetclock();
+);
+
+if(mode=="final",
+  reset();
+);
+
+      </script>
+
+        <script type="text/javascript">
+          var cdy = CindyJS({
+            scripts: "cs*",
+            geometry: [
+
+            ],
+            ports: [
+              {id: "CSCanvas", transform: [{visibleRect: [-16, -9, 16, 9]}]}
+            ],
+            autoplay: true
+          });
+        </script>
+    </head>
+    <body>
+        <div id="CSCanvas"></div>
+    </body>
+    </html>
