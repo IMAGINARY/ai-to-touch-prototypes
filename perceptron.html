@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+
+        <title>A perceptron</title>
+        <style type="text/css">
+            body {
+                margin: 0px;
+                padding: 0px;
+                background-color: rgb(10, 0, 30);
+            }
+
+            #CSCanvas {
+              /*16:9*/
+                width: 100vw;
+                height: 56.25vw;
+                max-height: 100vh;
+                max-width: 177.77vh;
+                filter: invert(1);
+            }
+        </style>
+        <script type="text/javascript" src="common/js/Cindy.js"></script>
+
+      <script id="csinit" type="text/x-cindyscript">
+sigma(x):=1/(1+exp(-x));
+
+parametername = ["x_1", "x_2", "x_3","w_1", "w_2", "w_3", "b", "\sigma(x)"];
+parameterpos = [(-12,5), (-12,0), (-12,-5), (-6,2.5), (-6,0), (-6,-2.5), (1,7), (5,7)];
+parameterval = [.5,.5,.5,.4,.2,.3,0, "\frac{1}{1+e^{-x}}"];
+parameterclamp = [1,1,1,2,2,2,2];
+
+choice = 1;
+sigmalatex = ["\frac{1}{1+e^{-x}}", "x", "\tanh(x)", "\begin{cases}0 &\text{if } x<0\\1 &\text{if } x\geq 0\end{cases} ", "\begin{cases}0 &\text{if } x<0\\x &\text{if } x\geq 0\end{cases} "];
+sigmaf = ["1/(1+exp(-x))", "x","(exp(x)-exp(-x))/(exp(x)+exp(-x))","if(x<0,0,1)","if(x<0,0,x)"];
+
+activeparameter = -1;
+lastmouse = (0,0);
+
+      </script>
+      <script id="csdraw" type="text/x-cindyscript">
+
+      //mouse handling
+      if(activeparameter>0,
+        if(parametername_activeparameter=="\sigma(x)",
+          if((mouse()-lastmouse).y>0.1,
+            choice = mod(choice,length(sigmaf))+1;
+          );
+          if((mouse()-lastmouse).y<-0.1,
+            choice = mod(choice-2,length(sigmaf))+1;
+          );
+          parameterval_activeparameter = sigmalatex_choice;
+          parse("sigma(x):="+sigmaf_choice);
+          ,
+          parameterval_activeparameter = min(parameterclamp_activeparameter,max(-parameterclamp_activeparameter,parameterval_activeparameter + (mouse()-lastmouse).y));
+          parameterval_activeparameter = round(parameterval_activeparameter*10)/10;
+        );
+      );
+      lastmouse = mouse();
+
+//compute value of perception
+z = parameterval_1*parameterval_4+parameterval_2*parameterval_5+parameterval_3*parameterval_6+parameterval_7;
+
+//rudimentary nodes and edges
+forall(1..3,k,
+  draw(parameterpos_k,(0,0), color->[0,0,0], size->|parameterval_(k+3)|);
+  fillcircle(parameterpos_k,2, color->[.8,.7,.8], alpha->.2+|parameterval_(k)|/2);
+);
+
+      //central perceptron
+      fillcircle((1,0), 2, color->[.8,.7,.8], alpha->.2+|z|/2);
+      drawtext((-1,3),"$x_1 w_1 + x_2 w_2 + x_3 w_3 + b = "+z+"$");
+      drawtext((0,0),"$\sigma("+z+")$" + newline + "$= "+sigma(z)+"$");
+      drawtext((1,-6),"$\sigma(x_1 w_1 + x_2 w_2 + x_3 w_3 + b)$", size->30);
+
+
+      forall(1..length(parametername),k,
+          drawtext(parameterpos_k+(-1,0), "$"+parametername_k+"="+
+          if(k==activeparameter,"\mathbf","")+"{"+parameterval_k+"}$");
+      );
+
+      //plot
+      plotoffset = parameterpos_(-1)+(1,-2);
+      translate(plotoffset);
+      connect(apply((-40..40)/20,x,[x,sigma(x)]));
+      draw((z,sigma(z)));
+      draw((-2,0),(2,0), arrow->true, color->[0,0,0], alpha->.5);
+      draw((0,-1),(0,1), arrow->true, color->[0,0,0], alpha->.5);
+
+      </script>
+      <script id="csmultidown" type="text/x-cindyscript">
+      forall(1..length(parametername),k,
+        if(|mouse(), parameterpos_k|<5,
+          if(activeparameter==-1 % |mouse(), parameterpos_k|<|mouse(), parameterpos_activeparameter|,
+            activeparameter = k;
+          );
+        );
+      );
+
+      </script>
+
+      <script id="csmultiup" type="text/x-cindyscript">
+      activeparameter = -1;
+      </script>
+
+        <script type="text/javascript">
+          var cdy = CindyJS({
+            scripts: "cs*",
+            geometry: [
+
+            ],
+            ports: [
+              {id: "CSCanvas", transform: [{visibleRect: [-16, -9, 16, 9]}]}
+            ],
+            autoplay: true
+          });
+        </script>
+    </head>
+    <body>
+        <div id="CSCanvas"></div>
+    </body>
+    </html>
