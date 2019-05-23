@@ -54,7 +54,7 @@ reset():=(
   while(|best|>pi*.7, //the minimum should somehow lie in the middle
     r = apply(1..4,k,apply(1..4,l,(randomnormal()/(k^exponent+l^exponent)+i*randomnormal()/(k^exponent+l^exponent))));
     r_1_1 = randomnormal()*.2;
-    r_2_1 = r_2_1-.5; //add negative cosine parts: lift function at boundary 
+    r_2_1 = r_2_1-.5; //add negative cosine parts: lift function at boundary
     r_1_2 = r_1_2-.5;
     best = (0,0);
 
@@ -109,7 +109,7 @@ floor(y) := (
       <script id="csdraw" type="text/x-cindyscript">
 
       if (dragging,
-          dx = .3 * (sx - mouse().x); dy = .3 * (sy - mouse().y);,
+          dx = -.3 * (sx - mouse().x); dy = .3 * (sy - mouse().y);,
           dx = .9*dx; dy = .9*dy;
       );
 
@@ -152,7 +152,7 @@ drawall(
 //plot
 //forall(plotlines, list, connect(apply(list, project(#)), size->2));
 
-if(mode=="select",
+if(mode=="select" & !dragging,
   if((N-length(pts))==0, mode="final"; resetclock());
 
   drawtext((-15,8), "approach the minimal function value!");
@@ -244,7 +244,7 @@ forall(if(mode!="compute",1..length(pts),1..(length(pts)-1)), k,
 
 
 
-  light = |n*[1,2,3]|*[1,1,1]*(-.2);
+  light = |n*[1,2,3]|*[1,1,1]*(-.1);
   //draw(project(y-v),project(y+v),color->c);
   poly1 = apply([(y-v),(y+v), floor(y+v),floor(y-v)],project(#));
   poly2 = apply([(y-v-vs),(y-v+vs),(y+v+vs), (y+v-vs)],project(#));
