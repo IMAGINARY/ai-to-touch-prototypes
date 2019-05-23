@@ -49,24 +49,41 @@ reset():=(
 );
 reset();
 
+initpt = randomnormal();
+autopilot = true;
       </script>
       <script id="csdraw" type="text/x-cindyscript">
-      //plot(f(x));
-      //connect(transpose([xvals,apply(xvals,x,f(x))]));
-      //draw((best,f(best)));
+//plot(f(x));
+if(autopilot, connect(transpose([xvals,apply(xvals,x,f(x))]),alpha->.2));
+
+if(autopilot & (mode=="select" % mode=="compute"),
+  drawtext((-15,8), "The computer tries to approach the minimum through gradient descent.");
+);
 
 if(mode=="select",
   if((N-length(pts))==0, mode="final"; resetclock());
 
-  drawtext((-15,8), "approach the minimal function value!");
+  if(autopilot,
+    if(seconds()>.5,
+      x = if(pts==[], initpt, pts_(-1) - .5*df(pts_(-1)));
+      pts = pts :> x;
+      mode = "compute";
+      resetclock();
+    );
+    ,
+    drawtext((-15,8), "Approach the minimal function value! Click to guess!");
+  );
   drawtext((-15,7), "$"+(N-length(pts))+"$ guess"+if((N-length(pts))==1,"","es")+" left");
 
-  x = mouse().x;
-  y = sin(seconds());
-  draw((x,0),(x,y));
+  if(!autopilot,
+    x = mouse().x;
+    y = sin(seconds());
+    draw((x,0),(x,y));
 
-  drawtext((x,0),"$x$");
-  drawtext((x,y),"$f(x)=?$");
+    drawtext((x,0),"$x$");
+    drawtext((x,y),"$f(x)=?$");
+  );
+
 );
 
 if(length(pts)>=2,
@@ -80,6 +97,7 @@ if(mode=="compute",
   speedfactor = max(5,(1+length(pts)));
   if(speedfactor*seconds()>2,
   	mode = "select";
+    resetclock();
   );
   x = pts_(-1);
   y = min(1,speedfactor*seconds())*f(x);
@@ -93,7 +111,6 @@ if(mode=="compute",
     v = .5*v/|v|;
     draw((x,y)-a*v,(x,y)+a*v);
     drawtext((x,y),"$f'(x)$", alpha->a, angle->arctan2([1,df]), align->"mid");
-
   );
 );
 
@@ -106,10 +123,17 @@ if(mode=="final",
   forall(pts, x, if(f(x)<f(yourbest),yourbest=x));
 
   err = |f(best)-f(yourbest)|;
-  if(err<.01,
-    drawtext((0,0),"you have reached the global minimum");
+
+  subjectverb = if(autopilot, "The computer has reached", "You have reached");
+  if(err<.02,
+    drawtext((0,0), subjectverb + " the global minimum.");
     ,
-    drawtext((0,0),"you have reached the global minimum up to $" + format(err,3) + "$");
+    drawtext((0,0), subjectverb + " the global minimum up to $" + format(err,3) + "$.");
+  );
+  if(!autopilot,
+    drawtext((0,-2), "Click to see what the computer would have done.");
+    ,
+    drawtext((0,-2), "Now it is your turn! Click to restart the applet with another function.");
   );
 
 
@@ -131,7 +155,7 @@ forall(if(mode!="compute",1..length(pts),1..(length(pts)-1)), k,
 
       </script>
       <script id="csmousedown" type="text/x-cindyscript">
-      if(mode=="select" & (N-length(pts))>0,
+if(mode=="select" & !autopilot & (N-length(pts))>0,
    x = mouse().x;
    pts = pts :> x;
    mode = "compute";
@@ -139,7 +163,16 @@ forall(if(mode!="compute",1..length(pts),1..(length(pts)-1)), k,
 );
 
 if(mode=="final",
-  reset();
+  if(!autopilot,
+    initpt = pts_1;
+    pts = [];
+    mode = "select";
+    autopilot = true;
+    ,
+    reset();
+    autopilot = false;
+  );
+
 );
 
       </script>
