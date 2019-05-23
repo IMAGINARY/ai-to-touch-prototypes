@@ -109,7 +109,7 @@ floor(y) := (
       <script id="csdraw" type="text/x-cindyscript">
 
       if (dragging,
-          dx = -.3 * (sx - mouse().x); dy = .3 * (sy - mouse().y);,
+          dx = -.3 * (sx - mouse().x); dy = -.3 * (sy - mouse().y);,
           dx = .9*dx; dy = .9*dy;
       );
 
@@ -149,6 +149,36 @@ drawall(
 );
 
 
+
+forall(if(mode!="compute",1..length(pts),1..(length(pts)-1)), k,
+  x = pts_k;
+  y = (x_1,x_2,f(x));
+  df = df(x);
+  c = hue(k*sqrt(.3))*.7;
+  draw(project(x),project(y),color->c);
+
+  n = [-df_1,-df_2, 1];
+  n = n/|n|;
+  vs = cross(n,[0,0,1]);
+  vs = vs/|vs|;
+  v = cross(n,vs);
+
+
+  v = .5*v; vs = .5*vs;
+
+
+  light = |n*[1,2,3]|*[1,1,1]*(-.1);
+  //draw(project(y-v),project(y+v),color->c);
+  poly1 = apply([(y-v),(y+v), floor(y+v),floor(y-v)],project(#));
+  poly2 = apply([(y-v-vs),(y-v+vs),(y+v+vs), (y+v-vs)],project(#));
+
+  draw(project(y), color->c);
+  fillpoly(poly1, alpha->.2,color->c);
+  fillpoly(poly2, alpha->.5,color->c+light);
+  draw(project(floor(y+v)),project(floor(y-v)),color->c);
+
+);
+
 //plot
 if(autopilot,
   forall(plotlines, list, connect(apply(list, project(#)), size->2, alpha->.1));
@@ -178,10 +208,13 @@ if(mode=="select" & !dragging,
 
   if(!autopilot,
     x = inverseproject(mouse().xy);
-    y = (x_1,x_2, sin(seconds()));
-    draw(project(x), project(y));
-    drawtext(project(x),"$x$");
-    drawtext(project(y),"$f(x)=?$");
+    if(max(x,|#|)<pi,
+      y = (x_1,x_2, sin(seconds()));
+      draw(project(x), project(y));
+      drawtext(project(x),"$x$");
+      drawtext(project(y),"$f(x)=?$");
+    );
+
   );
 );
 /*
@@ -251,35 +284,6 @@ if(mode=="final",
   draw(project(best_1, best_2, f(best)), size->10, alpha->.8*a);
   draw(project(best_1, best_2, f(best)), project(best_1, best_2,floorh), size->10, alpha->.8*a, color->[0,1,0]);
   draw(project(best_1, best_2, f(best)), project(best_1,best_2, f(yourbest)), size->5, alpha->.8*a, color->[0,1,1]);
-);
-
-forall(if(mode!="compute",1..length(pts),1..(length(pts)-1)), k,
-  x = pts_k;
-  y = (x_1,x_2,f(x));
-  df = df(x);
-  c = hue(k*sqrt(.3))*.7;
-  draw(project(x),project(y),color->c);
-
-  n = [-df_1,-df_2, 1];
-  n = n/|n|;
-  vs = cross(n,[0,0,1]);
-  vs = vs/|vs|;
-  v = cross(n,vs);
-
-
-  v = .5*v; vs = .5*vs;
-
-
-  light = |n*[1,2,3]|*[1,1,1]*(-.1);
-  //draw(project(y-v),project(y+v),color->c);
-  poly1 = apply([(y-v),(y+v), floor(y+v),floor(y-v)],project(#));
-  poly2 = apply([(y-v-vs),(y-v+vs),(y+v+vs), (y+v-vs)],project(#));
-
-  draw(project(y), color->c);
-  fillpoly(poly1, alpha->.2,color->c);
-  fillpoly(poly2, alpha->.5,color->c+light);
-  draw(project(floor(y+v)),project(floor(y-v)),color->c);
-
 );
 
 
