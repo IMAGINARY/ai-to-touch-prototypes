@@ -108,6 +108,7 @@ floor(y) := (
       </script>
       <script id="csdraw" type="text/x-cindyscript">
 
+      if(autopilot % mode=="final", dx = .003);
       if (dragging,
           dx = -.3 * (sx - mouse().x); dy = -.3 * (sy - mouse().y);,
           dx = .9*dx; dy = .9*dy;
