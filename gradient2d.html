@@ -165,7 +165,7 @@ if(mode=="select" & !dragging,
   if((N-length(pts))==0, mode="final"; resetclock());
 
   if(autopilot,
-    if(seconds()>.2,
+    if(seconds()>.3,
       x = if(pts==[], initpt, pts_(-1) - .6*df(pts_(-1)));
       pts = pts :> x;
       mode = "compute";
@@ -203,10 +203,12 @@ if(mode=="compute",
 
   par = min(1,speedfactor*seconds());
   y = (x_1,x_2,f(x));
-  cy = (1-par)*x+par*y;
+  cy = (1-par)*floor(y)+par*y;
+  errc(cy);
 
+  drawtext(project(floor(y)),"$x$", alpha->par);
   drawtext(project(y),"$f(x)="+format(f(x),2)+"$", alpha->par);
-  draw(project(x),project(cy));
+  draw(project(floor(y)),project(cy));
   if(speedfactor*seconds()>1,
     df = df(x);
     a = (speedfactor*seconds()-1);
@@ -219,7 +221,7 @@ if(mode=="compute",
     v = .5*v; vs = .5*vs;
 
     draw(project(y-a*v),project(y+a*v));
-    drawtext(project(y),"$f'(x)$", alpha->a, angle->arctan2([1,df]), align->"mid");
+    //drawtext(project(y),"$f'(x)$", alpha->a, angle->arctan2([1,df]), align->"mid");
 
   );
 );
@@ -227,7 +229,7 @@ if(mode=="compute",
 if(mode=="final",
   a = min(1,seconds());
   //plot(f(x),alpha->a);
-  forall(plotlines, list, connect(apply(list, project(#)), size->2, alpha->.6*a));
+  forall(plotlines, list, connect(apply(list, project(#)), size->2, alpha->.5*a));
 
   yourbest = pts_1;
   forall(pts, x, if(f(x)<f(yourbest),yourbest=x));
@@ -236,14 +238,14 @@ if(mode=="final",
 
   subjectverb = if(autopilot, "The computer has reached", "You have reached");
   if(err<.02,
-    drawtext((0,0), subjectverb + " the global minimum.");
+    drawtext((-15,8), subjectverb + " the global minimum.");
     ,
-    drawtext((0,0), subjectverb + " the global minimum up to $" + format(err,3) + "$.");
+    drawtext((-15,8), subjectverb + " the global minimum up to $" + format(err,3) + "$.");
   );
   if(!autopilot,
-    drawtext((0,-2), "Click to see what the computer would have done.");
+    drawtext((-15,7), "Click to see what the computer would have done.");
     ,
-    drawtext((0,-2), "Now it is your turn! Click to restart the applet with another function.");
+    drawtext((-15,7), "Now it is your turn! Click to restart the applet with another function.");
   );
 
   draw(project(best_1, best_2, f(best)), size->10, alpha->.8*a);
