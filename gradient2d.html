@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+
+        <title>Gradient descent</title>
+        <style type="text/css">
+            body {
+                margin: 0px;
+                padding: 0px;
+                background-color: rgb(10, 0, 30);
+            }
+
+            #CSCanvas {
+              /*16:9*/
+                width: 100vw;
+                height: 56.25vw;
+                max-height: 100vh;
+                max-width: 177.77vh;
+                filter: invert(1);
+            }
+        </style>
+        <script type="text/javascript" src="common/js/Cindy.js"></script>
+
+      <script id="csinit" type="text/x-cindyscript">
+      f(x,y) := (sum(1..length(r), k, sum(1..length(r), l, re(r_k_l)*cos((k-1)*x+(l-1)*y)+im(r_k_l)*sin((k-1)*x+(l-1)*y))));
+      f(x) := f(x_1,x_2);
+      df(x,y) := [
+        (sum(1..length(r), k, sum(1..length(r), l, -(k-1)*re(r_k_l)*sin((k-1)*x+(l-1)*y)+(k-1)*im(r_k_l)*cos((k-1)*x+(l-1)*y)))),
+        (sum(1..length(r), k, sum(1..length(r), l, -(l-1)*re(r_k_l)*sin((k-1)*x+(l-1)*y)+(l-1)*im(r_k_l)*cos((k-1)*x+(l-1)*y))))
+      ];
+      df(x) := df(x_1,x_2);
+
+      //df(x) := (x=pi*x/16; pi/16*sum(1..length(r), k, -k*re(r_k)*sin(k*x)+k*im(r_k)*cos(k*x)));
+
+xvals = (-15..15)/15*pi;
+xyvals = directproduct(xvals, xvals);
+exponent = 2;
+floorh = -2;
+
+reset():=(
+  dragging = false;
+
+  sx = 0;
+  sy = 0;
+  dx = .05; dy = -.02;
+  phi = -.1;
+  lambda = pi/3;
+
+
+  resetclock();
+  t0 = 0;
+  best = (100,100);
+  while(|best|>pi*.7, //the minimum should somehow lie in the middle
+    r = apply(1..4,k,apply(1..4,l,(randomnormal()/(k^exponent+l^exponent)+i*randomnormal()/(k^exponent+l^exponent))));
+    r_1_1 = randomnormal()*.2;
+    r_2_1 = r_2_1-.5; //add negative cosine parts: lift function at boundary 
+    r_1_2 = r_1_2-.5;
+    best = (0,0);
+
+
+    forall(xyvals, x, if(|f(x)|>|f(best)|, best=x));
+    r = r*.9*|floorh|/|f(best)|;//fit screen
+
+    best = xyvals_1;
+    forall(xyvals, x, if(f(x)<f(best), best=x));
+  );
+
+
+  plotlines =
+    apply(xvals, y,
+      apply(xvals,x,
+        (x,y,f(x,y))
+      )
+    )
+    ++
+    apply(xvals, x,
+      apply(xvals,y,
+        (x,y,f(x,y))
+      )
+  );
+
+
+  pts = [];
+
+  mode = "select";
+  N = 5;
+);
+reset();
+
+project(x,y,z) := project([x,y,z]);
+
+project(x) := (
+  P*x
+);
+
+inverseproject(y) := (
+  inverse([P_1,P_2,[0,0,1]])*(y_1,y_2,floorh)
+);
+
+floor(y) := (
+  (y_1,y_2,floorh)
+);
+
+
+
+
+      </script>
+      <script id="csdraw" type="text/x-cindyscript">
+
+      if (dragging,
+          dx = .3 * (sx - mouse().x); dy = .3 * (sy - mouse().y);,
+          dx = .9*dx; dy = .9*dy;
+      );
+
+      sx = mouse().x;
+      sy = mouse().y;
+///      P = [cos(alpha), cos(seconds())]
+
+phi = phi + dx;
+lambda = lambda + dy;
+lambda = min(max(lambda,0.1),pi/2-.1);
+
+P =
+(
+  (-2,0,0),
+  (0,-2,0)
+)*(
+    (1, 0, 0),
+    (0, cos(lambda), -sin(lambda)),
+    (0, sin(lambda), cos(lambda))
+)*(
+    (cos(phi), -sin(phi), 0),
+    (sin(phi), cos(phi), 0),
+    (0, 0, 1)
+);
+
+
+//grid
+drawall(
+  apply(xvals, x,
+    [project(x,-pi,floorh),project(x,pi,floorh)]
+  )
+  ++
+  apply(xvals, y,
+    [project(-pi,y,floorh),project(pi,y,floorh)]
+  ),
+  color->[.2,.2,.2], alpha->.6
+);
+
+
+//plot
+//forall(plotlines, list, connect(apply(list, project(#)), size->2));
+
+if(mode=="select",
+  if((N-length(pts))==0, mode="final"; resetclock());
+
+  drawtext((-15,8), "approach the minimal function value!");
+  drawtext((-15,7), "$"+(N-length(pts))+"$ guess"+if((N-length(pts))==1,"","es")+" left");
+
+  x = inverseproject(mouse().xy);
+  y = (x_1,x_2, sin(seconds()));
+  draw(project(x), project(y));
+
+
+  drawtext(project(x),"$x$");
+  drawtext(project(y),"$f(x)=?$");
+);
+
+if(length(pts)>=2,
+  yourbest = pts_1;
+  forall(pts, x, if(f(x)<f(yourbest),yourbest=x));
+  pb = (yourbest,f(yourbest));
+  draw(pb+(-5,0),pb+(5,0), color->[0,1,1], alpha->.3); //TODO
+);
+
+if(mode=="compute",
+  speedfactor = max(5,(1+length(pts)));
+  if(speedfactor*seconds()>2,
+  	mode = "select";
+  );
+  x = pts_(-1);
+  //y = min(1,speedfactor*seconds())*f(x);
+
+  par = min(1,speedfactor*seconds());
+  y = (x_1,x_2,f(x));
+  cy = (1-par)*x+par*y;
+
+  drawtext(project(y),"$f(x)="+format(f(x),2)+"$", alpha->par);
+  draw(project(x),project(cy));
+  if(speedfactor*seconds()>1,
+    df = df(x);
+    a = (speedfactor*seconds()-1);
+
+    n = [-df_1,-df_2, 1];
+    n = n/|n|;
+    vs = cross(n,[0,0,1]);
+    vs = vs/|vs|;
+    v = cross(n,vs);
+    v = .5*v; vs = .5*vs;
+
+    draw(project(y-a*v),project(y+a*v));
+    drawtext(project(y),"$f'(x)$", alpha->a, angle->arctan2([1,df]), align->"mid");
+
+  );
+);
+
+if(mode=="final",
+  a = min(1,seconds());
+  //plot(f(x),alpha->a);
+  forall(plotlines, list, connect(apply(list, project(#)), size->2, alpha->.6*a));
+
+  yourbest = pts_1;
+  forall(pts, x, if(f(x)<f(yourbest),yourbest=x));
+
+  err = |f(best)-f(yourbest)|;
+  if(err<.01,
+    drawtext((0,0),"you have reached the global minimum");
+    ,
+    drawtext((0,0),"you have reached the global minimum up to $" + format(err,3) + "$");
+  );
+
+
+  draw(project(best_1, best_2,f(best)), size->10, alpha->.3*a);
+  draw(project(best_1, best_2,f(best)), project(best_1, best_2,floorh), size->10, alpha->.3*a, color->[0,1,0]);
+  draw(project(best_1, best_2,f(best)),project(best_1,best_2,f(yourbest)), size->3, alpha->.3*a, color->[0,1,1]);
+);
+
+forall(if(mode!="compute",1..length(pts),1..(length(pts)-1)), k,
+  x = pts_k;
+  y = (x_1,x_2,f(x));
+  df = df(x);
+  c = hue(k*sqrt(.3))*.7;
+  draw(project(x),project(y),color->c);
+
+  n = [-df_1,-df_2, 1];
+  n = n/|n|;
+  vs = cross(n,[0,0,1]);
+  vs = vs/|vs|;
+  v = cross(n,vs);
+
+
+  v = .5*v; vs = .5*vs;
+
+
+
+  light = |n*[1,2,3]|*[1,1,1]*(-.2);
+  //draw(project(y-v),project(y+v),color->c);
+  poly1 = apply([(y-v),(y+v), floor(y+v),floor(y-v)],project(#));
+  poly2 = apply([(y-v-vs),(y-v+vs),(y+v+vs), (y+v-vs)],project(#));
+
+  draw(project(y), color->c);
+  fillpoly(poly1, alpha->.2,color->c);
+  fillpoly(poly2, alpha->.5,color->c+light);
+  draw(project(floor(x+v)),project(floor(x-v)),color->c);
+
+);
+
+
+      </script>
+
+<script id="csmousedown" type="text/x-cindyscript">
+  sx = mouse().x;
+  sy = mouse().y;
+  x = inverseproject(mouse());
+  //if(|x_1|>pi%|x_2|>pi,
+    dragging = true;
+  //);
+</script>
+
+<script id="csmouseup" type="text/x-cindyscript">
+  dragging = false;
+</script>
+
+<script id="csmouseclick" type="text/x-cindyscript">
+if(mode=="select" & (N-length(pts))>0,
+   //x = mouse().x;
+   x = inverseproject(mouse());
+   if(|x_1|<pi&|x_2|<pi,
+     pts = pts :> x;
+     mode = "compute";
+     resetclock();
+   );
+);
+
+if(mode=="final",
+  reset();
+);
+
+      </script>
+
+        <script type="text/javascript">
+          var cdy = CindyJS({
+            scripts: "cs*",
+            geometry: [
+
+            ],
+            ports: [
+              {id: "CSCanvas", transform: [{visibleRect: [-16, -9, 16, 9]}]}
+            ],
+            autoplay: true
+          });
+        </script>
+    </head>
+    <body>
+        <div id="CSCanvas"></div>
+    </body>
+    </html>
