@@ -90,12 +90,23 @@ autopilot = true;
 
 project(x,y,z) := project([x,y,z]);
 
+sceneoffset = [0,-1,-10];
+scenefactor = 25;
 project(x) := (
-  P*x
+  regional(y);
+  y=P*x+sceneoffset;
+  scenefactor*(y_1,y_2)/y_3;
 );
 
 inverseproject(y) := (
-  inverse([P_1,P_2,[0,0,1]])*(y_1,y_2,floorh)
+  //inverse([P_1,P_2,[0,0,1]])*(y_1,y_2,floorh)
+  regional(A,B,mu);
+  y = y/scenefactor;
+  //mu * [y_1, y_2, 1] = P*[x_1, x_2, floorh]+sceneoffset)
+  A = inverse(P) * [y_1, y_2, 1];
+  B = -inverse(P) * sceneoffset;
+  mu = (floorh-B_3)/A_3;
+  mu*A+B
 );
 
 floor(y) := (
@@ -122,11 +133,7 @@ phi = phi + dx;
 lambda = lambda + dy;
 lambda = min(max(lambda,0.1),pi/2-.1);
 
-P =
-(
-  (-2,0,0),
-  (0,-2,0)
-)*(
+P = (
     (1, 0, 0),
     (0, cos(lambda), -sin(lambda)),
     (0, sin(lambda), cos(lambda))
@@ -156,7 +163,7 @@ forall(if(mode!="compute",1..length(pts),1..(length(pts)-1)), k,
   y = (x_1,x_2,f(x));
   df = df(x);
   c = hue(k*sqrt(.3))*.7;
-  draw(project(x),project(y),color->c);
+  draw(project(floor(y)),project(y),color->c);
 
   n = [-df_1,-df_2, 1];
   n = n/|n|;
@@ -170,8 +177,8 @@ forall(if(mode!="compute",1..length(pts),1..(length(pts)-1)), k,
 
   light = |n*[1,2,3]|*[1,1,1]*(-.1);
   //draw(project(y-v),project(y+v),color->c);
-  poly1 = apply([(y-v),(y+v), floor(y+v),floor(y-v)],project(#));
-  poly2 = apply([(y-v-vs),(y-v+vs),(y+v+vs), (y+v-vs)],project(#));
+  poly1 = apply([(y-v),(y+v), floor(y+v),floor(y-v)], project(#));
+  poly2 = apply([(y-v-vs),(y-v+vs),(y+v+vs), (y+v-vs)], project(#));
 
   draw(project(y), color->c);
   fillpoly(poly1, alpha->.2,color->c);
