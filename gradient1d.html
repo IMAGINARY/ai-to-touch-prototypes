@@ -56,6 +56,8 @@ while(|df(initpt)|<1 & f(initpt)<0 & cnt < 10,
   cnt = cnt + 1;
 );
 autopilot = true;
+
+dot(x,y):=(x*y);
       </script>
       <script id="csdraw" type="text/x-cindyscript">
 //plot(f(x));
@@ -70,7 +72,14 @@ if(mode=="select",
 
   if(autopilot,
     if(seconds()>.5,
-      x = if(pts==[], initpt, pts_(-1) - .8*df(pts_(-1)));
+      x = if(pts==[], initpt,
+        gamma = if(length(pts)>=2,
+          |dot(pts_(-1)-pts_(-2), df(pts_(-1))-df(pts_(-2)))|/dot(df(pts_(-1))-df(pts_(-2)),df(pts_(-1))-df(pts_(-2))) //from https://en.wikipedia.org/wiki/Gradient_descent
+          ,
+          1
+        );
+        pts_(-1) - gamma*df(pts_(-1))
+      );
       pts = pts :> x;
       mode = "compute";
       resetclock();

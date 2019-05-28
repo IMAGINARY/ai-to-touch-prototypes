@@ -104,7 +104,7 @@ floor(y) := (
 
 
 
-
+dot(x,y):=(x*y);
       </script>
       <script id="csdraw" type="text/x-cindyscript">
 
@@ -197,7 +197,14 @@ if(mode=="select" & !dragging,
 
   if(autopilot,
     if(seconds()>.3,
-      x = if(pts==[], initpt, pts_(-1) - .6*df(pts_(-1)));
+      x = if(pts==[], initpt,
+        gamma = if(length(pts)>=2,
+          |dot(pts_(-1)-pts_(-2), df(pts_(-1))-df(pts_(-2)))|/dot(df(pts_(-1))-df(pts_(-2)),df(pts_(-1))-df(pts_(-2))) //from https://en.wikipedia.org/wiki/Gradient_descent
+          ,
+          .5
+        );
+        pts_(-1) - gamma*df(pts_(-1))
+      );
       pts = pts :> x;
       mode = "compute";
       resetclock();
@@ -238,7 +245,6 @@ if(mode=="compute",
   par = min(1,speedfactor*seconds());
   y = (x_1,x_2,f(x));
   cy = (1-par)*floor(y)+par*y;
-  errc(cy);
 
   drawtext(project(floor(y)),"$x$", alpha->par);
   drawtext(project(y),"$f(x)="+format(f(x),2)+"$", alpha->par);
