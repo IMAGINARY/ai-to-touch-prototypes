@@ -58,6 +58,19 @@ while(|df(initpt)|<1 & f(initpt)<0 & cnt < 10,
 autopilot = true;
 
 dot(x,y):=(x*y);
+
+gradientdescent() := (
+  regional(gamma, x);
+  x = if(pts==[], initpt,
+    gamma = if(length(pts)>=2,
+      |dot(pts_(-1)-pts_(-2), df(pts_(-1))-df(pts_(-2)))|/dot(df(pts_(-1))-df(pts_(-2)),df(pts_(-1))-df(pts_(-2))) //from https://en.wikipedia.org/wiki/Gradient_descent
+      ,
+      1
+    );
+    pts_(-1) - gamma*df(pts_(-1))
+  );
+  mod(x+16,32)-16
+);
       </script>
       <script id="csdraw" type="text/x-cindyscript">
 //plot(f(x));
@@ -72,14 +85,7 @@ if(mode=="select",
 
   if(autopilot,
     if(seconds()>.5,
-      x = if(pts==[], initpt,
-        gamma = if(length(pts)>=2,
-          |dot(pts_(-1)-pts_(-2), df(pts_(-1))-df(pts_(-2)))|/dot(df(pts_(-1))-df(pts_(-2)),df(pts_(-1))-df(pts_(-2))) //from https://en.wikipedia.org/wiki/Gradient_descent
-          ,
-          1
-        );
-        pts_(-1) - gamma*df(pts_(-1))
-      );
+      x = gradientdescent();
       pts = pts :> x;
       mode = "compute";
       resetclock();
@@ -92,9 +98,7 @@ if(mode=="select",
   if(!autopilot,
     x = mouse().x;
     ,
-    x = if(pts==[], initpt, pts_(-1));
-    x = x-.8*df(x)*(seconds()/.5);
-
+    x = if(pts==[], initpt, pts_(-1))*(1-seconds()/.5) + gradientdescent()*(seconds()/.5);
   );
   y = sin(seconds());
   draw((x,0),(x,y));

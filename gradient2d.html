@@ -116,6 +116,21 @@ floor(y) := (
 
 
 dot(x,y):=(x*y);
+
+
+gradientdescent() := (
+  regional(gamma, x);
+  x = if(pts==[], initpt,
+    gamma = if(length(pts)>=2,
+      |dot(pts_(-1)-pts_(-2), df(pts_(-1))-df(pts_(-2)))|/dot(df(pts_(-1))-df(pts_(-2)),df(pts_(-1))-df(pts_(-2))) //from https://en.wikipedia.org/wiki/Gradient_descent
+      ,
+      .5
+    );
+    pts_(-1) - gamma*df(pts_(-1))
+  );
+  apply(x, c, mod(c+pi,2*pi)-pi) //mod into domain
+);
+
       </script>
       <script id="csdraw" type="text/x-cindyscript">
 
@@ -204,14 +219,7 @@ if(mode=="select" & !dragging,
 
   if(autopilot,
     if(seconds()>.3,
-      x = if(pts==[], initpt,
-        gamma = if(length(pts)>=2,
-          |dot(pts_(-1)-pts_(-2), df(pts_(-1))-df(pts_(-2)))|/dot(df(pts_(-1))-df(pts_(-2)),df(pts_(-1))-df(pts_(-2))) //from https://en.wikipedia.org/wiki/Gradient_descent
-          ,
-          .5
-        );
-        pts_(-1) - gamma*df(pts_(-1))
-      );
+      x = gradientdescent();
       pts = pts :> x;
       mode = "compute";
       resetclock();
