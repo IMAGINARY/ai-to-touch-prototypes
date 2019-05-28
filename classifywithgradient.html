@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
 
-        <title>Gradient descent seperating clusters</title>
+        <title>Gradient descent</title>
         <style type="text/css">
             body {
                 margin: 0px;
@@ -23,20 +23,52 @@
         <script type="text/javascript" src="common/js/Cindy.js"></script>
 
       <script id="csinit" type="text/x-cindyscript">
-      f(x,y) := (sum(1..length(r), k, sum(1..length(r), l, re(r_k_l)*cos((k-1)*x+(l-1)*y)+im(r_k_l)*sin((k-1)*x+(l-1)*y))));
-      f(x) := f(x_1, x_2);
-      df(x,y) := [
-        (sum(1..length(r), k, sum(1..length(r), l, -(k-1)*re(r_k_l)*sin((k-1)*x+(l-1)*y)+(k-1)*im(r_k_l)*cos((k-1)*x+(l-1)*y)))),
-        (sum(1..length(r), k, sum(1..length(r), l, -(l-1)*re(r_k_l)*sin((k-1)*x+(l-1)*y)+(l-1)*im(r_k_l)*cos((k-1)*x+(l-1)*y))))
-      ];
-      df(x) := df(x_1, x_2);
+      tanh(x) := (
+        (exp(x)-exp(-x))/(exp(x)+exp(-x))
+      );
 
-      //df(x) := (x=pi*x/16; pi/16*sum(1..length(r), k, -k*re(r_k)*sin(k*x)+k*im(r_k)*cos(k*x)));
+      dtanh(x) := (
+        1-tanh(x)^2
+      );
 
-xvals = (-10..10)/10*pi;
+      transfer(x):=(
+        tanh(x)
+      );
+
+      dtransfer(x):=(
+        dtanh(x)
+      );
+
+      nn(w, x) := (
+        transfer(w*x+1)
+      );
+
+      dwnn(w, x) := (
+        dtransfer(w*x+1)*x
+      );
+
+      error(w):= (
+        (sum(A,a,(nn(w,a)-1)^2)+sum(B,b,(nn(w,b)+1)^2))/length(A);
+      );
+
+      derror(w):= (
+        (sum(A,a,2*(nn(w,a)-1)*dwnn(w,a))+sum(B,b,(2*nn(w,b)+1)*dwnn(w,b)))/length(A);
+      );
+
+      w = (randomnormal(), randomnormal());
+      errc(error(w));
+      errc(derror(w));
+
+      f(x) := error(x);
+      f(x,y) := error([x,y]);
+      df(x) := derror(x);
+      df(x,y) := derror([x,y]);
+
+S = 4;
+xvals = (-10..10)/10*S;
 xyvals = directproduct(xvals, xvals);
 exponent = 2;
-floorh = -2;
+floorh = 0;
 
 reset():=(
   dragging = false;
@@ -51,20 +83,22 @@ reset():=(
   resetclock();
   t0 = 0;
   best = (100,100);
-  while(|best|>pi*.7, //the minimum should somehow lie in the middle
-    r = apply(1..4,k,apply(1..4,l,(randomnormal()/(k^exponent+l^exponent)+i*randomnormal()/(k^exponent+l^exponent))));
-    r_1_1 = randomnormal()*.2;
-    r_2_1 = r_2_1-.5; //add negative cosine parts: lift function at boundary
-    r_1_2 = r_1_2-.5;
-    best = (0,0);
 
-
-    forall(xyvals, x, if(|f(x)|>|f(best)|, best=x));
-    r = r*.9*|floorh|/|f(best)|;//fit screen
-
-    best = xyvals_1;
-    forall(xyvals, x, if(f(x)<f(best), best=x));
+  a = random(2*pi);
+  if(autopilot,
+    c0 = 1.5*(-1,-1),
+    c0 = 2*(cos(a),sin(a))
   );
+
+  a0 = -.2*c0+.3*(randomnormal(), randomnormal());
+  b0 = c0+.3*(randomnormal(), randomnormal());
+  A = apply(1..20, (randomnormal(), randomnormal())+a0);
+  B = apply(1..20, (randomnormal(), randomnormal())+b0);
+
+
+  best = xyvals_1;
+  forall(xyvals, x, if(f(x)<f(best), best=x));
+//  );
 
 
   plotlines =
@@ -84,14 +118,16 @@ reset():=(
   mode = "select";
   N = 5;
 );
-reset();
-initpt = -(pi*.5,pi*.4);
+initpt = -(S*.4,S*.1);
 autopilot = true;
+
+reset();
+
 
 project(x,y,z) := project([x,y,z]);
 
-sceneoffset = [0,-1,-10];
-scenefactor = 25;
+sceneoffset = [0,.3*S,-5*S];
+scenefactor = 35;
 project(x) := (
   regional(y);
   y=P*x+sceneoffset;
@@ -124,11 +160,11 @@ gradientdescent() := (
     gamma = if(length(pts)>=2,
       |dot(pts_(-1)-pts_(-2), df(pts_(-1))-df(pts_(-2)))|/dot(df(pts_(-1))-df(pts_(-2)),df(pts_(-1))-df(pts_(-2))) //from https://en.wikipedia.org/wiki/Gradient_descent
       ,
-      .5
+      |pts_1|
     );
     pts_(-1) - gamma*df(pts_(-1))
   );
-  apply(x, c, mod(c+pi,2*pi)-pi) //mod into domain
+  apply(x, c, if(|c|>S, c/|c|*S, c)) //clamp into domain
 );
 
       </script>
@@ -162,11 +198,11 @@ P = (
 //grid
 drawall(
   apply(xvals, x,
-    [project(x,-pi,floorh),project(x,pi,floorh)]
+    [project(x,-S,floorh),project(x,S,floorh)]
   )
   ++
   apply(xvals, y,
-    [project(-pi,y,floorh),project(pi,y,floorh)]
+    [project(-S,y,floorh),project(S,y,floorh)]
   ),
   color->[.2,.2,.2], alpha->.6
 );
@@ -204,7 +240,7 @@ forall(if(mode!="compute",1..length(pts),1..(length(pts)-1)), k,
 
 //plot
 if(autopilot,
-  forall(plotlines, list, connect(apply(list, project(#)), size->2, alpha->.1));
+  forall(plotlines, list, connect(apply(list, project(#)), size->2, alpha->.3));
 );
 
 
@@ -231,7 +267,7 @@ if(mode=="select" & !dragging,
 
   if(!autopilot,
     x = inverseproject(mouse().xy);
-    if(max(x,|#|)<pi,
+    if(max(x,|#|)<S,
       y = (x_1,x_2, sin(seconds()));
       draw(project(x), project(y));
       drawtext(project(x),"$x$");
@@ -309,6 +345,44 @@ if(mode=="final",
 );
 
 
+
+////classification meaning draw
+
+
+if(pts!=[],
+  w = pts_(-1);,
+
+  x = inverseproject(mouse());
+  w = (x_1, x_2);
+);
+
+translate((16-4,9-4));
+scale(.8);
+clip(polygon([[-6,-6],[-6,6],[6,6],[6,-6]]));
+
+draw(line([w_1,w_2,1]));
+fill(halfplane(
+  line([w_1,w_2,1]),
+  point([0,0,1])
+), color->hue(0.3), alpha->.2);
+
+fill(halfplane(
+  line([w_1,w_2,1]),
+  point([-1000*w_1,-1000*w_2,1])
+), color->hue(0.8), alpha->.2);
+
+
+
+forall(A, a,
+  draw(a, color->hue(0.3), alpha->if(nn(w,a)>0,.9,.2))
+);
+forall(B, b,
+  draw(b, color->hue(0.8), alpha->if(nn(w,b)<0,.9,.2))
+);
+
+
+drawtext((0,3.5), align->"mid", "error: $"+format(error(w),2)+"$");
+
       </script>
 
 <script id="csmousedown" type="text/x-cindyscript">
@@ -328,7 +402,7 @@ if(mode=="final",
 if(mode=="select" & !autopilot & (N-length(pts))>0,
    //x = mouse().x;
    x = inverseproject(mouse());
-   if(|x_1|<pi&|x_2|<pi,
+   if(|x_1|<S&|x_2|<S,
      pts = pts :> [x_1, x_2];
      mode = "compute";
      resetclock();
