@@ -33,7 +33,7 @@ reset():=(
   best = -100;
   r0 = randomnormal();
   while(|best|>13,
-    r = apply(1..15,k,randomnormal()/(k^1.5)+i*randomnormal()/(k^1.5));
+    r = apply(1..10,k,randomnormal()/(k^2)+i*randomnormal()/(k^2));
     r_1 = r_1-1;//lift function at boundaries
     forall(xvals, x, if(|f(x)-r0|>|f(best)-r0|, best=x));
     r = r*(8.5-|r0|)/|f(best)-r0|;//fit screen
@@ -45,15 +45,17 @@ reset():=(
   pts = [];
 
   mode = "select";
-  N = 5;
+  N = 7;
 );
 reset();
 
 initpt = -8;
 cnt = 0;
-while(|df(initpt)|<1 & f(initpt)<0 & cnt < 10,
-  initpt = randomnormal();
+while((|df(initpt)|<1 % f(initpt)<0) & cnt < 10,
+  //initpt = randomnormal();
+  reset();
   cnt = cnt + 1;
+  errc(cnt);
 );
 autopilot = true;
 
