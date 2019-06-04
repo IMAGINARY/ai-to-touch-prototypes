@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+
+        <title>Unsupervised learning</title>
+        <style type="text/css">
+            body {
+                margin: 0px;
+                padding: 0px;
+                width: 100vw;
+                height: 100vh;
+                background-color: rgb(10, 0, 30);
+            }
+
+            #CSCanvas {
+              /*16:9*/
+                width: 100vw;
+                height: 56.25vw;
+                max-height: 100vh;
+                max-width: 177.77vh;
+                /*position: absolute;
+                top: 50%; left: 50%;
+                transform: translate(-50%, -50%);*/
+                filter: invert(1);
+            }
+
+            .button{
+              background-color: rgba(100,100,100,.4);
+              border: 1px solid white;
+              border-radius: 5px;
+              color: white;
+              width: 20vw;
+              font-size: xx-large;
+              font-family: sans-serif;
+              position: absolute;
+              text-align: center;
+              padding: 2vh;
+              top: 85vh;
+              transition: opacity .3s linear;
+            }
+
+            .button:hover {
+              background-color: rgba(100,100,100,.8);
+            }
+
+            #button1 {
+              left: 10vw;
+            }
+
+            #button2 {
+              right: 10vw;
+            }
+        </style>
+        <script type="text/javascript" src="common/js/Cindy.js"></script>
+
+      <script id="csinit" type="text/x-cindyscript">
+        level = 1;
+        resetclock();
+
+        //level 1
+        n = 30;
+        v0 = (0,0);
+        hist = apply(n, n, (0,0));
+        v1 = (randomnormal(),randomnormal());
+
+        p = (0,0);
+        dt = 0;
+        lastseconds = 0;
+
+
+        ncorrect = nfalse = nstrike = 0;
+        click(ans) := (
+          if(t9()>1,
+            if(level==1,
+              if(ans==cval, correct(), incorrect());
+              //t0 = 40*random();
+            );
+            if(level==2,
+              if(xor((hist_1-hist_2).x<0,ans>0), correct(), incorrect());
+            );
+            if(level==3,
+              if(xor(mod(randomint,2)==1,ans>0), correct(), incorrect());
+            );
+          );
+          javascript("hidebuttons()");
+        );
+
+        forall(0..9,k,
+          parse("t"+k+"() := ( seconds()-t"+k+";        );          reset"+k+"() := (              t"+k+" = seconds();            );            t"+k+" = seconds();");
+        );
+
+        msg = "";
+
+        correct() := (
+          ncorrect = ncorrect + 1;
+          nstrike = nstrike + 1;
+          playsin(440*2^(nstrike/12), damp->4, line->2, amp->.2);
+
+          if(nstrike > 1,
+            msg = "your answer was correct 😃 ("+["first","second","third","fourth","fifth"]_nstrike + " time)" + newline + "Can you make 5 correct guesses in a row?";
+            ,
+            msg = "your answer was correct 😃";
+          );
+
+          if(nstrike>=5,
+            msg = "proceed to next level";
+            level = mod(level,3) + 1;
+            ncorrect = nstrike = nfalse = 0;
+            lastseconds = seconds();
+            reset0();reset1();reset2();
+          );
+
+          reset9();
+        );
+        incorrect() := (
+          msg = "your answer was not correct 😢";
+          playsin(440*2^(-5/12), damp->4, line->2, amp->.2);
+          nstrike = 0;
+          nfalse = nfalse + 1;
+          reset9();
+        );
+        randomint = 3;
+      </script>
+      <script id="csdraw" type="text/x-cindyscript">
+      drawtext((-15,8), "level: " + level);
+
+      drawtext((-15,7), "correct: " + ncorrect);
+      drawtext((-15,6), "false: " + nfalse);
+      drawtext((-15,5), "correct answers in a row: " + nstrike +"/5");
+
+
+
+      if(level==1,
+        cval = if(mod(t0()/2,2)>1,1,0);
+        fillcircle((0,0),5*mod(t0()/2,1), alpha->1-(mod(t0()/2,1)-.5)^2*4, color->hue(cval*sqrt(3)));
+      );
+      if(level==2,
+        v = t0()*v1+(1-t0())*v0;
+        dt = seconds()-lastseconds;
+        p = p+v*dt;
+        hist = [p] ++ hist_(1..(n-1));
+        if(t0()>1,
+          reset0();
+          v0 = v1;
+          v1 = -p+4*(randomnormal(),randomnormal());
+          if(|v1|>6, v1 = 6*v1/|v1|); //limit speed
+        );
+        al = 1;
+
+        forall(hist, p,
+          draw(p, size->20, alpha->.2*al);
+          al = al*.95;
+        );
+
+        draw(p, size->20);
+        lastseconds = seconds();
+        playsin(100*|v|, amp->2*min(1,|v|));
+      );
+      if(level==3,
+        if(t0()>1,
+          randomint = round(1+|randomnormal()|*3);
+          reset0();
+        );
+        forall(0..randomint, k,
+          draw((2+(t0()))*gauss(exp(2*pi*i*k/randomint+i*.4*t0())), alpha->1-(t0()-.5)^2*4, color->hue(randomint*sqrt(3)), size->10);
+        );
+      );
+
+      if(t9()<2,
+        a = (2-t9())/2;
+        drawtext((0,-6), msg, alpha->a, align->"mid", size->50);
+      );
+
+      if(t9()>1,
+        javascript("showbuttons()");
+      );
+
+      </script>
+    </head>
+    <body>
+      <div id="container">
+        <div id="CSCanvas"></div>
+        <div class="button" id="button1" onclick="cdy.evokeCS('click(0)')">ya</div>
+        <div class="button" id="button2" onclick="cdy.evokeCS('click(1)')">tidak</div>
+      </div>
+    </body>
+    <script type="text/javascript">
+      var cdy = CindyJS({
+        scripts: "cs*",
+        geometry: [
+
+        ],
+        ports: [
+          {id: "CSCanvas", transform: [{visibleRect: [-16, -9, 16, 9]}]}
+        ],
+        autoplay: true
+      });
+
+      var button1 = document.getElementById("button1");
+      var button2 = document.getElementById("button2");
+      function hidebuttons() {
+        button1.style.opacity = 0;
+        button2.style.opacity = 0;
+      }
+
+      function showbuttons() {
+        button1.style.opacity = 1;
+        button2.style.opacity = 1;
+      }
+    </script>
+    </html>
