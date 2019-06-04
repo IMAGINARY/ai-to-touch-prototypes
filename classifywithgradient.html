@@ -52,7 +52,7 @@
       );
 
       derror(w):= (
-        (sum(A,a,2*(nn(w,a)-1)*dwnn(w,a))+sum(B,b,(2*nn(w,b)+1)*dwnn(w,b)))/length(A);
+        (sum(A,a,2*(nn(w,a)-1)*dwnn(w,a))+sum(B,b,2*(nn(w,b)+1)*dwnn(w,b)))/length(A);
       );
 
       w = (randomnormal(), randomnormal());
@@ -89,6 +89,7 @@ reset():=(
     c0 = 1.5*(-1,-1),
     c0 = 2*(cos(a),sin(a))
   );
+  c0 = 1.4*c0;
 
   a0 = -.2*c0+.3*(randomnormal(), randomnormal());
   b0 = c0+.3*(randomnormal(), randomnormal());
@@ -182,7 +183,7 @@ gradientdescent() := (
 
 phi = phi + dx;
 lambda = lambda + dy;
-lambda = min(max(lambda,0.1),pi/2-.1);
+lambda = min(max(lambda,0.01),pi/2-.01);
 
 P = (
     (1, 0, 0),
@@ -354,6 +355,7 @@ if(pts!=[],
 
   x = inverseproject(mouse());
   w = (x_1, x_2);
+  w = apply(w, c, if(|c|>S, c/|c|*S, c));//clamp to domain
 );
 
 gsave();
