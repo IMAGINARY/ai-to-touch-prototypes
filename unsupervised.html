@@ -121,6 +121,7 @@
           reset9();
         );
         randomint = 3;
+        dir = randomnormal();
       </script>
       <script id="csdraw" type="text/x-cindyscript">
       drawtext((-15,8), "level: " + level);
@@ -158,12 +159,15 @@
         playsin(100*|v|, amp->2*min(1,|v|));
       );
       if(level==3,
-        if(t0()>1,
+        if(t0()>2,
           randomint = round(1+|randomnormal()|*3);
+          dir = randomnormal();
           reset0();
         );
         forall(0..randomint, k,
-          draw((2+(t0()))*gauss(exp(2*pi*i*k/randomint+i*.4*t0())), alpha->1-(t0()-.5)^2*4, color->hue(randomint*sqrt(3)), size->10);
+
+          param =t0()/2;
+          draw((2+param)*gauss(exp(2*pi*i*k/randomint+i*dir*.7*param)), alpha->1-(param-.5)^2*4, color->hue(randomint*sqrt(3)), size->10);
         );
       );
 
