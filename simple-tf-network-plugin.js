@@ -2,7 +2,7 @@ const model = tf.sequential({
     layers: [tf.layers.dense({
             units: 6,
             inputShape: [4],
-            kernelRegularizer: 'l1l2',
+            kernelRegularizer: tf.regularizers.l1l2({l1:0,l2:0.005}),
             biasRegularizer: 'l1l2',
             activation: 'relu'
         }),

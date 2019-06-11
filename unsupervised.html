@@ -55,13 +55,19 @@
             }
 
             #button3 {
-              top: 35vh;
+              top: 30vh;
               left: 50vw;
               transform: translateX(-50%);
             }
 
             #button4 {
-              bottom: 35vh;
+              top: 45vh;
+              left: 50vw;
+              transform: translateX(-50%);
+            }
+
+            #button5 {
+              top: 60vh;
               left: 50vw;
               transform: translateX(-50%);
             }
@@ -105,6 +111,7 @@
         cimgcnt = 0;
         xs = [];
         ys = [];
+        cnt = 0;
         //xs = [[1,0,0,0],[0,1,0,0]];
         //ys = [[1,0],[0,1]];
         //xs = [[1,1,1,1],[1,1,1,1]];
@@ -163,7 +170,7 @@
           playsin(440*2^(nstrike/12), damp->4, line->2, amp->.2);
 
           if(nstrike > 1,
-            msg = "your answer was correct 😃 ("+["first","second","third","fourth","fifth","sixth","seventh","eighth"]_nstrike + " time)" + newline + "Can you make 5 correct guesses in a row?";
+            msg = "your answer was correct 😃 ("+["first","second","third","fourth","fifth","sixth","seventh","eighth"]_nstrike + " time)" + newline + "Can you make four correct guesses in a row?";
             ,
             msg = "your answer was correct 😃";
           );
@@ -172,26 +179,31 @@
             msg = "";
             mode = "menu";
             //
-            javascript("hidebutton(1);hidebutton(2);showbutton(3);showbutton(4);");
+            javascript("hidebutton(1);hidebutton(2);showbutton(3);showbutton(4);showbutton(5);");
           );
 
           reset9();
         );
 
-        nextlevel() := (
-          javascript("hidebutton(3);hidebutton(4);showbutton(1);showbutton(2);");
-          level = mod(level,3) + 1;
-          required = 5;
+        restart() := (
+          resetclock();
+          javascript("hidebutton(3);hidebutton(4);hidebutton(5);showbutton(1);showbutton(2);");
+          required = 4;
           lt3 = t3();
           ncorrect = nstrike = nfalse = 0;
           reset0();reset1();reset2();reset9();
           mode = "user";
         );
 
+        nextlevel() := (
+          restart();
+          level = mod(level,3) + 1;
+        );
+
         usecomputer() := (
-          javascript("hidebutton(3);hidebutton(4);");
+          javascript("hidebutton(3);hidebutton(4);hidebutton(5);");
           resethistory();
-          required = 10;
+          required = 8;
           reset7();
           reset8();
           reset9();
@@ -231,19 +243,20 @@
               if(|v1|>6, v1 = 6*v1/|v1|); //limit speed
             );*/
             //x = hist_(1) ++ hist_(-1);
-            x = 4*[sin(t3()/2), cos(t3())]++4*[sin(t3()),cos(t3()/2)]
+            x = 4*[sin(t3()/2), cos(t3())]++4*[sin(t3()),cos(t3()/1.1234)]
 
           );
           if(level==3,
             //if(t0()>2,
             if(floor(t0()/2)!=floor(lt0/2),
-              randomint = round(1+1.4*|randomnormal()|);
+              randomint = 2+randomint(4);//round(2+2*|randomnormal()|);
+
               dir = randomnormal();
             );
             lt0 = t0();
               //reset0();
             //);
-            x = [randomint/8, dir, mod(t0()/2,1), mod(randomint*sqrt(3),1)];
+            x = [randomint/8, dir, mod(t0()/2,1), mod(randomint*0.43+.3,1)];
           );
           x
         );
@@ -277,8 +290,17 @@
               playsin(100*|v|, amp->.1);*/
 
               draw(x_[1,2], x_[3,4], color->[.5,.5,.5],size->10);
-              draw(x_[3,4], color->[.3,.2,.4], size->20);
-              draw(x_[1,2], color->[.5,1,.1], size->20);
+              fillcircle(x_[3,4], color->[1,1,1], 1.5);
+              fillcircle(x_[3,4], color->[.3,.2,.4], 1.4);
+              fillcircle(x_[1,2], color->[1,1,1], 1.5);
+              fillcircle(x_[1,2], color->[.5,1,.1], 1.4);
+              if(mode=="user",
+                //  x = 4*[sin(t3()/2), cos(t3())]++4*[sin(t3()),cos(t3()/1.1234)]
+                v1 = |[cos(t3()/2)/2, sin(t3())]|;
+                v2 = |[cos(t3()),sin(t3()/1.1234)/1.1234]|;
+                playsin(300*v1, line->"x12", amp->.1);
+                playsin(300*v2, line->"x34", amp->.1);
+              );
 
 
             );
@@ -288,16 +310,15 @@
               dir = x_2;
               forall(0..randomint, k,
                 //param =t0()/2;
-                draw((2+param)*gauss(exp(2*pi*i*k/randomint+i*dir*.7*param)), alpha->1-.9*(param-.5)^2*4, color->hue(x_4), size->30);
+                draw((2+param)*gauss(exp(2*pi*i*k/randomint+i*dir*.7*(param+10))), alpha->1-.9*(param-.5)^2*4, color->hue(x_4), size->30);
               );
             );
         );
 
         //applet
-          resetclock();
-          mode = "user";
-          level = 0;
-          nextlevel();
+
+          level = 1;
+          restart();
 
 
 
@@ -341,7 +362,7 @@
           forall(1..N_k, j0,
             forall(1..N_(k+1), j1,
               w = W_(k*2-1)_j0_j1;
-              draw(pos(k, j0), pos(k+1, j1), size->min(2,4*w*w), color->hue(if(w<0,.3,.8)));
+              draw(pos(k, j0), pos(k+1, j1), size->min(2,4*w*w), color->hue(if(w>0,.3,.8)));
             );
           );
         );
@@ -349,7 +370,7 @@
             forall(1..N_k, j,
               fillcircle(pos(k,j), .5, color->[.7,.7,.7], alpha->.5);
               w = if(k>1,W_(2*k-2)_j,0);
-              fillcircle(pos(k,j), .4, alpha->|w|, color->hue(if(w<0,.3,.8)));
+              fillcircle(pos(k,j), .4, alpha->|w|, color->hue(if(w>0,.3,.8)));
             );
         );
         drawtext(color->[1,1,1],pos(3,1)+(1,0), "ya");
@@ -379,7 +400,7 @@
           lx = x;
           cimgcnt = mod(cimgcnt,5) + 1;
           clearimage("cimg"+cimgcnt);
-          scale = 2;
+          scale = 1.5;
           canvas((-16,-9)/scale,(16,-9)/scale,"cimg"+cimgcnt,
               drawit(x);
           );
@@ -390,7 +411,7 @@
           predict([x],
             y = #_1;
             //computerguess(y);
-            computerguess_cimgcnt = if(y_1>.5, "ya", "tidak") + newline + if((y_1>.5) == answer(x),"✔","✗");
+            computerguess_cimgcnt = if(y_1>.5, "ya", "tidak") + "  " + if((y_1>.5) == answer(x),"✔","✗");
             if((y_1>.5) == answer(x), correct(), incorrect());
             /*clearimage("cimg"+cimgcnt);
             canvas((-16,-9)/scale,(16,-9)/scale,"cimg"+cimgcnt,
@@ -401,7 +422,8 @@
             //add correct answer to training data
             xs = xs :> x;
             ys = ys :> if(answer(x),[1,0],[0,1]);
-
+            cnt = cnt + 1;
+            if(cnt>20 & nstrike<4, resetweights(); cnt = 0;);
             //cut away too old answers.
             if(length(xs)==33, xs=xs_(2..33); ys=ys_(2..33));
           );
@@ -409,14 +431,14 @@
 
         //draw image history
         forall(1..5,k,
-          offset = ((mod(-k+cimgcnt,5)-3+t7())*5,-9);
+          offset = ((mod(-k+cimgcnt,5)-2.5+t7()-.5)*5,-9);
           drawimage(offset+(-3,0),offset+(3,0),"cimg"+k);
           drawtext(color->[1,1,1],offset+(-1.3,1), computerguess_k);
         );
 
 
         //train network on computed xs and ys
-        if(!computing & t8()>1/20 & length(xs)>=2,
+        if(!computing & t8()>1/15 & length(xs)>=2,
           reset8();
           computing = true;
           train(xs, ys,
@@ -437,8 +459,9 @@
         <div id="button1" class="visible" onclick="cdy.evokeCS('click(false)')">ya</div>
         <div id="button2" class="visible" onclick="cdy.evokeCS('click(true)')">tidak</div>
 
-        <div id="button3" class="hidden" onclick="cdy.evokeCS('nextlevel()')">proceed to next level</div>
-        <div id="button4" class="hidden" onclick="cdy.evokeCS('usecomputer()')">how the computer would learn?</div>
+        <div id="button3" class="hidden" onclick="cdy.evokeCS('restart()')">restart</div>
+        <div id="button4" class="hidden" onclick="cdy.evokeCS('nextlevel()')">proceed to next level</div>
+        <div id="button5" class="hidden" onclick="cdy.evokeCS('usecomputer()')">how the computer would learn?</div>
       </div>
     </body>
     <script type="text/javascript">
