@@ -136,6 +136,7 @@ CindyJS.registerPlugin(1, "simple-tf-network-plugin", function(api) {
             tf.tensor2d(xs, [xs.length, 4]),
             tf.tensor2d(ys, [ys.length, 2]), {
                 //batchSize: 32,
+                shuffle: true,
                 epochs: 1,
             }).then(() => api.evaluate(callback));
 
@@ -169,11 +170,8 @@ CindyJS.registerPlugin(1, "simple-tf-network-plugin", function(api) {
 
     api.defineFunction("resetweights", 0, function(args, modifs) {
       model.weights.forEach(w => {
-        const newVals = tf.ones(w.shape);
+        const newVals = tf.randomNormal(w.shape);
         w.val.assign(newVals);
       });
     });
-
-
-
 });
