@@ -36,8 +36,6 @@
               position: absolute;
               text-align: center;
               padding: 2vh;
-
-
             }
 
             .button:hover {
@@ -86,6 +84,7 @@
         <script type="text/javascript" src="common/js/Cindy.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.0/dist/tf.min.js"></script>
         <script src="simple-tf-network-plugin.js"></script>
+        <script src="url-parameters.js"></script>
 
       <script id="csinit" type="text/x-cindyscript">
       //nn
@@ -316,8 +315,7 @@
         );
 
         //applet
-
-          level = 1;
+          level = geturlparameter("level", 1);
           restart();
 
 
@@ -467,13 +465,10 @@
     <script type="text/javascript">
       var cdy = CindyJS({
         scripts: "cs*",
-        geometry: [
-
-        ],
         ports: [
           {id: "CSCanvas", transform: [{visibleRect: [-16, -9, 16, 9]}]}
         ],
-        use: ["simple-tf-network-plugin"],
+        use: ["simple-tf-network-plugin", "url-parameters"],
         autoplay: true
       });
 
