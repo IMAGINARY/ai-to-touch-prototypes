@@ -62,12 +62,12 @@
         ncorrect = nfalse = nstrike = 0;
 
         generaterandomx() := (
-          t0 = random()*1000;
-          t1 = random()*500;
-          t2 = random()*1000;
-          t3 = random()*500;
-          t4 = random()*500;
-          t5 = random()*500;
+          t0 = random(1000);
+          t1 = random(500);
+          t2 = random(1000);
+          t3 = random(500);
+          t4 = random(500);
+          t5 = random(500);
           getx()
         );
 
@@ -95,14 +95,13 @@
           );
 
 
+          msg = "your answer was correct " + ["😃","😄","😀","😁","🙃","😊","🤗"]_(randomint(7)+1);
           if(nstrike > 1,
-            msg = "your answer was correct 😃 ("
+            msg = msg + newline + "("
             + if(nstrike<=6,["first","second","third","fourth","fifth","sixth"]_nstrike,
                 if(nstrike + if(mod(nstrike, 10)==1 & nstrike!=11, "st", if(mod(nstrike, 10)==2 & nstrike!=12, "nd", if(mod(nstrike, 10)==3 & nstrike!=13, "rd", "th")))))
             + " time)" + newline
             + "Can you make " + if(required<=9,["one", "two", "three", "four", "five", "six", "seven", "eigth", "nine", "ten"]_required, required)+ " correct guesses in a row?";
-            ,
-            msg = "your answer was correct 😃";
           );
 
           if(nstrike>=required & mode=="user",
@@ -117,10 +116,21 @@
         restart() := (
           resetclock();
           javascript("hide([3,4,5]); show([1,2])");
+          if(level==1,
+              labels = ["biru", "merah"];//blue  red in Indonesian
+          );
+          if(level==2,
+              labels = ["kiri", "kanan"];//left right in Indonesian
+          );
+          if(level==3,
+              labels = ["genap", "gasal"];//even odd in Indonesian
+          );
+          javascript("setlabels(['"+labels_1+"','"+labels_2+"'])");
           required = geturlparameter("required", 4);
           lt3 = t3();
           ncorrect = nstrike = nfalse = 0;
           reset0();reset1();reset2();reset9();
+          msg = "";
           mode = "user";
         );
 
@@ -141,7 +151,7 @@
         );
 
         incorrect() := (
-          msg = "your answer was not correct 😢";
+          msg = "your answer was not correct " + ["😢","🙄","😕","😮","😞"]_(randomint(5)+1);
           if(mode=="user",
             playsin(440*2^(-5/12), damp->4, line->2, amp->.2);
           );
@@ -280,7 +290,7 @@
 
         if(t9()<2,
           a = (2-t9())/2;
-          drawtext(color->[1,1,1],(0,-6), msg, alpha->a, align->"mid", size->50);
+          drawtext(color->[1,1,1],(0,-5), msg, alpha->a, align->"mid", size->50);
         );
 
         if(t9()>1,
@@ -304,8 +314,8 @@
               fillcircle(pos(k,j), .4, alpha->|w|, color->hue(if(w>0,.3,.8)));
             );
         );
-        drawtext(color->[1,1,1],pos(3,1)+(1,0), "ya");
-        drawtext(color->[1,1,1],pos(3,2)+(1,0), "tidak");
+        drawtext(color->[1,1,1],pos(3,1)+(1,0), labels_1);
+        drawtext(color->[1,1,1],pos(3,2)+(1,0), labels_2);
         if(level==1,
           drawtext(color->[1,1,1],pos(1,1)+(-1,0), align->"right", "$\text{color}_\text{red}$");
           drawtext(color->[1,1,1],pos(1,2)+(-1,0), align->"right", "$\text{color}_\text{green}$");
@@ -405,6 +415,10 @@
         autoplay: true
       });
 
+      function setlabels(labels) {
+        document.getElementById("button1").innerHTML = labels[0];
+        document.getElementById("button2").innerHTML = labels[1];
+      }
       function hide(l) {
         for(k in l){
           document.getElementById("button"+l[k]).classList.remove("visible");
