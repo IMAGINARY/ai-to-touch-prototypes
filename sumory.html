@@ -1,6 +1,7 @@
 <!DOCTYPE html>
     <html>
     <head>
+      <meta charset="UTF-8">
       <script src="sumory.js"></script>
       <link rel="stylesheet" href="sumory-style.css">
     </head>
@@ -13,13 +14,19 @@
       <div id="content">
         <div id="cardcontainer"></div>
       </div>
+      <div id="messagebox" class="hidden">
+        <div id="messagecontainer">
+          <div id="closebutton" onclick="hide_message()">×</div>
+          <div id="message"></div>
+        </div>
+      </div>
       <div id="footer">
         <div id="description">Erkl&auml;rung: Hinter jeder Karte befindet sich eine Zahl. Jede Zahl, die du anklickst oder tippst, wird zu deiner Summe addiert. Du kannst 10 Zahlen antippen, um die h&ouml;chstm&ouml;gliche Summe zu erreichen. Eine bereits aufgedeckte Zahl kannst du auch mehrmals antippen.</div>
         <div id="buttons">
-          <div onClick="desordenar(cartasvalores)">Zahlen neu sortieren</div>
-          <div onClick="resetear()">Neues Zahlen-Set</div>
+          <div onClick="shufflecards()">Zahlen neu sortieren</div>
+          <div onClick="assignvalues()">Neues Zahlen-Set</div>
           <div onClick="calculate_strategy()">Strategie berechnen</div>
-          <div onClick="draw_all()">Alle Zahlen anzeigen</div>
+          <div onClick="showall()">Alle Zahlen anzeigen</div>
         </div>
       </div>
     </body>

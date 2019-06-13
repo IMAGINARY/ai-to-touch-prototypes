@@ -82,6 +82,11 @@ body {
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
   font-size: 2em;
+  user-select: none; /* supported by Chrome and Opera */
+   -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+   -moz-user-select: none; /* Firefox */
+   -ms-user-select: none; /* Internet Explorer/Edge */
 }
 
 .value {
@@ -126,4 +131,55 @@ content {
 
 h1 {
     text-align: center;
+}
+
+
+.visible {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity .3s linear;
+}
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s .3s, opacity .3s linear;
+}
+
+
+#messagebox {
+    z-index: 100;
+    position: absolute;
+    bottom: 40px;
+    left: 50vw;
+    color: black;
+    background: rgba(255,255,255,.7);
+    border-radius: 10px;
+    margin: 10px;
+    padding: 10px;
+}
+
+#messagecontainer {
+  position: relative;
+}
+
+#closebutton {
+  user-select: none; /* supported by Chrome and Opera */
+   -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+   -moz-user-select: none; /* Firefox */
+   -ms-user-select: none; /* Internet Explorer/Edge */
+  position: absolute;
+  font-size: xx-large;
+  top: -30px;
+  right: -30px;
+  text-align: center;
+  border-radius: 20px;
+  width: 40px;
+  height: 40px;
+  background-color: rgba(255,255,255,.4);
+}
+
+#closebutton:hover {
+  font-weight: bolder;
+  background-color: rgba(255,255,255,.8);
 }
