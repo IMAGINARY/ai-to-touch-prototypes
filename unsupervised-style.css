@@ -1,0 +1,78 @@
+body {
+    margin: 0px;
+    padding: 0px;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(10, 0, 30);
+}
+
+#CSCanvas {
+  /*16:9*/
+    width: 100vw;
+    height: 56.25vw;
+    max-height: 100vh;
+    max-width: 177.77vh;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    /*filter: invert(1);*/
+}
+
+.button{
+  background-color: rgba(100,100,100,.4);
+  border: 1px solid white;
+  border-radius: 5px;
+  color: white;
+  width: 20vw;
+  font-size: xx-large;
+  font-family: sans-serif;
+  position: absolute;
+  text-align: center;
+  padding: 2vh;
+}
+
+.button:hover {
+  background-color: rgba(100,100,100,.8);
+}
+
+#button1 {
+  top: 85vh;
+  left: 5vw;
+}
+
+#button2 {
+  top: 85vh;
+  right: 5vw;
+}
+
+#button3 {
+  top: 30vh;
+}
+
+#button4 {
+  top: 45vh;
+}
+
+#button5 {
+  top: 60vh;
+}
+
+.center {
+  left: 50vw;
+  transform: translateX(-50%);
+}
+
+.right {
+  right: 5vw;
+}
+
+.visible {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity .3s linear;
+}
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s .3s, opacity .3s linear;
+}

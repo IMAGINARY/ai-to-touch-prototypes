@@ -4,83 +4,7 @@
         <meta charset="UTF-8">
 
         <title>Unsupervised learning</title>
-        <style type="text/css">
-            body {
-                margin: 0px;
-                padding: 0px;
-                width: 100vw;
-                height: 100vh;
-                background-color: rgb(10, 0, 30);
-            }
-
-            #CSCanvas {
-              /*16:9*/
-                width: 100vw;
-                height: 56.25vw;
-                max-height: 100vh;
-                max-width: 177.77vh;
-                position: absolute;
-                top: 50%; left: 50%;
-                transform: translate(-50%, -50%);
-                /*filter: invert(1);*/
-            }
-
-            .visible, .hidden, .button{
-              background-color: rgba(100,100,100,.4);
-              border: 1px solid white;
-              border-radius: 5px;
-              color: white;
-              width: 20vw;
-              font-size: xx-large;
-              font-family: sans-serif;
-              position: absolute;
-              text-align: center;
-              padding: 2vh;
-            }
-
-            .button:hover {
-              background-color: rgba(100,100,100,.8);
-            }
-
-            #button1 {
-              top: 85vh;
-              left: 5vw;
-            }
-
-            #button2 {
-              top: 85vh;
-              right: 5vw;
-            }
-
-            #button3 {
-              top: 30vh;
-              left: 50vw;
-              transform: translateX(-50%);
-            }
-
-            #button4 {
-              top: 45vh;
-              left: 50vw;
-              transform: translateX(-50%);
-            }
-
-            #button5 {
-              top: 60vh;
-              left: 50vw;
-              transform: translateX(-50%);
-            }
-
-            .visible {
-              visibility: visible;
-              opacity: 1;
-              transition: opacity .3s linear;
-            }
-            .hidden {
-              visibility: hidden;
-              opacity: 0;
-              transition: visibility 0s .3s, opacity .3s linear;
-            }
-        </style>
+        <link rel="stylesheet" href="unsupervised-style.css">
         <script type="text/javascript" src="common/js/Cindy.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.0/dist/tf.min.js"></script>
         <script src="simple-tf-network-plugin.js"></script>
@@ -152,7 +76,7 @@
             x = getx();
             if(answer(x) == ans, correct(), incorrect());
           );
-          javascript("hidebutton(1); hidebutton(2);");
+          javascript("hide([1,2])");
           reset9();
         );
 
@@ -166,7 +90,10 @@
         correct() := (
           ncorrect = ncorrect + 1;
           nstrike = nstrike + 1;
-          playsin(440*2^(nstrike/12), damp->4, line->2, amp->.2);
+          if(mode=="user",
+            playsin(440*2^(nstrike/12), damp->4, line->2, amp->.2);
+          );
+
 
           if(nstrike > 1,
             msg = "your answer was correct 😃 ("
@@ -178,11 +105,10 @@
             msg = "your answer was correct 😃";
           );
 
-          if(nstrike>=required,
+          if(nstrike>=required & mode=="user",
             msg = "";
             mode = "menu";
-            //
-            javascript("hidebutton(1);hidebutton(2);showbutton(3);showbutton(4);showbutton(5);");
+            javascript("hide([1,2,3]); show([3,4,5]); movecenter([3,4,5]);");
           );
 
           reset9();
@@ -190,7 +116,7 @@
 
         restart() := (
           resetclock();
-          javascript("hidebutton(3);hidebutton(4);hidebutton(5);showbutton(1);showbutton(2);");
+          javascript("hide([3,4,5]); show([1,2])");
           required = geturlparameter("required", 4);
           lt3 = t3();
           ncorrect = nstrike = nfalse = 0;
@@ -200,13 +126,14 @@
 
         nextlevel() := (
           restart();
+          resethistory();
           level = mod(level,3) + 1;
         );
 
         usecomputer() := (
-          javascript("hidebutton(3);hidebutton(4);hidebutton(5);");
+          javascript("hide([1,2,5]); show([3,4]); moveright([3,4]);");
           resethistory();
-          required = 8;
+          //required = 8;
           reset7();
           reset8();
           reset9();
@@ -215,7 +142,9 @@
 
         incorrect() := (
           msg = "your answer was not correct 😢";
-          playsin(440*2^(-5/12), damp->4, line->2, amp->.2);
+          if(mode=="user",
+            playsin(440*2^(-5/12), damp->4, line->2, amp->.2);
+          );
           nstrike = 0;
           nfalse = nfalse + 1;
         );
@@ -338,7 +267,7 @@
             level + newline +
             ncorrect + newline +
             nfalse + newline +
-            nstrike + "/" + required);
+            nstrike + if(mode=="user","/" + required,""));
       );
 
       if(mode=="menu",
@@ -355,7 +284,7 @@
         );
 
         if(t9()>1,
-          javascript("showbutton(1); showbutton(2);");
+          javascript("show([1,2])");
         );
       );
       if(mode=="computer",
@@ -458,12 +387,12 @@
     <body>
       <div id="container">
         <div id="CSCanvas"></div>
-        <div id="button1" class="visible" onclick="cdy.evokeCS('click(false)')">ya</div>
-        <div id="button2" class="visible" onclick="cdy.evokeCS('click(true)')">tidak</div>
+        <div id="button1" class="visible button" onclick="cdy.evokeCS('click(false)')">ya</div>
+        <div id="button2" class="visible button" onclick="cdy.evokeCS('click(true)')">tidak</div>
 
-        <div id="button3" class="hidden" onclick="cdy.evokeCS('restart()')">restart</div>
-        <div id="button4" class="hidden" onclick="cdy.evokeCS('nextlevel()')">proceed to next level</div>
-        <div id="button5" class="hidden" onclick="cdy.evokeCS('usecomputer()')">how the computer would learn?</div>
+        <div id="button3" class="hidden button center" onclick="cdy.evokeCS('restart()')">restart</div>
+        <div id="button4" class="hidden button center" onclick="cdy.evokeCS('nextlevel()')">proceed to next level</div>
+        <div id="button5" class="hidden button center" onclick="cdy.evokeCS('usecomputer()')">how the computer would learn?</div>
       </div>
     </body>
     <script type="text/javascript">
@@ -476,14 +405,33 @@
         autoplay: true
       });
 
-      var button1 = document.getElementById("button1");
-      var button2 = document.getElementById("button2");
-      function hidebutton(k) {
-        document.getElementById("button"+k).className = "hidden";
+      function hide(l) {
+        for(k in l){
+          document.getElementById("button"+l[k]).classList.remove("visible");
+          document.getElementById("button"+l[k]).classList.add("hidden");
+        }
       }
 
-      function showbutton(k) {
-        document.getElementById("button"+k).className = "visible";
+      function show(l) {
+        for(k in l){
+          document.getElementById("button"+l[k]).classList.remove("hidden");
+          document.getElementById("button"+l[k]).classList.add("visible");
+        }
       }
+
+      function movecenter(l) {
+        for(k in l){
+          document.getElementById("button"+l[k]).classList.remove("right");
+          document.getElementById("button"+l[k]).classList.add("center");
+        }
+      }
+
+      function moveright(l) {
+        for(k in l){
+          document.getElementById("button"+l[k]).classList.remove("center");
+          document.getElementById("button"+l[k]).classList.add("right");
+        }
+      }
+
     </script>
     </html>
