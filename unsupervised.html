@@ -169,7 +169,11 @@
           playsin(440*2^(nstrike/12), damp->4, line->2, amp->.2);
 
           if(nstrike > 1,
-            msg = "your answer was correct 😃 ("+["first","second","third","fourth","fifth","sixth","seventh","eighth"]_nstrike + " time)" + newline + "Can you make four correct guesses in a row?";
+            msg = "your answer was correct 😃 ("
+            + if(nstrike<=6,["first","second","third","fourth","fifth","sixth"]_nstrike,
+                if(nstrike + if(mod(nstrike, 10)==1 & nstrike!=11, "st", if(mod(nstrike, 10)==2 & nstrike!=12, "nd", if(mod(nstrike, 10)==3 & nstrike!=13, "rd", "th")))))
+            + " time)" + newline
+            + "Can you make " + if(required<=9,["one", "two", "three", "four", "five", "six", "seven", "eigth", "nine", "ten"]_required, required)+ " correct guesses in a row?";
             ,
             msg = "your answer was correct 😃";
           );
@@ -187,7 +191,7 @@
         restart() := (
           resetclock();
           javascript("hidebutton(3);hidebutton(4);hidebutton(5);showbutton(1);showbutton(2);");
-          required = 4;
+          required = geturlparameter("required", 4);
           lt3 = t3();
           ncorrect = nstrike = nfalse = 0;
           reset0();reset1();reset2();reset9();
