@@ -135,9 +135,9 @@
         );
 
         nextlevel() := (
-          restart();
-          resethistory();
           level = mod(level,3) + 1;
+          resethistory();
+          restart();
         );
 
         usecomputer() := (
