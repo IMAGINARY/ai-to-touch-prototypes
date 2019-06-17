@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="463.02084mm"
+   height="330.72916mm"
+   viewBox="0 0 463.02084 330.72916"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   sodipodi:docname="restaurants.svg">
+  <style
+     type="text/css"
+     id="style2">
+     path:hover {
+           fill: #ff0000 !important;
+           fill-opacity: .2 !important;
+     }
+   </style>
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.4132165"
+     inkscape:cx="767.59069"
+     inkscape:cy="455.70315"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1920"
+     inkscape:window-height="1029"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(91.830841,-7.2755346)">
+    <image
+       sodipodi:absref="restaurants.jpg"
+       xlink:href="restaurants.jpg"
+       width="463.02084"
+       height="330.72916"
+       preserveAspectRatio="none"
+       id="image858"
+       x="-91.830841"
+       y="7.2755346" />
+    <path
+       style="fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:0.265;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m -62.993766,175.79615 23.880704,-14.41854 19.374908,16.22086 0.45058,34.24402 -45.50851,1.35174 z"
+       id="path899"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:0.265;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M -19.738154,135.69459 31.177307,134.79344 30.726727,96.494195 2.7908121,78.471025 -21.089892,100.54941 Z"
+       id="path901"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:0.265;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 74.883499,49.63395 c -0.45058,2.252895 -3.604636,58.12473 -3.604636,58.12473 l 65.333997,-4.5058 -6.30811,-54.06951 z"
+       id="path905"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:0.265;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 191.58355,78.921602 -4.95639,18.473751 -16.22085,7.209267 -1.35174,25.68302 61.72935,4.5058 1.80234,-56.322415 z"
+       id="path907"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:0.265;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 251.06,61.799589 -4.95636,51.366041 66.68571,5.40695 2.25291,-54.069515 z"
+       id="path909"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:0.265;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 128.95301,192.01701 74.3456,-4.5058 0.90114,-38.74982 -53.61893,-8.561 -4.05521,18.02317 -18.02317,5.85753 z"
+       id="path911"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:0.265;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 239.79552,187.96179 -6.30811,35.59577 69.83978,2.70347 1.80232,-32.44171 z"
+       id="path913"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:0.265;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m -67.04898,255.54869 62.6305234,6.75868 5.40695085,15.3197 15.77027475,1.80232 0.901158,30.63938 -92.368755,-2.70346 z"
+       id="path915"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:0.265;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 27.572671,272.22013 88.400876,270.4178 86.147981,230.31625 55.508588,211.84249 27.122094,231.2174 Z"
+       id="path917"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:0.265;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 138.41518,247.88884 -3.60464,47.31083 75.24674,-0.45059 -13.06679,-46.40966 z"
+       id="path919"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:0.265;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 237.09204,315.02516 82.45602,1.35173 -7.65985,-50.46488 -37.39809,-11.71506 -34.6946,18.02318 z"
+       id="path921"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>
