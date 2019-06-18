@@ -2,19 +2,36 @@
 
 let N;
 
+function getUrlVars() {
+  var vars = {};
+  var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+      vars[key] = value;
+  });
+  return vars;
+}
+
+function getUrlParam(parameter, defaultvalue){
+    var urlparameter = defaultvalue;
+    if(window.location.href.indexOf(parameter) > -1)
+        urlparameter = getUrlVars()[parameter];
+    return urlparameter;
+}
+
+
+
 //if field is a grid
-let Nh = 3; //TODO URL-parameter
-let Nw = 7;
+let Nh = getUrlParam("Nh",3);
+let Nw = getUrlParam("Nw",7);
 
 
-let draws = 7;
+let draws = getUrlParam("draws",7);
 let score = 0;
 let cdraws = 0;
 
 let cards = [];
 
-let mode = "image"; // "grid" or "image"//TODO URL-parameter
-let imagename = "images/restaurants.svg"; //TODO URL-parameter
+let mode = getUrlParam("mode", "grid"); // "grid" or "image"
+let imgsrc = getUrlParam("imgsrc","images/restaurants.svg");
 
 addinteraction = function(card) {
     card.text = document.createElement("div");
@@ -39,7 +56,7 @@ addinteraction = function(card) {
             this.appendChild(miniscore);
             score += this.value;
             cdraws++;
-            show_parameters();
+            update_parameters();
             if (cdraws == draws)
                 show_message(`final score: ${score}`);
         }
@@ -67,7 +84,7 @@ window.onload = function(e) {
         assignvalues();
     } else if (mode == "image") {
         let svgembed = document.createElement("embed");
-        svgembed.src = imagename;
+        svgembed.src = imgsrc;
         svgembed.type = "image/svg+xml";
         document.getElementById("content").appendChild(svgembed);
         svgembed.onload = function() {
@@ -90,14 +107,14 @@ var withsign = (v => ((v > 0) ? "+" : "").concat(v));
 
 var assignvalues = function() {
     hide_message();
-    let random_range = Math.floor((Math.random() * 99)); // random range number (maximum of random number)
+    let random_range = Math.floor((Math.random() * 99)); //random range number (maximum of random number)
     for (let id = 0; id < N; id++) {
         cards[id].value = Math.floor((Math.random() * random_range * 2)) - Math.floor((Math.random() * random_range * 2));
         cards[id].close();
     }
     cdraws = 0;
     score = 0;
-    show_parameters();
+    update_parameters();
 }
 
 //Fisher-Yates shuffle
@@ -118,10 +135,10 @@ function shufflecards() {
         cards[id].value = nvals[id];
     cdraws = 0;
     score = 0;
-    show_parameters();
+    update_parameters();
 }
 
-var show_parameters = function() {
+var update_parameters = function() {
     document.getElementById("contadortext").innerHTML = `Spielz&uuml;ge ${draws-cdraws}`;
     document.getElementById("scoretext").innerHTML = `Summe ${score}`;
 }
