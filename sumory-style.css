@@ -121,8 +121,9 @@ content {
 }
 
 #content {
-    display: flex;
-    justify-content: center;
+    /*display: flex;
+    justify-content: center;*/
+    position: relative;
 }
 
 
@@ -185,7 +186,22 @@ h1 {
   background-color: rgba(255,255,255,.8);
 }
 
-embed {
+embed, #svgoverlay {
+  position: absolute;
   width: 100vw;
   max-height: 70vh;
+  left: 0;
+  top: 0;
+}
+
+#svgoverlay {
+  z-index: 100; /*is on top of embed*/
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none; /*click through*/
+}
+
+path:hover {
+      fill: #ff0000 !important;
+      fill-opacity: .2 !important;
 }

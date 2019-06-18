@@ -1,18 +1,17 @@
 /*jshint esversion: 6 */
-
 let N;
 
 function getUrlVars() {
-  var vars = {};
-  var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
-      vars[key] = value;
-  });
-  return vars;
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
+        vars[key] = value;
+    });
+    return vars;
 }
 
-function getUrlParam(parameter, defaultvalue){
+function getUrlParam(parameter, defaultvalue) {
     var urlparameter = defaultvalue;
-    if(window.location.href.indexOf(parameter) > -1)
+    if (window.location.href.indexOf(parameter) > -1)
         urlparameter = getUrlVars()[parameter];
     return urlparameter;
 }
@@ -20,18 +19,18 @@ function getUrlParam(parameter, defaultvalue){
 
 
 //if field is a grid
-let Nh = getUrlParam("Nh",3);
-let Nw = getUrlParam("Nw",7);
+let Nh = getUrlParam("Nh", 3);
+let Nw = getUrlParam("Nw", 7);
 
 
-let draws = getUrlParam("draws",7);
+let draws = getUrlParam("draws", 7);
 let score = 0;
 let cdraws = 0;
 
 let cards = [];
 
 let mode = getUrlParam("mode", "grid"); // "grid" or "image"
-let imgsrc = getUrlParam("imgsrc","images/restaurants.svg");
+let imgsrc = getUrlParam("imgsrc", "images/restaurants.svg");
 
 addinteraction = function(card) {
     card.text = document.createElement("div");
@@ -39,20 +38,37 @@ addinteraction = function(card) {
     card.text.className = "value";
 
 
-    if(mode == "image") {
-      pos = card.getBBox();
-      //TODO: The following looks only proper in Firefox (not even chrome)
-      let foreignObject = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
-      foreignObject.setAttribute('x', pos.x);
-      foreignObject.setAttribute('y', pos.y);
-      foreignObject.setAttribute('height', pos.height);
-      foreignObject.setAttribute('width', pos.width);
-      foreignObject.style.pointerEvents = "none"; //click through foreignObject
-      card.htmlel = foreignObject;
-      svgdoc.getElementById("layer1").appendChild(card.htmlel);
+    if (mode == "image") {
+        /*
+        The following looks only proper in Firefox (not even chrome)
+        pos = card.getBBox();
+        let foreignObject = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
+        foreignObject.setAttribute('x', pos.x);
+        foreignObject.setAttribute('y', pos.y);
+        foreignObject.setAttribute('height', pos.height);
+        foreignObject.setAttribute('width', pos.width);
+        foreignObject.style.pointerEvents = "none"; //click through foreignObject
+        card.htmlel = foreignObject;
+        svgdoc.getElementById("layer1").appendChild(card.htmlel);
+        */
+
+        card.htmlel = document.createElement("div");
+        //use overlay instead
+
+        card.reposition = function() {
+            let box = card.getBoundingClientRect();
+            card.htmlel.style.position = "absolute";
+            card.htmlel.style.top = box.y + "px";
+            card.htmlel.style.left = box.x + "px";
+            card.htmlel.style.width = box.width + "px";
+            card.htmlel.style.height = box.height + "px";
+        }
+        card.reposition();
+
+        document.getElementById("svgoverlay").appendChild(card.htmlel);
 
     } else {
-      card.htmlel = card;
+        card.htmlel = card;
     }
     card.htmlel.appendChild(card.text);
 
@@ -102,9 +118,12 @@ window.onload = function(e) {
         assignvalues();
     } else if (mode == "image") {
         let svgembed = document.createElement("embed");
+        let svgoverlay = document.createElement("div");
+        svgoverlay.id = "svgoverlay";
         svgembed.src = imgsrc;
         svgembed.type = "image/svg+xml";
         document.getElementById("content").appendChild(svgembed);
+        document.getElementById("content").appendChild(svgoverlay);
         svgembed.onload = function() {
             svgdoc = svgembed.contentDocument || svgembed.getSVGDocument();
             paths = svgdoc.getElementsByTagName("path");
@@ -120,6 +139,14 @@ window.onload = function(e) {
         };
     }
 };
+
+window.onresize = function() {
+    if (mode == "image") {
+        for (let id = 0; id < N; id++) {
+            cards[id].reposition();
+        }
+    }
+}
 
 var withsign = (v => ((v > 0) ? "+" : "").concat(v));
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?xml-stylesheet type="text/css" href="../sumory-style.css" ?>    
+<?xml-stylesheet type="text/css" href="../sumory-style.css" ?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
@@ -18,14 +18,6 @@
    id="svg8"
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
    sodipodi:docname="restaurants.svg">
-  <style
-     type="text/css"
-     id="style2">
-     path:hover {
-           fill: #ff0000 !important;
-           fill-opacity: .2 !important;
-     }
-   </style>
   <defs
      id="defs2" />
   <sodipodi:namedview
