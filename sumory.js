@@ -19,11 +19,11 @@ function getUrlParam(parameter, defaultvalue) {
 
 
 //if field is a grid
-let Nh = getUrlParam("Nh", 3);
-let Nw = getUrlParam("Nw", 7);
+let Nh = getUrlParam("Nh", 3) | 0;
+let Nw = getUrlParam("Nw", 7) | 0;
 
 
-let draws = getUrlParam("draws", 7);
+let draws = getUrlParam("draws", 7) | 0;
 let score = 0;
 let cdraws = 0;
 
@@ -223,12 +223,11 @@ var calculate_strategy = function() {
 
 evaluate_strategy = function(seq, start_exploit) {
     var j = 0;
-    var k = 0;
     var final_sum = 0;
     var max_nr = -1000000;
     var max_index = -1;
 
-    for (k = 0; k < start_exploit; k++) {
+    for (let k = 0; k < start_exploit; k++) {
         final_sum += seq[k];
         if (seq[k] > max_nr) {
             max_nr = seq[k];
@@ -236,7 +235,7 @@ evaluate_strategy = function(seq, start_exploit) {
         }
     }
 
-    for (k = start_exploit; k < draws; k++) {
+    for (let k = start_exploit; k < draws; k++) {
         final_sum += seq[max_index];
     }
     return final_sum;

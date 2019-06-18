@@ -31,6 +31,7 @@ body {
   justify-content: space-around;
   font-size: xx-large;
   line-height: 1em;
+  z-index:;
 }
 
 #cardcontainer {
