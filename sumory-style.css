@@ -2,9 +2,10 @@ body {
     margin: 0px;
     padding: 0px;
     background-color: white;
-    color: black;
+    color: rgb(10,10,100);
     font-family: sans-serif;
     font-size: x-large;
+    filter: sepia;
 }
 
 #buttons {
@@ -85,6 +86,7 @@ body {
   position: absolute;
   left: 50%;
   top: 50%;
+  /* background-color: rgba(255,200,0,.6); */
   transform: translateX(-50%) translateY(-50%);
   font-size: 2em;
   user-select: none; /* supported by Chrome and Opera */
@@ -96,6 +98,7 @@ body {
 
 .value {
   animation:fadein 3s ease-out forwards;
+  /* background-color: rgba(255,200,0,.4); */
 }
 
 @keyframes fadein{
@@ -156,13 +159,14 @@ h1 {
 #messagebox {
     z-index: 100;
     position: absolute;
-    bottom: 40px;
+    top: 40px; /*TODO: proper center*/
     left: 50vw;
-    color: black;
-    background: rgba(255,255,255,.7);
+    margin: auto;
+    background: rgba(114, 178, 205, 0.59);
     border-radius: 10px;
     margin: 10px;
     padding: 10px;
+    font-size: xx-large;
 }
 
 #messagecontainer {

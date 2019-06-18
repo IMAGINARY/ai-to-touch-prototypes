@@ -95,7 +95,7 @@ addinteraction = function(card) {
             cdraws++;
             update_parameters();
             if (cdraws == draws)
-                show_message(`final score: ${score}`);
+                show_message(`Endergebnis: ${score}`);
         }
     };
 };
@@ -197,8 +197,9 @@ var update_parameters = function() {
 
 
 var showall = function() {
-    for (let id = 0; id < N; id++)
+    for (let id = 0; id < N; id++) {
         cards[id].open();
+    }
 }
 
 
