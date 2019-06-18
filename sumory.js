@@ -27,6 +27,7 @@ let draws = getUrlParam("draws", 7);
 let score = 0;
 let cdraws = 0;
 
+let checkerboard = false;
 let cards = [];
 
 let mode = getUrlParam("mode", "grid"); // "grid" or "image"
@@ -75,10 +76,12 @@ addinteraction = function(card) {
 
     card.open = function() {
         this.text.innerHTML = withsign(this.value);
+        this.className = "light";
     };
 
     card.close = function() {
         this.text.innerHTML = "";
+        this.className = "dark";
     };
 
     card.onclick = function(e) {
@@ -108,7 +111,11 @@ window.onload = function(e) {
                 cards[id] = document.createElement("div");
                 cards[id].style.width = 85 / Nw + "%";
                 cards[id].style.margin = 5 / Nw + "%";
-                cards[id].className = (i + j) % 2 ? "light" : "dark";
+                if(checkerboard) {
+                  cards[id].className = (i + j) % 2 ? "light" : "dark";
+                } else {
+                  cards[id].className = "dark";
+                }
                 cardcontainer.appendChild(cards[id]);
                 addinteraction(cards[id]);
             }
