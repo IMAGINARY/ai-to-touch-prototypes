@@ -27,7 +27,7 @@ let draws = getUrlParam("draws", 7);
 let score = 0;
 let cdraws = 0;
 
-let checkerboard = false;
+let checkerboard = getUrlParam("checkerboard", false);
 let cards = [];
 
 let mode = getUrlParam("mode", "grid"); // "grid" or "image"
@@ -76,12 +76,12 @@ addinteraction = function(card) {
 
     card.open = function() {
         this.text.innerHTML = withsign(this.value);
-        this.className = "light";
+        if(!checkerboard) this.className = "light";
     };
 
     card.close = function() {
         this.text.innerHTML = "";
-        this.className = "dark";
+        if(!checkerboard) this.className = "dark";
     };
 
     card.onclick = function(e) {
