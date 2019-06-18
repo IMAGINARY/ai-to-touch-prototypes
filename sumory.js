@@ -33,11 +33,13 @@ let cards = [];
 let mode = getUrlParam("mode", "grid"); // "grid" or "image"
 let imgsrc = getUrlParam("imgsrc", "images/restaurants.svg");
 
+let editmode = false;
+
 addinteraction = function(card) {
     card.text = document.createElement("div");
     card.text.innerHTML = "";
     card.text.className = "value";
-
+    card.text.card = card;
 
     if (mode == "image") {
         /*
@@ -76,16 +78,16 @@ addinteraction = function(card) {
 
     card.open = function() {
         this.text.innerHTML = withsign(this.value);
-        if(!checkerboard) this.className = "light";
+        if (!checkerboard) this.className = "light";
     };
 
     card.close = function() {
         this.text.innerHTML = "";
-        if(!checkerboard) this.className = "dark";
+        if (!checkerboard) this.className = "dark";
     };
 
     card.onclick = function(e) {
-        if (cdraws < draws) {
+        if (cdraws < draws & !editmode) {
             this.open();
             let miniscore = document.createElement("div");
             miniscore.innerHTML = withsign(this.value);
@@ -98,6 +100,13 @@ addinteraction = function(card) {
                 show_message(`Endergebnis: ${score}`);
         }
     };
+
+    card.text.onblur = function(e) {
+        if (editmode) {
+            this.card.value = this.innerHTML | 0; //force integer
+            this.innerHTML = withsign(this.card.value);
+        }
+    }
 };
 
 window.onload = function(e) {
@@ -111,10 +120,10 @@ window.onload = function(e) {
                 cards[id] = document.createElement("div");
                 cards[id].style.width = 85 / Nw + "%";
                 cards[id].style.margin = 5 / Nw + "%";
-                if(checkerboard) {
-                  cards[id].className = (i + j) % 2 ? "light" : "dark";
+                if (checkerboard) {
+                    cards[id].className = (i + j) % 2 ? "light" : "dark";
                 } else {
-                  cards[id].className = "dark";
+                    cards[id].className = "dark";
                 }
                 cardcontainer.appendChild(cards[id]);
                 addinteraction(cards[id]);
@@ -162,11 +171,8 @@ var assignvalues = function() {
     let random_range = Math.floor((Math.random() * 99)); //random range number (maximum of random number)
     for (let id = 0; id < N; id++) {
         cards[id].value = Math.floor((Math.random() * random_range * 2)) - Math.floor((Math.random() * random_range * 2));
-        cards[id].close();
     }
-    cdraws = 0;
-    score = 0;
-    update_parameters();
+    startplay();
 }
 
 //Fisher-Yates shuffle
@@ -178,16 +184,23 @@ function shuffle(array) {
     return array;
 }
 
-function shufflecards() {
-    for (let id = 0; id < N; id++)
+function startplay() {
+    for (let id = 0; id < N; id++) {
+        cards[id].text.contentEditable = "false";
+        cards[id].text.style.pointerEvents = "none"; //click through
         cards[id].close();
-
-    let nvals = shuffle(cards.map(c => c.value));
-    for (let id = 0; id < N; id++)
-        cards[id].value = nvals[id];
+    }
+    editmode = false;
     cdraws = 0;
     score = 0;
     update_parameters();
+}
+
+function shufflecards() {
+    let nvals = shuffle(cards.map(c => c.value));
+    for (let id = 0; id < N; id++)
+        cards[id].value = nvals[id];
+    startplay();
 }
 
 var update_parameters = function() {
@@ -197,8 +210,11 @@ var update_parameters = function() {
 
 
 var showall = function() {
+    editmode = true;
     for (let id = 0; id < N; id++) {
         cards[id].open();
+        cards[id].text.contentEditable = "true";
+        cards[id].text.style.pointerEvents = "auto"; //clickable
     }
 }
 
@@ -223,14 +239,13 @@ var calculate_strategy = function() {
 
 
 evaluate_strategy = function(seq, start_exploit) {
-    var j = 0;
-    var final_sum = 0;
-    var max_nr = -1000000;
-    var max_index = -1;
+    let final_sum = 0;
+    let max_nr;
+    let max_index = -1;
 
     for (let k = 0; k < start_exploit; k++) {
         final_sum += seq[k];
-        if (seq[k] > max_nr) {
+        if (max_index == -1 || seq[k] > max_nr) {
             max_nr = seq[k];
             max_index = k
         }
