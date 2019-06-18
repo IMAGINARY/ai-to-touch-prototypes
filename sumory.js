@@ -37,7 +37,25 @@ addinteraction = function(card) {
     card.text = document.createElement("div");
     card.text.innerHTML = "";
     card.text.className = "value";
-    card.appendChild(card.text);
+
+
+    if(mode == "image") {
+      pos = card.getBBox();
+      //TODO: The following looks only proper in Firefox (not even chrome)
+      let foreignObject = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
+      foreignObject.setAttribute('x', pos.x);
+      foreignObject.setAttribute('y', pos.y);
+      foreignObject.setAttribute('height', pos.height);
+      foreignObject.setAttribute('width', pos.width);
+      foreignObject.style.pointerEvents = "none"; //click through foreignObject
+      card.htmlel = foreignObject;
+      svgdoc.getElementById("layer1").appendChild(card.htmlel);
+
+    } else {
+      card.htmlel = card;
+    }
+    card.htmlel.appendChild(card.text);
+
 
     card.open = function() {
         this.text.innerHTML = withsign(this.value);
@@ -53,7 +71,7 @@ addinteraction = function(card) {
             let miniscore = document.createElement("div");
             miniscore.innerHTML = withsign(this.value);
             miniscore.className = "score";
-            this.appendChild(miniscore);
+            this.htmlel.appendChild(miniscore);
             score += this.value;
             cdraws++;
             update_parameters();
