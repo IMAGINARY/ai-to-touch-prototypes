@@ -23,7 +23,7 @@ let Nh = getUrlParam("Nh", 3) | 0;
 let Nw = getUrlParam("Nw", 7) | 0;
 
 
-let draws = getUrlParam("draws", 7) | 0;
+let draws = getUrlParam("draws", 10) | 0;
 let score = 0;
 let cdraws = 0;
 
@@ -110,6 +110,7 @@ addinteraction = function(card) {
 };
 
 window.onload = function(e) {
+    document.getElementById("description").innerHTML = `Erkl&auml;rung: Hinter jeder Karte befindet sich eine Zahl. Jede Zahl, die du anklickst oder tippst, wird zu deiner Summe addiert. Du kannst ${draws} Zahlen antippen, um die h&ouml;chstm&ouml;gliche Summe zu erreichen. Eine bereits aufgedeckte Zahl kannst du auch mehrmals antippen.`;
     if (mode == "grid") {
         let cardcontainer = document.createElement("div");
         cardcontainer.id = "cardcontainer";
