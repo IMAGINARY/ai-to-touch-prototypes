@@ -204,8 +204,10 @@ var assignvalues = function() {
     } else if(values=="stars") {
       let mv = (maxstars == "random") ? Math.floor(Math.random()*10)+2 : (maxstars | 0);
       for (let id = 0; id < N; id++) {
-          cards[id].value = Math.ceil((Math.random() * mv));
-          //cards[id].value = Math.floor((Math.random() * (mv+1))); //zero stars can happen
+          if((maxstars == "random"))
+            cards[id].value = Math.ceil((Math.random() * mv));
+          else
+            cards[id].value = Math.floor((Math.random() * (mv+1))); //zero stars can happen
       }
     }
     startplay();
@@ -267,7 +269,7 @@ var calculate_strategy = function() {
         }
     }
 
-    let msg = `Strat(n) = explore n and exploit (${draws}-n) <br><br>`;
+    let msg = `Strat(n) = explore(n) and exploit (${draws}-n) <br><br>`;
     msg += `<div id="diagram">`
 
     minval = 0;
@@ -283,11 +285,11 @@ var calculate_strategy = function() {
         //msg += `Avg. for Strat ${l} ${l==draws ? '(all random)' :''}: ${strat_nr[l]/iterations}<br>`;
         let v = strat_nr[l];
         let p = (v-minval)/(maxval-minval)*100;
-        msg += `<div class="bar-track" style="width: ${1/(draws+2)*100}%"><div class="bar" style="top: ${100-Math.max(p,z)}%; bottom: ${Math.min(p,z)}%">${v.toFixed(2)}</div><div class="baridx" style="bottom: ${z}%;">${l}</div></div>`;
+        msg += `<div class="bar-track" style="width: ${1/(draws+2)*100}%"><div class="bar" style="top: ${100-Math.max(p,z)}%; bottom: ${Math.min(p,z)}%">${v.toFixed(1)}</div><div class="baridx" style="bottom: ${z}%;">${l}</div></div>`;
     }
     msg += `<div class="zeroline" style="bottom: ${z}%;"></div>`
     msg += `</div>`;
-    msg += `Durschnittswert für Strat n`
+    msg += `Durschnittswert für Strat(n)`
     show_message(msg);
 }
 
