@@ -66,7 +66,7 @@ addinteraction = function(card) {
       card.htmlel.style.left = box.x + "px";
       card.htmlel.style.width = box.width + "px";
       card.htmlel.style.height = box.height + "px";
-    }
+    };
     card.reposition();
 
     document.getElementById("svgoverlay").appendChild(card.htmlel);
@@ -117,7 +117,7 @@ addinteraction = function(card) {
       }
       this.innerHTML = formatvalue(this.card.value, false);
     }
-  }
+  };
 };
 
 window.onload = function(e) {
@@ -174,7 +174,7 @@ window.onresize = function() {
       cards[id].reposition();
     }
   }
-}
+};
 
 var formatvalue = function(v, sum = false) {
   if (values == "numbers") {
@@ -183,7 +183,7 @@ var formatvalue = function(v, sum = false) {
     if (sum || (maxstars == "random" && v > 3))
       return `${v}⭐`;
     else if (maxstars == "random")
-      return Array(v).fill("⭐").join("")
+      return Array(v).fill("⭐").join("");
     else
       return Array(v).fill("⭐").concat(Array((maxstars | 0) - v).fill("☆")).join("");
     //☆★⭐🌟✫✩☆
@@ -210,7 +210,7 @@ var assignvalues = function() {
     }
   }
   startplay();
-}
+};
 
 //Fisher-Yates shuffle
 function shuffle(array) {
@@ -243,7 +243,7 @@ function shufflecards() {
 var update_parameters = function() {
   document.getElementById("contadortext").innerHTML = `Spielz&uuml;ge ${draws-cdraws}`;
   document.getElementById("scoretext").innerHTML = `Summe ${formatvalue(score, true)}`;
-}
+};
 
 
 var showall = function() {
@@ -253,7 +253,7 @@ var showall = function() {
     cards[id].text.contentEditable = "true";
     cards[id].text.style.pointerEvents = "auto"; //clickable
   }
-}
+};
 
 
 var calculate_strategy = function() {
@@ -269,7 +269,7 @@ var calculate_strategy = function() {
   }
 
   let msg = `Strat(n) = explore(n) and exploit (${draws}-n) <br><br>`;
-  msg += `<div id="diagram">`
+  msg += `<div id="diagram">`;
 
   minval = 0;
   maxval = 1;
@@ -286,11 +286,11 @@ var calculate_strategy = function() {
     let p = (v - minval) / (maxval - minval) * 100;
     msg += `<div class="bar-track" style="width: ${1/(draws+2)*100}%"><div class="bar" style="top: ${100-Math.max(p,z)}%; bottom: ${Math.min(p,z)}%">${v.toFixed(1)}</div><div class="baridx" style="bottom: ${z}%;">${l}</div></div>`;
   }
-  msg += `<div class="zeroline" style="bottom: ${z}%;"></div>`
+  msg += `<div class="zeroline" style="bottom: ${z}%;"></div>`;
   msg += `</div>`;
-  msg += `Durschnittswert für Strat(n)`
+  msg += `Durschnittswert für Strat(n)`;
   show_message(msg);
-}
+};
 
 
 evaluate_strategy = function(seq, start_exploit) {
@@ -302,7 +302,7 @@ evaluate_strategy = function(seq, start_exploit) {
     final_sum += seq[k];
     if (max_index == -1 || seq[k] > max_nr) {
       max_nr = seq[k];
-      max_index = k
+      max_index = k;
     }
   }
 
@@ -310,7 +310,7 @@ evaluate_strategy = function(seq, start_exploit) {
     final_sum += seq[max_index];
   }
   return final_sum;
-}
+};
 
 let closeblocked = false;
 show_message = function(msg) {
@@ -320,8 +320,8 @@ show_message = function(msg) {
   setTimeout(function() {
     closeblocked = false;
   }, 400);
-}
+};
 
 hide_message = function() {
   if (!closeblocked) document.getElementById("messagebox").className = "hidden";
-}
+};

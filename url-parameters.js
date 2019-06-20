@@ -1,3 +1,5 @@
+/*jshint esversion: 6 */
+
 CindyJS.registerPlugin(1, "url-parameters", function(api) {
     var real = function(r) {
         return {
@@ -63,7 +65,7 @@ CindyJS.registerPlugin(1, "url-parameters", function(api) {
             vars[key] = wrap(JSON.parse(value));
         });
         return vars;
-    }
+    };
     let vars;
 
     // Define a CindyScript function called "geturlparameter"
