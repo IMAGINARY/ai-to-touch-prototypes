@@ -21,6 +21,7 @@
             }
         </style>
         <script type="text/javascript" src="common/js/Cindy.js"></script>
+        <script src="url-parameters.js"></script>
 
       <script id="csinit" type="text/x-cindyscript">
       f(x,y) := (sum(1..length(r), k, sum(1..length(r), l, re(r_k_l)*cos((k-1)*x+(l-1)*y)+im(r_k_l)*sin((k-1)*x+(l-1)*y))));
@@ -86,7 +87,7 @@ reset():=(
 );
 reset();
 initpt = -(pi*.5,pi*.4);
-autopilot = true;
+autopilot = geturlparameter("autopilot",true);
 
 project(x,y,z) := project([x,y,z]);
 
@@ -358,7 +359,8 @@ if(mode=="final",
             ports: [
               {id: "CSCanvas", transform: [{visibleRect: [-16, -9, 16, 9]}]}
             ],
-            autoplay: true
+            autoplay: true,
+            use: ["url-parameters"]
           });
         </script>
     </head>
