@@ -88,7 +88,7 @@ body {
   top: 50%;
   /* background-color: rgba(255,200,0,.6); */
   transform: translateX(-50%) translateY(-50%);
-  font-size: xx-large;
+  font-size: x-large;
   user-select: none; /* supported by Chrome and Opera */
   -webkit-user-select: none; /* Safari */
   -khtml-user-select: none; /* Konqueror HTML */
@@ -122,6 +122,7 @@ body {
     position: absolute;
     padding: 0px;
     margin: 20px;
+    /* max-height: 10vh; */
 }
 
 content {
@@ -188,12 +189,12 @@ h1 {
   border-radius: 20px;
   width: 40px;
   height: 40px;
-  background-color: rgba(255,255,255,.4);
+  background-color: rgba(114, 178, 205, 0.6);
 }
 
 #closebutton:hover {
   font-weight: bolder;
-  background-color: rgba(255,255,255,.8);
+  background-color: rgba(114, 178, 205, 1);
 }
 
 embed, #svgoverlay {
