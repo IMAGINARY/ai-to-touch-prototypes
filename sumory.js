@@ -283,7 +283,7 @@ var calculate_strategy = function() {
         //msg += `Avg. for Strat ${l} ${l==draws ? '(all random)' :''}: ${strat_nr[l]/iterations}<br>`;
         let v = strat_nr[l];
         let p = (v-minval)/(maxval-minval)*100;
-        msg += `<div class="bar-track"><div class="bar" style="top: ${100-Math.max(p,z)}%; bottom: ${Math.min(p,z)}%">${v.toFixed(2)}</div><div class="baridx" style="bottom: ${z}%;">${l}</div></div>`;
+        msg += `<div class="bar-track" style="width: ${1/(draws+2)*100}%"><div class="bar" style="top: ${100-Math.max(p,z)}%; bottom: ${Math.min(p,z)}%">${v.toFixed(2)}</div><div class="baridx" style="bottom: ${z}%;">${l}</div></div>`;
     }
     msg += `<div class="zeroline" style="bottom: ${z}%;"></div>`
     msg += `</div>`;

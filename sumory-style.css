@@ -88,7 +88,7 @@ body {
   top: 50%;
   /* background-color: rgba(255,200,0,.6); */
   transform: translateX(-50%) translateY(-50%);
-  font-size: x-large;
+  font-size: xx-large;
   user-select: none; /* supported by Chrome and Opera */
   -webkit-user-select: none; /* Safari */
   -khtml-user-select: none; /* Konqueror HTML */
@@ -205,7 +205,7 @@ embed, #svgoverlay {
 }
 
 #svgoverlay {
-  z-index: 100; /*is on top of embed*/
+  z-index: 30; /*is on top of embed*/
   width: 100vw;
   height: 100vh;
   pointer-events: none; /*click through*/
@@ -230,7 +230,9 @@ diagram {}
     /* border-bottom: 1px black solid; */
 }
 
-.bar-track {}
+.bar-track {
+  width:2vw;
+}
 
 .bar {
     position: absolute;
