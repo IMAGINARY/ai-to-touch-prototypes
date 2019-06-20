@@ -216,3 +216,53 @@ path:hover {
       fill: #ff0000 !important;
       fill-opacity: .2 !important;
 }
+
+
+diagram {}
+
+#diagram {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    height: 20vh;
+    position: relative;
+    /* border-radius: 3px; */
+    /* border-bottom: 1px black solid; */
+}
+
+.bar-track {}
+
+.bar {
+    position: absolute;
+    background-color: #ff00008f;
+    /* bottom: 0px; */
+    font-size: medium;
+    border-radius: 5px;
+    border: 5px;
+    width: 100%;
+    text-align: center;
+    /* transform: rotate(-90deg); */
+}
+
+.baridx {
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    width: 100%;
+}
+
+.bar-track {
+    /* background-color: green; */
+    height: 100%;
+    position: relative;
+    width: 4vw;
+}
+
+.zeroline {
+    /* height: 1px; */
+    color: green;
+    width: 100%;
+    position: absolute;
+    border-top: 1px black solid;
+}

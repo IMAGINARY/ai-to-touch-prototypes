@@ -267,9 +267,27 @@ var calculate_strategy = function() {
         }
     }
 
-    let msg = `Strat n = explore n and exploit (${draws}-n) <br><br>`;
-    for (l = 1; l <= draws; l++)
-        msg += `Avg. for Strat ${l} ${l==draws ? '(all random)' :''}: ${strat_nr[l]/iterations}<br>`;
+    let msg = `Strat(n) = explore n and exploit (${draws}-n) <br><br>`;
+    msg += `<div id="diagram">`
+
+    minval = 0;
+    maxval = 1;
+
+    for (l = 1; l <= draws; l++) {
+        strat_nr[l] = strat_nr[l]/iterations;
+        minval = Math.min(strat_nr[l], minval);
+        maxval = Math.max(strat_nr[l], maxval);
+    }
+    let z = (0-minval)/(maxval-minval)*100; //height of zero line
+    for (l = 1; l <= draws; l++) {
+        //msg += `Avg. for Strat ${l} ${l==draws ? '(all random)' :''}: ${strat_nr[l]/iterations}<br>`;
+        let v = strat_nr[l];
+        let p = (v-minval)/(maxval-minval)*100;
+        msg += `<div class="bar-track"><div class="bar" style="top: ${100-Math.max(p,z)}%; bottom: ${Math.min(p,z)}%">${v.toFixed(2)}</div><div class="baridx" style="bottom: ${z}%;">${l}</div></div>`;
+    }
+    msg += `<div class="zeroline" style="bottom: ${z}%;"></div>`
+    msg += `</div>`;
+    msg += `Durschnittswert für Strat n`
     show_message(msg);
 }
 
