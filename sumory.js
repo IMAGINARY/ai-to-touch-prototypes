@@ -17,7 +17,6 @@ function getUrlParam(parameter, defaultvalue) {
 }
 
 
-
 //if field is a grid
 let Nh = getUrlParam("Nh", 3) | 0;
 let Nw = getUrlParam("Nw", 7) | 0;
@@ -33,6 +32,8 @@ let cards = [];
 let mode = getUrlParam("mode", "grid"); // "grid" or "image"
 let imgsrc = getUrlParam("imgsrc", "images/restaurants.svg");
 
+let values = getUrlParam("values", "numbers");// "numbers" or "stars"
+let maxstars = getUrlParam("maxstars", 5); //an integer or "random"
 let editmode = false;
 
 addinteraction = function(card) {
@@ -61,7 +62,7 @@ addinteraction = function(card) {
         card.reposition = function() {
             let box = card.getBoundingClientRect();
             card.htmlel.style.position = "absolute";
-            card.htmlel.style.top = box.y + "px";
+            card.htmlel.style.top = box.y - 10 + "px";
             card.htmlel.style.left = box.x + "px";
             card.htmlel.style.width = box.width + "px";
             card.htmlel.style.height = box.height + "px";
@@ -77,7 +78,7 @@ addinteraction = function(card) {
 
 
     card.open = function() {
-        this.text.innerHTML = withsign(this.value);
+        this.text.innerHTML = formatvalue(this.value, false);
         if (!checkerboard) this.className = "light";
     };
 
@@ -90,21 +91,31 @@ addinteraction = function(card) {
         if (cdraws < draws & !editmode) {
             this.open();
             let miniscore = document.createElement("div");
-            miniscore.innerHTML = withsign(this.value);
+            miniscore.innerHTML = formatvalue(this.value, false);
             miniscore.className = "score";
             this.htmlel.appendChild(miniscore);
             score += this.value;
             cdraws++;
             update_parameters();
             if (cdraws == draws)
-                show_message(`Endergebnis: ${score}`);
+                show_message(`<div>Endergebnis: ${formatvalue(score, true)}</div>`);
         }
     };
 
     card.text.onblur = function(e) {
         if (editmode) {
-            this.card.value = this.innerHTML | 0; //force integer
-            this.innerHTML = withsign(this.card.value);
+            if(values=="numbers") {
+              this.card.value = this.innerHTML | 0; //force integer
+            }
+            if(values=="stars") {
+              let m = this.innerHTML.match(/(\d+)/,'$1');
+              if(m) //an integer occurs
+                this.card.value = m[0] | 0;
+              else
+                this.card.value = (this.innerHTML.match(/⭐/g)||[]).length; //numer of occurences of ⭐
+
+            }
+            this.innerHTML = formatvalue(this.card.value, false);
         }
     }
 };
@@ -165,13 +176,37 @@ window.onresize = function() {
     }
 }
 
-var withsign = (v => ((v > 0) ? "+" : "").concat(v));
+var formatvalue = function(v, sum=false) {
+  if(values == "numbers") {
+    return ((v > 0) ? "+" : "").concat(v);
+  } else if(values=="stars") {
+    if(sum || (maxstars == "random" && v>3))
+      return `${v}⭐`;
+    else if(maxstars == "random")
+      return Array(v).fill("⭐").join("")
+    else
+      return Array(v).fill("⭐").concat(Array((maxstars | 0)-v).fill("☆")).join("");
+
+      //☆★⭐🌟✫✩☆
+      //★★★☆☆
+      //⭐⭐⭐☆☆
+
+  }
+};
 
 var assignvalues = function() {
     hide_message();
-    let random_range = Math.floor((Math.random() * 99)); //random range number (maximum of random number)
-    for (let id = 0; id < N; id++) {
-        cards[id].value = Math.floor((Math.random() * random_range * 2)) - Math.floor((Math.random() * random_range * 2));
+    if(values=="numbers") {
+      let random_range = Math.floor((Math.random() * 99)); //random range number (maximum of random number)
+      for (let id = 0; id < N; id++) {
+          cards[id].value = Math.floor((Math.random() * random_range * 2)) - Math.floor((Math.random() * random_range * 2));
+      }
+    } else if(values=="stars") {
+      let mv = (maxstars == "random") ? Math.floor(Math.random()*10)+2 : (maxstars | 0);
+      for (let id = 0; id < N; id++) {
+          cards[id].value = Math.ceil((Math.random() * mv));
+          //cards[id].value = Math.floor((Math.random() * (mv+1))); //zero stars can happen
+      }
     }
     startplay();
 }
@@ -206,7 +241,7 @@ function shufflecards() {
 
 var update_parameters = function() {
     document.getElementById("contadortext").innerHTML = `Spielz&uuml;ge ${draws-cdraws}`;
-    document.getElementById("scoretext").innerHTML = `Summe ${score}`;
+    document.getElementById("scoretext").innerHTML = `Summe ${formatvalue(score, true)}`;
 }
 
 
