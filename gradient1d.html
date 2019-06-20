@@ -21,6 +21,7 @@
             }
         </style>
         <script type="text/javascript" src="common/js/Cindy.js"></script>
+        <script src="url-parameters.js"></script>
 
       <script id="csinit" type="text/x-cindyscript">
 
@@ -57,7 +58,7 @@ while((|df(initpt)|<1 % f(initpt)<0) & cnt < 10,
   cnt = cnt + 1;
   errc(cnt);
 );
-autopilot = true;
+autopilot = geturlparameter("autopilot",true);
 
 dot(x,y):=(x*y);
 
@@ -212,7 +213,8 @@ if(mode=="final",
             ports: [
               {id: "CSCanvas", transform: [{visibleRect: [-16, -9, 16, 9]}]}
             ],
-            autoplay: true
+            autoplay: true,
+            use: ["url-parameters"]
           });
         </script>
     </head>
