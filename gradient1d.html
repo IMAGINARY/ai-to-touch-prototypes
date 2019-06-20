@@ -34,8 +34,8 @@ reset():=(
   best = -100;
   r0 = randomnormal();
   while(|best|>13,
-    r = apply(1..10,k,randomnormal()/(k^2)+i*randomnormal()/(k^2));
-    r_1 = r_1-1;//lift function at boundaries
+    r = apply(1..10,k,randomnormal()/(k^1.8)+i*randomnormal()/(k^1.8));
+    r_1 = r_1-.8;//lift function at boundaries
     forall(xvals, x, if(|f(x)-r0|>|f(best)-r0|, best=x));
     r = r*(8.5-|r0|)/|f(best)-r0|;//fit screen
 
