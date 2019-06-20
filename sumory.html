@@ -20,12 +20,13 @@
           <div id="message"></div>
         </div>
       </div>
-      <div id="footer">
+      <div id="infobutton" onclick="toggle_footer();">ⓘ</div>
+      <div id="footer" class="hidden">
         <div id="description"></div>
         <div id="buttons">
-          <div onClick="shufflecards()">Zahlen neu sortieren</div>
-          <div onClick="assignvalues()">Neues Zahlen-Set</div>
-          <div onClick="calculate_strategy()">Strategie berechnen</div>
+          <div onClick="shufflecards(); hide_footer();">Zahlen neu sortieren</div>
+          <div onClick="assignvalues(); hide_footer();">Neues Zahlen-Set</div>
+          <div onClick="calculate_strategy(); hide_footer();">Strategie berechnen</div>
           <div onClick="showall()">Alle Zahlen anzeigen (und editieren)</div>
         </div>
       </div>
