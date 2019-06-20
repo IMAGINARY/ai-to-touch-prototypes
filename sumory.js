@@ -311,11 +311,16 @@ evaluate_strategy = function(seq, start_exploit) {
     return final_sum;
 }
 
+let closeblocked = false;
 show_message = function(msg) {
     document.getElementById("message").innerHTML = msg;
     document.getElementById("messagebox").className = "visible";
+    closeblocked = true;
+    setTimeout(function () {
+      closeblocked = false;
+    }, 400);
 }
 
 hide_message = function() {
-    document.getElementById("messagebox").className = "hidden";
+    if(!closeblocked) document.getElementById("messagebox").className = "hidden";
 }
