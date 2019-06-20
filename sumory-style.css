@@ -20,7 +20,8 @@ body {
   /* width: 20vw; */
   font-family: sans-serif;
   text-align: center;
-  padding: 2vh;
+  padding: 1vh;
+  font-size:medium;
 }
 
 #buttons div:hover, #buttons a:hover{
@@ -119,11 +120,13 @@ body {
 #footer {
     bottom: 0px;
     position: absolute;
+    width: 100vw;
+    /* height: 2vh; */
     padding: 0px;
     /* margin: 20px; */
     z-index: 10;
     /* max-height: 10vh; */
-    background-color: rgba(255,255,255,.8);
+    /* background-color: rgba(255,255,255,.8); */
 }
 
 content {
@@ -175,10 +178,11 @@ h1 {
     transform: translateX(-50%) translateY(-50%);
     margin: auto;
     background: rgba(114, 178, 205, 0.8);
-    border-radius: 10px;
-    margin: 10px;
-    padding: 10px;
+    border-radius: 15px;
+    /* margin: 10px; */
+    padding: 30px;
     font-size: xx-large;
+    text-align: justify;
 }
 
 #closebutton {
@@ -207,7 +211,7 @@ h1 {
 embed, #svgoverlay {
   /* position: absolute; */
   width: 100vw;
-  max-height: 95vh;
+  max-height: 90vh;
   left: 0;
   top: 0;
 }
@@ -292,7 +296,7 @@ diagram {}
 
 #infobutton {
     position: absolute;
-    bottom: 1vh;
+    bottom: 4vh;
     right: 1vw;
     z-index: 10;
     font-size: 2cm;

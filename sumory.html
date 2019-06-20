@@ -2,6 +2,8 @@
     <html>
     <head>
       <meta charset="UTF-8">
+      <meta name="mobile-web-app-capable" content="yes">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
       <script src="sumory.js"></script>
       <link rel="stylesheet" href="sumory-style.css">
     </head>
@@ -20,14 +22,14 @@
           <div id="message"></div>
         </div>
       </div>
-      <div id="infobutton" onclick="toggle_footer();">ⓘ</div>
-      <div id="footer" class="hidden">
-        <div id="description"></div>
+      <div id="infobutton" onclick="show_description();">ⓘ</div>
+      <div id="footer">
         <div id="buttons">
-          <div onClick="shufflecards(); hide_footer();">Zahlen neu sortieren</div>
-          <div onClick="assignvalues(); hide_footer();">Neues Zahlen-Set</div>
-          <div onClick="calculate_strategy(); hide_footer();">Strategie berechnen</div>
-          <div onClick="showall()">Alle Zahlen anzeigen (und editieren)</div>
+          <div onClick="shufflecards();">Zahlen neu sortieren</div>
+          <div onClick="assignvalues();">Neues Zahlen-Set</div>
+          <div onClick="calculate_strategy();">Strategie berechnen</div>
+          <div onClick="showall();">Alle Zahlen anzeigen (und editieren)</div>
+          <div onClick="document.documentElement.requestFullscreen();">Vollbild-modus</div>
         </div>
       </div>
     </body>

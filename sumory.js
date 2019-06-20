@@ -121,7 +121,6 @@ addinteraction = function(card) {
 };
 
 window.onload = function(e) {
-  document.getElementById("description").innerHTML = `Erkl&auml;rung: Hinter jeder Karte befindet sich eine Zahl. Jede Zahl, die du anklickst oder tippst, wird zu deiner Summe addiert. Du kannst ${draws} Zahlen antippen, um die h&ouml;chstm&ouml;gliche Summe zu erreichen. Eine bereits aufgedeckte Zahl kannst du auch mehrmals antippen.`;
   if (mode == "grid") {
     let cardcontainer = document.createElement("div");
     cardcontainer.id = "cardcontainer";
@@ -333,4 +332,20 @@ toggle_footer = function() {
 
 hide_footer = function() {
   document.getElementById("footer").className = "hidden";
+};
+
+
+show_description = function() {
+  if(imgsrc=="images/restaurants.svg") {
+      show_message(`Du bist für ${draws} Tage in einer fremden Stadt und möchtest jeden Abend einmal essen gehen.<br>
+        Wenn du ein Restaurant anklickst oder antippst, besuchst du ein Restaurant und die Anzahl der Sterne wird zu deiner Summe addiert.<br>
+        Du möchtest deinen Genuss maximieren und daher eine h&ouml;chstm&ouml;gliche Summe erreichen.<br>
+        Bereits besuchte Restaurants können erneut besucht werden.
+        `)
+  } else {
+      show_message(`Erkl&auml;rung: Hinter jeder Karte befindet sich eine Zahl.<br>
+        Jede Zahl, die du anklickst oder tippst, wird zu deiner Summe addiert.<br>
+        Du kannst ${draws} Zahlen antippen, um die h&ouml;chstm&ouml;gliche Summe zu erreichen.<br>
+        Eine bereits aufgedeckte Zahl kannst du auch mehrmals antippen.`);
+  }
 };
