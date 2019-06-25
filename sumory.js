@@ -134,7 +134,7 @@ window.onload = function(e) {
   if (mode == "grid") {
     let cardcontainer = document.createElement("div");
     cardcontainer.id = "cardcontainer";
-    cardcontainer.style.maxWidth = (80 * Nw / Nh) + "vh";
+    cardcontainer.style.maxWidth = (65 * Nw / Nh) + "vh";
     for (let i = 0; i < Nw; i++) {
       for (let j = 0; j < Nh; j++) {
         id = i * Nh + j;
