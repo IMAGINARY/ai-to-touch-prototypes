@@ -34,6 +34,8 @@ let imgsrc = getUrlParam("imgsrc", "images/restaurants.svg");
 
 let values = getUrlParam("values", "numbers"); // "numbers" or "stars"
 let maxstars = getUrlParam("maxstars", 5); //an integer or "random"
+
+let buttonclass = getUrlParam("buttons", "visible"); //"visible" or "hidden"
 let editmode = false;
 
 addinteraction = function(card) {
@@ -178,6 +180,8 @@ window.onload = function(e) {
       document.getElementById("assignvalues-button").innerHTML = "neue Köche einfliegen";
       document.getElementById("showall-button").innerHTML = "alle Bewertungen anzeigen (und verändern)";
   }
+
+  document.getElementById("buttons").className = buttonclass;
 };
 
 window.onresize = function() {
