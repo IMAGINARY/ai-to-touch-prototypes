@@ -25,7 +25,7 @@
 
       <script id="csinit" type="text/x-cindyscript">
       autopilot = geturlparameter("autopilot", true);
-      showwater = geturlparameter("water", false);
+      watertheme = geturlparameter("water", false);
       waterh = 7.5;
 
       f(x) := r0+(x=pi*x/16; sum(1..length(r), k, re(r_k)*cos(k*x)+im(r_k)*sin(k*x)));
@@ -35,7 +35,7 @@ xvals = (-160..160)/10;
 reset():=(
   best = -100;
   r0 = randomnormal();
-  if(showwater, r0 = r0-2);
+  if(watertheme, r0 = r0-2);
   while(|best|>13,
     r = apply(1..10,k,randomnormal()/(k^1.8)+i*randomnormal()/(k^1.8));
     r_1 = r_1-.8;//lift function at boundaries
@@ -94,7 +94,11 @@ x = mouse().x;
 if(autopilot, connect(transpose([xvals,apply(xvals,x,f(x))]),alpha->.2));
 
 if(autopilot & (mode=="select" % mode=="compute"),
-  drawtext((-15,8), "The computer tries to approach the minimum through gradient descent.");
+
+  if(watertheme,
+    drawtext((-15,8), "Der Computer versucht die tiefste Stelle zu finden."),
+    drawtext((-15,8), "The computer tries to approach the minimum through gradient descent.")
+  );
 );
 
 if(mode=="select",
@@ -108,9 +112,17 @@ if(mode=="select",
       resett0();
     );
     ,
-    drawtext((-15,8), "Approach the minimal function value! Click to guess!");
+    if(watertheme,
+      drawtext((-15,8), "Finde den Schatz an der tiefsten Stelle!"),
+      drawtext((-15,8), "Approach the minimal function value! Click to guess!")
+    );
+
   );
-  drawtext((-15,7), "$"+(N-length(pts))+"$ guess"+if((N-length(pts))==1,"","es")+" left");
+  if(watertheme,
+    drawtext((-15,7), "noch $"+(N-length(pts))+"$ Versuch"+if((N-length(pts))==1,"","e")),
+    drawtext((-15,7), "$"+(N-length(pts))+"$ guess"+if((N-length(pts))==1,"","es")+" left")
+  );
+
 
   if(!autopilot,
     x = mouse().x;
@@ -118,10 +130,10 @@ if(mode=="select",
     x = if(pts==[], initpt, pts_(-1))*(1-t0()/.5) + gradientdescent()*(t0()/.5);
   );
   y = sin(t0());
-  if(showwater, y = waterh-2+y);
-  draw((x,if(showwater,waterh,0)),(x,y));
+  if(watertheme, y = waterh-2+y);
+  draw((x,if(watertheme,waterh,0)),(x,y));
 
-  if(showwater,
+  if(watertheme,
     drawtext((x,y),"$?$");
     ,
     drawtext((x,0),"$x$");
@@ -145,7 +157,7 @@ if(mode=="compute",
 
   x = pts_(-1);
   lt = min(1,speedfactor*t0());
-  if(showwater,
+  if(watertheme,
     y = (1-lt)*waterh + lt*f(x);
     draw((x,waterh),(x,y));
     drawtext((x,y),"$?$", alpha->1-lt);
@@ -196,9 +208,9 @@ if(mode=="final",
 );
 
 
-if(showwater,
+if(watertheme,
   boat  = [[-2,-1],[2,-1],[2.5,1],[-2.5,1]]*.5;
-  angle = sin(4*t0())*.04;
+  angle = sin(4*seconds())*.04;
   R = [[cos(angle),-sin(angle)],[sin(angle),cos(angle)]];
 
   drawpoly(apply(boat,R*#+(x,waterh)));
