@@ -213,9 +213,6 @@ var formatvalue = function(v, sum = false) {
       return Array(v).fill(star).join("");
     else
       return Array(v).fill(star).concat(Array((maxstars | 0) - v).fill(emptystar)).join("");
-    //☆★⭐🌟✫✩☆
-    //★★★☆☆
-    //⭐⭐⭐☆☆
 
   }
 };
