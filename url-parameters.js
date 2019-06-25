@@ -62,7 +62,12 @@ CindyJS.registerPlugin(1, "url-parameters", function(api) {
     var geturlvars = function() {
         var vars = {};
         var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
-            vars[key] = wrap(JSON.parse(value));
+            //vars[key] = wrap(isNaN(value) ? value : (value | 0));
+            try {
+              vars[key] = wrap(JSON.parse(value));
+            } catch(error) {
+              vars[key] = wrap(value);
+            }
         });
         return vars;
     };

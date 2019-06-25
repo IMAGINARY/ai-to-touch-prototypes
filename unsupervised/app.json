@@ -1,0 +1,13 @@
+{
+  "id": "unsupervised",
+  "version": "0.1.0",
+  "main": "../unsupervised.html",
+  "name": {
+    "de": "Unsupervised learning"
+  },
+  "description": {
+    "en": "",
+    "de": "",
+    "es": ""
+  }
+}

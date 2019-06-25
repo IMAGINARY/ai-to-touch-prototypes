@@ -1,0 +1,13 @@
+{
+  "id": "sumory-classic-expert",
+  "version": "0.1.0",
+  "main": "../sumory.html?mode=grid&Nw=7&Nh=3&draws=10&buttons=visible",
+  "name": {
+    "de": "Sumory: Zufällige Karten (Expertenmodus)"
+  },
+  "description": {
+    "en": "",
+    "de": "",
+    "es": ""
+  }
+}

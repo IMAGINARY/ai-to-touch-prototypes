@@ -1,0 +1,13 @@
+{
+  "id": "sumory-classic",
+  "version": "0.1.0",
+  "main": "../sumory.html?mode=grid&Nw=7&Nh=3&draws=10&buttons=hidden",
+  "name": {
+    "de": "Sumory: Zufällige Karten"
+  },
+  "description": {
+    "en": "",
+    "de": "",
+    "es": ""
+  }
+}

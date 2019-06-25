@@ -1,0 +1,13 @@
+{
+  "id": "gradient1d",
+  "version": "0.1.0",
+  "main": "../gradient1d.html",
+  "name": {
+    "de": "Eindimensionales Gradientenverfahren."
+  },
+  "description": {
+    "en": "",
+    "de": "Ziel ist es, mithilfe das Minimum einer unbekannten Funktion zu bestimmen. Hierfür kann die Funktion und deren Ableitung an möglichst wenigen verschiedenen Stellen berechnet werden.",
+    "es": ""
+  }
+}

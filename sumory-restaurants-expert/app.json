@@ -1,0 +1,13 @@
+{
+  "id": "sumory-restaurants-expert",
+  "version": "0.1.0",
+  "main": "../sumory.html?mode=image&imgsrc=images/restaurants.svg&draws=7&values=stars&maxstars=random&buttons=visible",
+  "name": {
+    "de": "Restaurants in einer fremden Stadt. (Expertenmodus)"
+  },
+  "description": {
+    "en": "",
+    "de": "Du bist für 7 Tage in einer fremden Stadt und möchtest jeden Abend einmal essen gehen. Wenn du ein Restaurant anklickst oder antippst, besuchst du ein Restaurant und die Anzahl der Sterne wird zu deiner Summe addiert. Du möchtest deinen Genuss maximieren und daher eine höchstmögliche Summe erreichen. Bereits besuchte Restaurants können erneut besucht werden.",
+    "es": ""
+  }
+}
