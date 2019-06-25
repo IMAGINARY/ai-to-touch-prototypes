@@ -97,8 +97,16 @@ addinteraction = function(card) {
       score += this.value;
       cdraws++;
       update_parameters();
-      if (cdraws == draws)
-        show_message(`<div>Endergebnis: ${formatvalue(score, true)}</div>`);
+      if (cdraws == draws) {
+          let strats = calculate_strategies(10000);
+          let best;
+          for(let l=1; l<draws; l++) {
+            if(l==1 || strats[l]<best) best = strats[l];
+          }
+
+          show_message(`<div>Endergebnis: ${formatvalue(score, true)}.</div>
+          <div>${score>best  ? `Dies ist um ${(score-best).toFixed(1)} <em>besser</em> als die durchschnittlich beste Strategie` : `Dies ist um ${(best-score).toFixed(1)} <em>schlechter</em> als die durchschnittlich beste Strategie` }.</div>`);
+      }
     }
   };
 
@@ -260,29 +268,37 @@ var showall = function() {
 };
 
 
-var calculate_strategy = function() {
-  var l = 0;
-  var iterations = 1000000;
+var calculate_strategies = function(iterations) {
   var strat_nr = Array(draws + 1).fill(0);
   let seq = cards.map(c => c.value);
   for (let i = 0; i < iterations; i++) {
     seq = shuffle(seq);
-    for (l = 1; l <= draws; l++) {
+    for (let l = 1; l <= draws; l++) {
       strat_nr[l] += evaluate_strategy(seq, l);
     }
+  }
+
+  for (let l = 1; l <= draws; l++) {
+    strat_nr[l] = strat_nr[l] / iterations;
+  }
+  return strat_nr;
+};
+
+
+var show_strategies = function () {
+  strat_nr = calculate_strategies(1000000);
+
+  minval = 0;
+  maxval = 1;
+
+  for (let l = 1; l <= draws; l++) {
+    minval = Math.min(strat_nr[l], minval);
+    maxval = Math.max(strat_nr[l], maxval);
   }
 
   let msg = `Strat(n) = explore(n) and exploit (${draws}-n) <br><br>`;
   msg += `<div id="diagram">`;
 
-  minval = 0;
-  maxval = 1;
-
-  for (l = 1; l <= draws; l++) {
-    strat_nr[l] = strat_nr[l] / iterations;
-    minval = Math.min(strat_nr[l], minval);
-    maxval = Math.max(strat_nr[l], maxval);
-  }
   let z = (0 - minval) / (maxval - minval) * 100; //height of zero line
   for (l = 1; l <= draws; l++) {
     //msg += `Avg. for Strat ${l} ${l==draws ? '(all random)' :''}: ${strat_nr[l]/iterations}<br>`;
