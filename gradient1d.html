@@ -152,6 +152,12 @@ if(mode=="compute",
   speedfactor = max(5,(1+length(pts)));
   if(speedfactor*t0()>2,
   	mode = "select";
+    forall(pts,x,
+      if(|x-best|<.2,
+        //drawtreasure = true;
+        mode = "final";
+      );
+    );
     resett0();
   );
 
@@ -206,7 +212,30 @@ if(mode=="final",
   );
 
   if(watertheme,
-    drawtreasure = true,
+
+    
+      //draw treasure
+        translate([best, f(best)+.3]);
+        scale(.3);
+        tbox = [[-1,-1],[1,-1],[1,1],[-1,1]];
+        tcap = [[-1,1],[1,1],[.5,1.4],[0,1.5],[-.5,1.4]];
+        angle = pi/4+sin(2*seconds())*.1;
+        R2 = [[cos(angle),-sin(angle)],[sin(angle),cos(angle)]];
+        R3 = [[cos(seconds()),-sin(seconds())],[sin(seconds()),cos(seconds())]];
+        tcap = apply(tcap,t,R2*(t-(-1,1))+(-1,1));
+        tgold = [[-.7,1],[.8,1],[.5,1.2],[.2,1.3],[-.4,1.2]];
+
+        fh = mod(.3*seconds(),1);
+
+        gstar = apply(0..9, k, .1*(1+5/3*mod(k,2))*gauss(exp(i*2*pi*k/10)));
+        gstar = apply(gstar, t, R3*t+(.3,1.2)+(sin(seconds())*.3,fh));
+        drawpoly(tbox, color->[1,1,1]-[.6,.5,.3]);
+        fillpoly(tgold, color->[1,1,1]-[.7,.6,.2]);
+        fillpoly(gstar, alpha->min(fh,1-fh), color->[1,1,1]-[1,.8,.3]);
+        drawpoly(tcap, color->[1,1,1]-[.6,.5,.3]);
+        greset();
+
+      ,
 
     draw((best,f(best)), size->10, alpha->.3*a);
     draw((best,f(best)),(best,f(yourbest)), size->3, alpha->.3*a, color->[0,1,1]);
@@ -227,34 +256,7 @@ if(watertheme,
 
   connect(transpose([xvals,apply(xvals,x,waterh+watersize*sin(seconds())*sin(x/watersize-seconds()))]), color->[.6,.6,.3]);
 
-  //treasure
 
-  forall(pts,x,
-    if(|x-best|<.2,
-      drawtreasure = true;
-    );
-  );
-  if(drawtreasure,
-    translate([best, f(best)+.3]);
-    scale(.3);
-    tbox = [[-1,-1],[1,-1],[1,1],[-1,1]];
-    tcap = [[-1,1],[1,1],[.5,1.4],[0,1.5],[-.5,1.4]];
-    angle = pi/4+sin(2*seconds())*.1;
-    R2 = [[cos(angle),-sin(angle)],[sin(angle),cos(angle)]];
-    R3 = [[cos(seconds()),-sin(seconds())],[sin(seconds()),cos(seconds())]];
-    tcap = apply(tcap,t,R2*(t-(-1,1))+(-1,1));
-    tgold = [[-.7,1],[.8,1],[.5,1.2],[.2,1.3],[-.4,1.2]];
-
-    fh = mod(.3*seconds(),1);
-
-    gstar = apply(0..9, k, .1*(1+5/3*mod(k,2))*gauss(exp(i*2*pi*k/10)));
-    gstar = apply(gstar, t, R3*t+(.3,1.2)+(sin(seconds())*.3,fh));
-    drawpoly(tbox, color->[1,1,1]-[.6,.5,.3]);
-    fillpoly(tgold, color->[1,1,1]-[.7,.6,.2]);
-    fillpoly(gstar, alpha->min(fh,1-fh), color->[1,1,1]-[1,.8,.3]);
-    drawpoly(tcap, color->[1,1,1]-[.6,.5,.3]);
-    greset();
-  );
 );
 
 forall(if(mode!="compute",1..length(pts),1..(length(pts)-1)), k,
