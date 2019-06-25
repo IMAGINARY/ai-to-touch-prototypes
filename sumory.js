@@ -169,7 +169,8 @@ window.onload = function(e) {
       }*/
       N = paths.length;
       for (let id = 0; id < paths.length; id++) {
-        cards[id] = paths[id];addinteraction(cards[id]);
+        cards[id] = paths[id];
+        addinteraction(cards[id]);
       }
       assignvalues();
     };
@@ -192,16 +193,26 @@ window.onresize = function() {
   }
 };
 
+/*
+//UTF 8 stars
+let star = "⭐";
+let emptystar = "☆";
+*/
+
+let star = "<div class='star'></div>";
+let emptystar = "<div class='emptystar'></div>";
+
+
 var formatvalue = function(v, sum = false) {
   if (values == "numbers") {
     return ((v > 0) ? "+" : "").concat(v);
   } else if (values == "stars") {
     if (sum || (maxstars == "random" && v > 3))
-      return `${v}⭐`;
+      return `${v}${star}`;
     else if (maxstars == "random")
-      return Array(v).fill("⭐").join("");
+      return Array(v).fill(star).join("");
     else
-      return Array(v).fill("⭐").concat(Array((maxstars | 0) - v).fill("☆")).join("");
+      return Array(v).fill(star).concat(Array((maxstars | 0) - v).fill(emptystar)).join("");
     //☆★⭐🌟✫✩☆
     //★★★☆☆
     //⭐⭐⭐☆☆

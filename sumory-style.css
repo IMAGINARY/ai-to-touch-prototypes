@@ -85,6 +85,9 @@ body {
 
 .value, .score {
   position: absolute;
+  width: 5em;
+  /* align-content: center; */
+  text-align: center;
   left: 50%;
   top: 50%;
   /* background-color: rgba(255,200,0,.6); */
@@ -302,4 +305,22 @@ diagram {}
     z-index: 10;
     font-size: 2cm;
     z-index: 30;
+}
+
+.star {
+  background-image: url('images/star.png');
+}
+
+.emptystar {
+  background-image: url('images/emptystar.png');
+}
+
+.star, .emptystar {
+  background-size: contain;
+  width: 1em;
+  height: 1em;
+  /* border: 0px; */
+  /* margin: 0px; */
+  /* padding: 0px; */
+  display: inline-block;
 }
