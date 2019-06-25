@@ -176,10 +176,13 @@ if(mode=="compute",
     v = (1,df);
     v = .5*v/|v|;
     draw((x,y)-a*v,(x,y)+a*v);
-    drawtext((x,y),"$f'(x)$", alpha->a, angle->arctan2([1,df]), align->"mid");
+    if(!watertheme,
+      drawtext((x,y),"$f'(x)$", alpha->a, angle->arctan2([1,df]), align->"mid");
+    );
   );
 );
 
+drawtreasure = false;
 if(mode=="final",
   a = min(1,t0());
   //plot(f(x),alpha->a);
@@ -202,9 +205,13 @@ if(mode=="final",
     drawtext((-15,7), "Now it is your turn! Click to restart the applet with another function.");
   );
 
+  if(watertheme,
+    drawtreasure = true,
 
-  draw((best,f(best)), size->10, alpha->.3*a);
-  draw((best,f(best)),(best,f(yourbest)), size->3, alpha->.3*a, color->[0,1,1]);
+    draw((best,f(best)), size->10, alpha->.3*a);
+    draw((best,f(best)),(best,f(yourbest)), size->3, alpha->.3*a, color->[0,1,1]);
+  );
+
 );
 
 
@@ -221,15 +228,15 @@ if(watertheme,
   connect(transpose([xvals,apply(xvals,x,waterh+watersize*sin(seconds())*sin(x/watersize-seconds()))]), color->[.6,.6,.3]);
 
   //treasure
-  isclose = false;
+
   forall(pts,x,
-    if(|x-best|<.3,
-      isclose = true;
+    if(|x-best|<.2,
+      drawtreasure = true;
     );
   );
-  if(isclose,
-    translate([best, f(best)+.5]);
-    scale(.5);
+  if(drawtreasure,
+    translate([best, f(best)+.3]);
+    scale(.3);
     tbox = [[-1,-1],[1,-1],[1,1],[-1,1]];
     tcap = [[-1,1],[1,1],[.5,1.4],[0,1.5],[-.5,1.4]];
     angle = pi/4+sin(2*seconds())*.1;
