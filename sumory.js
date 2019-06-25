@@ -159,11 +159,16 @@ window.onload = function(e) {
       }*/
       N = paths.length;
       for (let id = 0; id < paths.length; id++) {
-        cards[id] = paths[id];
-        addinteraction(cards[id]);
+        cards[id] = paths[id];addinteraction(cards[id]);
       }
       assignvalues();
     };
+  }
+
+  if(mode=="image" && imgsrc=="images/restaurants.svg") {
+      document.getElementById("shuffle-button").innerHTML = "Köche zufällig vertauschen";
+      document.getElementById("assignvalues-button").innerHTML = "neue Köche einfliegen";
+      document.getElementById("showall-button").innerHTML = "alle Bewertungen anzeigen (und verändern)";
   }
 };
 
@@ -336,12 +341,12 @@ hide_footer = function() {
 
 
 show_description = function() {
-  if(imgsrc=="images/restaurants.svg") {
+  if(mode=="image" && imgsrc=="images/restaurants.svg") {
       show_message(`Du bist für ${draws} Tage in einer fremden Stadt und möchtest jeden Abend einmal essen gehen.<br>
         Wenn du ein Restaurant anklickst oder antippst, besuchst du ein Restaurant und die Anzahl der Sterne wird zu deiner Summe addiert.<br>
         Du möchtest deinen Genuss maximieren und daher eine h&ouml;chstm&ouml;gliche Summe erreichen.<br>
         Bereits besuchte Restaurants können erneut besucht werden.
-        `)
+        `);
   } else {
       show_message(`Erkl&auml;rung: Hinter jeder Karte befindet sich eine Zahl.<br>
         Jede Zahl, die du anklickst oder tippst, wird zu deiner Summe addiert.<br>
