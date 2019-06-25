@@ -70,6 +70,7 @@ gradientdescent() := (
       ,
       1
     );
+    if(|gamma|>5, gamma = 5*gamma/|gamma|);//maximum step width
     pts_(-1) - gamma*df(pts_(-1))
   );
   mod(x+16,32)-16
