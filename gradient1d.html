@@ -12,11 +12,14 @@
             }
 
             #CSCanvas {
-              /*16:9*/
+              /*16:9
                 width: 100vw;
                 height: 56.25vw;
                 max-height: 100vh;
                 max-width: 177.77vh;
+                */
+                width: 100vw;
+                height: 100vh;
                 filter: invert(1);
             }
         </style>
@@ -26,7 +29,15 @@
       <script id="csinit" type="text/x-cindyscript">
       autopilot = geturlparameter("autopilot", true);
       watertheme = geturlparameter("water", false);
-      waterh = 7.5;
+      //waterh = 7.5;
+
+      EPS = 0.2; //how close to minimum counts as won?
+
+      updatescreenparameters() := (
+          waterh = max(apply(screenbounds(),#.y))-1;
+          textposition = (screenbounds()_4).xy+(3,1);
+      );
+      updatescreenparameters();
 
       f(x) := r0+(x=pi*x/16; sum(1..length(r), k, re(r_k)*cos(k*x)+im(r_k)*sin(k*x)));
       df(x) := (x=pi*x/16; pi/16*sum(1..length(r), k, -k*re(r_k)*sin(k*x)+k*im(r_k)*cos(k*x)));
@@ -35,7 +46,7 @@ xvals = (-160..160)/10;
 reset():=(
   best = -100;
   r0 = randomnormal();
-  if(watertheme, r0 = r0-2);
+  if(watertheme, r0 = r0-1);
   while(|best|>13,
     r = apply(1..10,k,randomnormal()/(k^1.8)+i*randomnormal()/(k^1.8));
     r_1 = r_1-.8;//lift function at boundaries
@@ -87,17 +98,20 @@ resett0() := (
 );
       </script>
       <script id="csdraw" type="text/x-cindyscript">
+      updatescreenparameters();
+
 //plot(f(x));
 
 x = mouse().x;
 
+msg = "";
 if(autopilot, connect(transpose([xvals,apply(xvals,x,f(x))]),alpha->.2));
 
 if(autopilot & (mode=="select" % mode=="compute"),
 
   if(watertheme,
-    drawtext((-15,8), "Der Computer versucht die tiefste Stelle zu finden."),
-    drawtext((-15,8), "The computer tries to approach the minimum through gradient descent.")
+    msg =  "Der Computer versucht die tiefste Stelle zu finden.",
+    msg = "The computer tries to approach the minimum through gradient descent."
   );
 );
 
@@ -113,15 +127,16 @@ if(mode=="select",
     );
     ,
     if(watertheme,
-      drawtext((-15,8), "Finde den Schatz an der tiefsten Stelle!"),
-      drawtext((-15,8), "Approach the minimal function value! Click to guess!")
+      msg = "Finde den Schatz an der tiefsten Stelle!",
+      msg = "Approach the minimal function value! Click to guess!"
     );
 
   );
   if(watertheme,
-    drawtext((-15,7), "noch $"+(N-length(pts))+"$ Versuch"+if((N-length(pts))==1,"","e")),
-    drawtext((-15,7), "$"+(N-length(pts))+"$ guess"+if((N-length(pts))==1,"","es")+" left")
+    msg = msg + newline + "noch $"+(N-length(pts))+"$ Versuch"+if((N-length(pts))==1,"","e"),
+    msg = msg + newline + "$"+(N-length(pts))+"$ guess"+if((N-length(pts))==1,"","es")+" left"
   );
+
 
 
   if(!autopilot,
@@ -153,7 +168,7 @@ if(mode=="compute",
   if(speedfactor*t0()>2,
   	mode = "select";
     forall(pts,x,
-      if(|x-best|<.2,
+      if(|x-best|<EPS,
         //drawtreasure = true;
         mode = "final";
       );
@@ -199,21 +214,40 @@ if(mode=="final",
 
   err = |f(best)-f(yourbest)|;
 
-  subjectverb = if(autopilot, "The computer has reached", "You have reached");
-  if(err<.02,
-    drawtext((-15,8), subjectverb + " the global minimum.");
+  if(watertheme,
+    if(|best-yourbest|<EPS,
+      msg = "Schatz gefunden!";
+      ,
+      msg = if(autopilot, "Der Computer hat", "Du hast") + " den Schatz nicht gefunden (Fehler: $"+format(err,3)+"$)";
+    );
+    if(!autopilot,
+      msg = msg + newline + "Klicke um zu sehen, wie der Computer gehandelt hätte.";
+      ,
+      msg = msg + newline + "Jetzt bist du am Zug! Klicke, um in einem anderem Meer neu zu beginnen.";
+    );
+
+
+
     ,
-    drawtext((-15,8), subjectverb + " the global minimum up to $" + format(err,3) + "$.");
+    subjectverb = if(autopilot, "The computer has reached", "You have reached");
+    if(|best-yourbest|<EPS,
+      msg = subjectverb + " the global minimum.";
+      ,
+      msg = subjectverb + " the global minimum up to $" + format(err,3) + "$.";
+    );
+    if(!autopilot,
+      msg = msg + newline + "Click to see what the computer would have done.";
+      ,
+      msg = msg + newline + "Now it is your turn! Click to restart the applet with another function.";
+    );
   );
-  if(!autopilot,
-    drawtext((-15,7), "Click to see what the computer would have done.");
-    ,
-    drawtext((-15,7), "Now it is your turn! Click to restart the applet with another function.");
-  );
+
+
+
 
   if(watertheme,
 
-    
+
       //draw treasure
         translate([best, f(best)+.3]);
         scale(.3);
@@ -270,6 +304,7 @@ forall(if(mode!="compute",1..length(pts),1..(length(pts)-1)), k,
   draw((x,y)-v,(x,y)+v,color->c);
 );
 
+drawtext(textposition, msg);
       </script>
       <script id="csmousedown" type="text/x-cindyscript">
 if(mode=="select" & !autopilot & (N-length(pts))>0,
