@@ -274,13 +274,13 @@
 
       if(mode!="menu",
         rp = relativepoint((0.3,.9));
-        drawtext(color->[1,1,1],rp, align->"right",
+        drawtext(family->"Quicksand", color->[1,1,1],rp, align->"right",
           "level: " + newline +
           "correct: " + newline +
           "false: " + newline +
           "correct answers in a row: ");
 
-          drawtext(color->[1,1,1],rp+(0.3,0), align->"left",
+          drawtext(family->"Quicksand", color->[1,1,1],rp+(0.3,0), align->"left",
             level + newline +
             ncorrect + newline +
             nfalse + newline +
@@ -297,7 +297,7 @@
 
         if(t9()<2,
           a = (2-t9())/2;
-          drawtext(color->[1,1,1],relativepoint((0.5,.2)), msg, alpha->a, align->"mid", size->30);
+          drawtext(family->"Quicksand", color->[1,1,1],relativepoint((0.5,.2)), msg, alpha->a, align->"mid", size->30);
         );
 
         if(t9()>1,
@@ -321,25 +321,25 @@
               fillcircle(pos(k,j), .4, alpha->|w|, color->hue(if(w>0,.3,.8)));
             );
         );
-        drawtext(color->[1,1,1],pos(3,1)+(1,0), labels_1);
-        drawtext(color->[1,1,1],pos(3,2)+(1,0), labels_2);
+        drawtext(family->"Quicksand", color->[1,1,1],pos(3,1)+(1,0), labels_1);
+        drawtext(family->"Quicksand", color->[1,1,1],pos(3,2)+(1,0), labels_2);
         if(level==1,
-          drawtext(color->[1,1,1],pos(1,1)+(-1,0), align->"right", "$\text{color}_\text{red}$");
-          drawtext(color->[1,1,1],pos(1,2)+(-1,0), align->"right", "$\text{color}_\text{green}$");
-          drawtext(color->[1,1,1],pos(1,3)+(-1,0), align->"right", "$\text{color}_\text{blue}$");
-          drawtext(color->[1,1,1],pos(1,4)+(-1,0), align->"right", "size");
+          drawtext(family->"Quicksand", color->[1,1,1],pos(1,1)+(-1,0), align->"right", "$\text{color}_\text{red}$");
+          drawtext(family->"Quicksand", color->[1,1,1],pos(1,2)+(-1,0), align->"right", "$\text{color}_\text{green}$");
+          drawtext(family->"Quicksand", color->[1,1,1],pos(1,3)+(-1,0), align->"right", "$\text{color}_\text{blue}$");
+          drawtext(family->"Quicksand", color->[1,1,1],pos(1,4)+(-1,0), align->"right", "size");
         );
         if(level==2,
-          drawtext(color->[1,1,1],pos(1,1)+(-1,0), align->"right", "$x_\text{current}$");
-          drawtext(color->[1,1,1],pos(1,2)+(-1,0), align->"right", "$y_\text{current}$");
-          drawtext(color->[1,1,1],pos(1,3)+(-1,0), align->"right", "$x_\text{previous}$");
-          drawtext(color->[1,1,1],pos(1,4)+(-1,0), align->"right", "$y_\text{previous}$");
+          drawtext(family->"Quicksand", color->[1,1,1],pos(1,1)+(-1,0), align->"right", "$x_\text{current}$");
+          drawtext(family->"Quicksand", color->[1,1,1],pos(1,2)+(-1,0), align->"right", "$y_\text{current}$");
+          drawtext(family->"Quicksand", color->[1,1,1],pos(1,3)+(-1,0), align->"right", "$x_\text{previous}$");
+          drawtext(family->"Quicksand", color->[1,1,1],pos(1,4)+(-1,0), align->"right", "$y_\text{previous}$");
         );
         if(level==3,
-          drawtext(color->[1,1,1],pos(1,1)+(-1,0), align->"right", "number");
-          drawtext(color->[1,1,1],pos(1,2)+(-1,0), align->"right", "rotation");
-          drawtext(color->[1,1,1],pos(1,3)+(-1,0), align->"right", "size");
-          drawtext(color->[1,1,1],pos(1,4)+(-1,0), align->"right", "color");
+          drawtext(family->"Quicksand", color->[1,1,1],pos(1,1)+(-1,0), align->"right", "number");
+          drawtext(family->"Quicksand", color->[1,1,1],pos(1,2)+(-1,0), align->"right", "rotation");
+          drawtext(family->"Quicksand", color->[1,1,1],pos(1,3)+(-1,0), align->"right", "size");
+          drawtext(family->"Quicksand", color->[1,1,1],pos(1,4)+(-1,0), align->"right", "color");
         );
 
 
@@ -379,9 +379,9 @@
 
         //draw image history
         forall(1..5,k,
-          offset = ((mod(-k+cimgcnt,5)-2.5+t7()-.5)*5,-9);
+          offset = ((mod(-k+cimgcnt,5)-2.5+t7()-.5)*5,(screenbounds()_4).y+.5);
           drawimage(offset+(-3,0),offset+(3,0),"cimg"+k);
-          drawtext(color->[1,1,1],offset+(-1.3,1), computerguess_k);
+          drawtext(family->"Quicksand", color->[1,1,1],offset+(-1.3,1), computerguess_k);
         );
 
 
@@ -415,7 +415,6 @@
     <script type="text/javascript">
       var cdy = CindyJS({
         scripts: "cs*",
-        defaultAppearance: { fontFamily: "sans-serif", lineSize: 1, pointSize: 5.0, fontSize: 30 },
         ports: [
           {id: "CSCanvas", transform: [{visibleRect: [-16, -9, 16, 9]}], virtualwidth: 1000}
         ],
