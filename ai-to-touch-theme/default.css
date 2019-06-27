@@ -40,7 +40,8 @@ body {
 }
 
 .appContainer {
-  height: 90vh !important;
+  top: 0 !important;
+  height: 100vh !important;
 }
 
 .appContainer iframe {
@@ -49,7 +50,7 @@ body {
 
 body.mode-app .appPane {
     top: 0 !important;
-    max-height: 90vh !important;
+    max-height: 100vh !important;
     opacity: 1;
 }
 
@@ -74,4 +75,19 @@ body.mode-app .appPane {
 
 .menu-main-button .name {
   text-transform: none;
+}
+
+
+body.mode-app .util-button-close {
+  position: absolute !important;
+  bottom: 1vh !important;
+  left: 1vh !important;
+  z-index: 2000 !important;
+}
+body.mode-app .util-bar {
+    z-index: 2000 !important;
+}
+
+.titlePane {
+  display: none;
 }
