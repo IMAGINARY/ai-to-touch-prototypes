@@ -12,11 +12,17 @@
             }
 
             #CSCanvas {
-              /*16:9*/
+              /*16:9
                 width: 100vw;
                 height: 56.25vw;
                 max-height: 100vh;
-                max-width: 177.77vh;
+                max-width: 177.77vh;*/
+
+                width: 100vw;
+                position: absolute; /* works if URL bar is displayed on mobile screens */
+                top: 0;
+                bottom: 0;
+
                 filter: invert(1);
             }
         </style>
@@ -24,6 +30,12 @@
         <script src="url-parameters.js"></script>
 
       <script id="csinit" type="text/x-cindyscript">
+
+      updatescreenparameters() := (
+          textposition = (screenbounds()_4).xy+(3,2);
+      );
+      updatescreenparameters();
+
       f(x,y) := (sum(1..length(r), k, sum(1..length(r), l, re(r_k_l)*cos((k-1)*x+(l-1)*y)+im(r_k_l)*sin((k-1)*x+(l-1)*y))));
       f(x) := f(x_1, x_2);
       df(x,y) := [
@@ -135,6 +147,9 @@ gradientdescent() := (
       </script>
       <script id="csdraw" type="text/x-cindyscript">
 
+      updatescreenparameters();
+
+      msg = "";
       if(autopilot % mode=="final", dx = .003);
       if (dragging,
           dx = -.3 * (sx - mouse().x); dy = -.3 * (sy - mouse().y);,
@@ -211,7 +226,7 @@ if(autopilot,
 
 
 if(autopilot & (mode=="select" % mode=="compute"),
-  drawtext((-15,8), "The computer tries to approach the minimum through gradient descent.");
+  msg = "The computer tries to approach the minimum through gradient descent.";
 );
 
 
@@ -226,9 +241,9 @@ if(mode=="select" & !dragging,
       resetclock();
     );
     ,
-    drawtext((-15,8), "Approach the minimal function value! Click to guess!");
+    msg = "Approach the minimal function value! Click to guess!";
   );
-  drawtext((-15,7), "$"+(N-length(pts))+"$ guess"+if((N-length(pts))==1,"","es")+" left");
+  msg = msg + newline + "$"+(N-length(pts))+"$ guess"+if((N-length(pts))==1,"","es")+" left";
 
   if(!autopilot,
     x = inverseproject(mouse().xy);
@@ -294,14 +309,14 @@ if(mode=="final",
 
   subjectverb = if(autopilot, "The computer has reached", "You have reached");
   if(err<.02,
-    drawtext((-15,8), subjectverb + " the global minimum.");
+    msg = subjectverb + " the global minimum.";
     ,
-    drawtext((-15,8), subjectverb + " the global minimum up to $" + format(err,3) + "$.");
+    msg = subjectverb + " the global minimum up to $" + format(err,3) + "$.";
   );
   if(!autopilot,
-    drawtext((-15,7), "Click to see what the computer would have done.");
+    msg = msg + newline + "Click to see what the computer would have done.";
     ,
-    drawtext((-15,7), "Now it is your turn! Click to restart the applet with another function.");
+    msg = msg + newline + "Now it is your turn! Click to restart the applet with another function.";
   );
 
   draw(project(best_1, best_2, f(best)), size->10, alpha->.8*a);
@@ -309,7 +324,7 @@ if(mode=="final",
   draw(project(best_1, best_2, f(best)), project(best_1,best_2, f(yourbest)), size->5, alpha->.8*a, color->[0,1,1]);
 );
 
-
+drawtext(textposition, msg);
       </script>
 
 <script id="csmousedown" type="text/x-cindyscript">
@@ -357,7 +372,7 @@ if(mode=="final",
 
             ],
             ports: [
-              {id: "CSCanvas", transform: [{visibleRect: [-16, -9, 16, 9]}]}
+              {id: "CSCanvas", transform: [{visibleRect: [-16, -9, 16, 9]}], virtualwidth: 1280}
             ],
             autoplay: true,
             use: ["url-parameters"]
