@@ -11,6 +11,12 @@
         <script src="url-parameters.js"></script>
 
       <script id="csinit" type="text/x-cindyscript">
+
+      relativepoint(x) := [
+          (screenbounds()_4).x * (1-x_1) + (screenbounds()_2).x * (x_1),
+          (screenbounds()_4).y * (1-x_2) + (screenbounds()_2).y * (x_2)
+        ];
+
       //nn
         N = [4, 6, 2];
         W = [
@@ -153,7 +159,7 @@
         incorrect() := (
           msg = "your answer was not correct " + ["😢","🙄","😕","😮","😞"]_(randomint(5)+1);
           if(mode=="user",
-            playsin(440*2^(-5/12), damp->4, line->2, amp->.2);
+            playsin(440*2^(-5/12), damp->4, line->2, amp->.1);
           );
           nstrike = 0;
           nfalse = nfalse + 1;
@@ -267,13 +273,14 @@
       <script id="csdraw" type="text/x-cindyscript">
 
       if(mode!="menu",
-        drawtext(color->[1,1,1],(-10,8), align->"right",
+        rp = relativepoint((0.3,.9));
+        drawtext(color->[1,1,1],rp, align->"right",
           "level: " + newline +
           "correct: " + newline +
           "false: " + newline +
           "correct answers in a row: ");
 
-          drawtext(color->[1,1,1],(-9.7,8), align->"left",
+          drawtext(color->[1,1,1],rp+(0.3,0), align->"left",
             level + newline +
             ncorrect + newline +
             nfalse + newline +
@@ -290,7 +297,7 @@
 
         if(t9()<2,
           a = (2-t9())/2;
-          drawtext(color->[1,1,1],(0,-5), msg, alpha->a, align->"mid", size->50);
+          drawtext(color->[1,1,1],relativepoint((0.5,.2)), msg, alpha->a, align->"mid", size->30);
         );
 
         if(t9()>1,
@@ -408,8 +415,9 @@
     <script type="text/javascript">
       var cdy = CindyJS({
         scripts: "cs*",
+        defaultAppearance: { fontFamily: "sans-serif", lineSize: 1, pointSize: 5.0, fontSize: 30 },
         ports: [
-          {id: "CSCanvas", transform: [{visibleRect: [-16, -9, 16, 9]}]}
+          {id: "CSCanvas", transform: [{visibleRect: [-16, -9, 16, 9]}], virtualwidth: 1000}
         ],
         use: ["simple-tf-network-plugin", "url-parameters"],
         autoplay: true

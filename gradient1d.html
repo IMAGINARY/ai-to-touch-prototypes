@@ -35,7 +35,7 @@
 
       updatescreenparameters() := (
           waterh = max(apply(screenbounds(),#.y))-1;
-          textposition = (screenbounds()_4).xy+(3,1);
+          textposition = (screenbounds()_4).xy+(3,2);
       );
       updatescreenparameters();
 
@@ -336,7 +336,7 @@ if(mode=="final",
 
             ],
             ports: [
-              {id: "CSCanvas", transform: [{visibleRect: [-16, -9, 16, 9]}]}
+              {id: "CSCanvas", transform: [{visibleRect: [-16, -9, 16, 9]}], virtualheight: 720}
             ],
             autoplay: true,
             use: ["url-parameters"]

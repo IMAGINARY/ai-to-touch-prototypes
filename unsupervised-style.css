@@ -4,31 +4,37 @@ body {
     width: 100vw;
     height: 100vh;
     background-color: rgb(10, 0, 30);
+    font-size: 3vw;
 }
 
 #CSCanvas {
-  /*16:9*/
+  /*16:9
     width: 100vw;
     height: 56.25vw;
     max-height: 100vh;
     max-width: 177.77vh;
     position: absolute;
     top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);*/
+    width: 100vw;
+    height: 100vh;
+    z-index: -10;
+    pointer-events: none;
     /*filter: invert(1);*/
 }
 
+
 .button{
   background-color: rgba(100,100,100,.4);
-  border: 1px solid white;
+  border: 0.1em solid white;
   border-radius: 5px;
   color: white;
-  width: 20vw;
-  font-size: xx-large;
+  width: 30vw;
+  font-size: 1em;
   font-family: sans-serif;
   position: absolute;
   text-align: center;
-  padding: 2vh;
+  padding: 1vw;
 }
 
 .button:hover {
@@ -37,12 +43,12 @@ body {
 
 #button1 {
   top: 85vh;
-  left: 5vw;
+  left: 10vw;
 }
 
 #button2 {
   top: 85vh;
-  right: 5vw;
+  right: 10vw;
 }
 
 #button3 {
@@ -64,6 +70,7 @@ body {
 
 .right {
   right: 5vw;
+  transform: translateY(-20vh);
 }
 
 .visible {
