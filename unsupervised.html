@@ -352,7 +352,7 @@
           predict([x],
             y = #_1;
             //computerguess(y);
-            computerguess_cimgcnt = if(y_1>.5, "ya", "tidak") + "  " + if((y_1>.5) == answer(x),"✔","✗");
+            computerguess_cimgcnt = if(y_1>.5, labels_1, labels_2) + "  " + if((y_1>.5) == answer(x),"✔","✗");
             if((y_1>.5) == answer(x), correct(), incorrect());
             /*clearimage("cimg"+cimgcnt);
             canvas((-16,-9)/scale,(16,-9)/scale,"cimg"+cimgcnt,
