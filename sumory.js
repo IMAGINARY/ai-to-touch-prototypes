@@ -100,14 +100,14 @@ addinteraction = function(card) {
       cdraws++;
       update_parameters();
       if (cdraws == draws) {
-          let strats = calculate_strategies(10000);
-          let best;
-          for(let l=1; l<draws; l++) {
-            if(l==1 || strats[l]<best) best = strats[l];
-          }
+        let strats = calculate_strategies(10000);
+        let best;
+        for (let l = 1; l < draws; l++) {
+          if (l == 1 || strats[l] < best) best = strats[l];
+        }
 
-          show_message(`<div>Endergebnis: ${formatvalue(score, true)}.</div>
-          <div>${score>best  ? `Dies ist um ${(score-best).toFixed(1)} <em>besser</em> als die durchschnittlich beste Strategie` : `Dies ist um ${(best-score).toFixed(1)} <em>schlechter</em> als die durchschnittlich beste Strategie` }.</div>`);
+        show_message(`<div>Endergebnis: ${formatvalue(score, true)}.</div>
+          <div>${score>best  ? `Dies ist um ${(score-best).toFixed(1)} <em>besser</em> als die durchschnittlich beste Strategie` : `Dies ist um ${(best-score).toFixed(1)} <em>schlechter</em> als die durchschnittlich beste Strategie` }.</div>`, assignvalues);
       }
     }
   };
@@ -176,10 +176,10 @@ window.onload = function(e) {
     };
   }
 
-  if(mode=="image" && imgsrc=="images/restaurants.svg") {
-      document.getElementById("shuffle-button").innerHTML = "Köche zufällig vertauschen";
-      document.getElementById("assignvalues-button").innerHTML = "neue Köche einfliegen";
-      document.getElementById("showall-button").innerHTML = "alle Bewertungen anzeigen (und verändern)";
+  if (mode == "image" && imgsrc == "images/restaurants.svg") {
+    document.getElementById("shuffle-button").innerHTML = "Köche zufällig vertauschen";
+    document.getElementById("assignvalues-button").innerHTML = "neue Köche einfliegen";
+    document.getElementById("showall-button").innerHTML = "alle Bewertungen anzeigen (und verändern)";
   }
 
   document.getElementById("buttons").className = buttonclass;
@@ -230,10 +230,10 @@ var assignvalues = function() {
       if ((maxstars == "random"))
         cards[id].value = Math.ceil((Math.random() * mv));
       else {
-        if((maxstars | 0) != 5) {
+        if ((maxstars | 0) != 5) {
           cards[id].value = Math.floor((Math.random() * (mv + 1))); //zero stars can happen
         } else {
-          cards[id].value = [ 0, 1, 1, 1, 2, 2, 2, 3, 3, 4, 5 ][id]; //interesting distribution for max 5 stars
+          cards[id].value = [0, 1, 1, 1, 2, 2, 2, 3, 3, 4, 5][id]; //interesting distribution for max 5 stars
         }
       }
     }
@@ -302,7 +302,7 @@ var calculate_strategies = function(iterations) {
 };
 
 
-var show_strategies = function () {
+var show_strategies = function() {
   strat_nr = calculate_strategies(1000000);
 
   minval = 0;
@@ -326,7 +326,7 @@ var show_strategies = function () {
   msg += `<div class="zeroline" style="bottom: ${z}%;"></div>`;
   msg += `</div>`;
   msg += `Durschnittswert für Strat(n)`;
-  show_message(msg);
+  show_message(msg, shufflecards);
 };
 
 
@@ -351,8 +351,13 @@ evaluate_strategy = function(seq, start_exploit) {
 
 let closeblocked = false;
 
-show_message = function(msg) {
+show_message = function(msg, closecallback) {
   document.getElementById("message").innerHTML = msg;
+  document.getElementById("messagebackground").onclick = function() {
+    closecallback();
+    hide_message();
+  };
+
   document.getElementById("messagebox").className = "visible";
   closeblocked = true;
   setTimeout(function() {
@@ -374,16 +379,16 @@ hide_footer = function() {
 
 
 show_description = function() {
-  if(mode=="image" && imgsrc=="images/restaurants.svg") {
-      show_message(`Du bist für ${draws} Tage in einer fremden Stadt und möchtest jeden Abend einmal essen gehen.<br>
+  if (mode == "image" && imgsrc == "images/restaurants.svg") {
+    show_message(`Du bist für ${draws} Tage in einer fremden Stadt und möchtest jeden Abend einmal essen gehen.<br>
         Wenn du ein Restaurant anklickst oder antippst, besuchst du ein Restaurant und die Anzahl der Sterne wird zu deiner Summe addiert.<br>
         Du möchtest deinen Genuss maximieren und daher eine h&ouml;chstm&ouml;gliche Summe erreichen.<br>
         Bereits besuchte Restaurants können erneut besucht werden.
-        `);
+        `, assignvalues);
   } else {
-      show_message(`Erkl&auml;rung: Hinter jeder Karte befindet sich eine Zahl.<br>
+    show_message(`Erkl&auml;rung: Hinter jeder Karte befindet sich eine Zahl.<br>
         Jede Zahl, die du anklickst oder tippst, wird zu deiner Summe addiert.<br>
         Du kannst ${draws} Zahlen antippen, um die h&ouml;chstm&ouml;gliche Summe zu erreichen.<br>
-        Eine bereits aufgedeckte Zahl kannst du auch mehrmals antippen.`);
+        Eine bereits aufgedeckte Zahl kannst du auch mehrmals antippen.`, assignvalues);
   }
 };
