@@ -19,7 +19,9 @@
                 max-width: 177.77vh;
                 */
                 width: 100vw;
-                height: 100vh;
+                position: absolute; /* works if URL */
+                top: 0;
+                bottom: 0;
                 filter: invert(1);
             }
         </style>
@@ -35,7 +37,7 @@
 
       updatescreenparameters() := (
           waterh = max(apply(screenbounds(),#.y))-1;
-          textposition = (screenbounds()_4).xy+(3,1);
+          textposition = (screenbounds()_4).xy+(3,2);
       );
       updatescreenparameters();
 
@@ -336,7 +338,7 @@ if(mode=="final",
 
             ],
             ports: [
-              {id: "CSCanvas", transform: [{visibleRect: [-16, -9, 16, 9]}]}
+              {id: "CSCanvas", transform: [{visibleRect: [-16, -9, 16, 9]}], virtualwidth: 1000}
             ],
             autoplay: true,
             use: ["url-parameters"]
