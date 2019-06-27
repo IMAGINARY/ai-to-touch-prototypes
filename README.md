@@ -10,7 +10,7 @@ To install the applauncher for this collection, check out the repository via git
 
 ## ready-to-use URLs for several applets
 
-The applets can be opened directly on [githack.com](githack.com).
+The applets can be opened directly on [githack.com](https://raw.githack.com/).
 * Sumory (Explore / Exploit)
   * [Restaurants (up to 5 stars)](https://raw.githack.com/IMAGINARY/ai-to-touch-prototypes/master/sumory.html?mode=image&imgsrc=images/restaurants.svg&draws=7&values=stars&maxstars=5&buttons=hidden).
   * [Restaurants (expert mode)](https://raw.githack.com/IMAGINARY/ai-to-touch-prototypes/master/sumory.html?mode=image&imgsrc=images/restaurants.svg&draws=7&values=stars&maxstars=random&buttons=visible)
