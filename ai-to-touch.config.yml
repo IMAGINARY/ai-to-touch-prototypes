@@ -52,15 +52,15 @@ theme: ../../ai-to-touch-theme/
 # on the app.json file format.
 #
 apps:
-  - ../sumory-restaurants
-  - ../sumory-restaurants-expert
-  - ../sumory-classic
-  - ../sumory-classic-expert
-  - ../unsupervised
-  - ../treasure
-  - ../gradient1d
-  - ../gradient2d
-  - ../classifywithgradient
+  - ../apps/sumory-restaurants
+  - ../apps/sumory-restaurants-expert
+  - ../apps/sumory-classic
+  - ../apps/sumory-classic-expert
+  - ../apps/unsupervised
+  - ../apps/treasure
+  - ../apps/gradient1d
+  - ../apps/gradient2d
+  - ../apps/classifywithgradient
 
 #
 # App to load when the user clicks on the "info" button. Typically an

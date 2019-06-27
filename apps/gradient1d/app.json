@@ -1,7 +1,7 @@
 {
   "id": "gradient1d",
   "version": "0.1.0",
-  "main": "../gradient1d.html",
+  "main": "../../gradient1d.html",
   "name": {
     "de": "Eindimensionales Gradientenverfahren."
   },

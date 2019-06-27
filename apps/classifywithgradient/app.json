@@ -1,7 +1,7 @@
 {
   "id": "classifywithgradient",
   "version": "0.1.0",
-  "main": "../classifywithgradient.html",
+  "main": "../../classifywithgradient.html",
   "name": {
     "de": "Trainiere ein neuronales Netzwerk!"
   },

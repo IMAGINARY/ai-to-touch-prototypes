@@ -1,7 +1,7 @@
 {
   "id": "treasure",
   "version": "0.1.0",
-  "main": "../gradient1d.html?water=true&autopilot=false",
+  "main": "../../gradient1d.html?water=true&autopilot=false",
   "name": {
     "de": "Schatzsuche"
   },

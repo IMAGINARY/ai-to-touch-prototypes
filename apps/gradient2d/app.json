@@ -1,7 +1,7 @@
 {
   "id": "gradient2d",
   "version": "0.1.0",
-  "main": "../gradient2d.html",
+  "main": "../../gradient2d.html",
   "name": {
     "de": "Zweidimensionales Gradientenverfahren."
   },

@@ -1,9 +1,9 @@
 {
-  "id": "sumory-restaurants",
+  "id": "sumory-restaurants-expert",
   "version": "0.1.0",
-  "main": "../sumory.html?mode=image&imgsrc=images/restaurants.svg&draws=7&values=stars&maxstars=5&buttons=hidden",
+  "main": "../../sumory.html?mode=image&imgsrc=images/restaurants.svg&draws=7&values=stars&maxstars=random&buttons=visible",
   "name": {
-    "de": "Restaurants in einer fremden Stadt."
+    "de": "Restaurants in einer fremden Stadt. (Expertenmodus)"
   },
   "description": {
     "en": "",
