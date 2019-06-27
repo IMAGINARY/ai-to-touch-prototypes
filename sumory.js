@@ -229,11 +229,16 @@ var assignvalues = function() {
     for (let id = 0; id < N; id++) {
       if ((maxstars == "random"))
         cards[id].value = Math.ceil((Math.random() * mv));
-      else
-        cards[id].value = Math.floor((Math.random() * (mv + 1))); //zero stars can happen
+      else {
+        if((maxstars | 0) != 5) {
+          cards[id].value = Math.floor((Math.random() * (mv + 1))); //zero stars can happen
+        } else {
+          cards[id].value = [ 0, 1, 1, 1, 2, 2, 2, 3, 3, 4, 5 ][id]; //interesting distribution for max 5 stars
+        }
+      }
     }
   }
-  startplay();
+  shufflecards();
 };
 
 //Fisher-Yates shuffle
