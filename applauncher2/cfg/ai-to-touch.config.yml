@@ -52,15 +52,9 @@ theme: ../../ai-to-touch-theme/
 # on the app.json file format.
 #
 apps:
-  - ../apps/sumory-restaurants
-  - ../apps/sumory-restaurants-expert
-  - ../apps/sumory-classic
-  - ../apps/sumory-classic-expert
+  - ../apps/sumory
   - ../apps/unsupervised
-  - ../apps/treasure
-  - ../apps/gradient1d
-  - ../apps/gradient2d
-  - ../apps/classifywithgradient
+  - ../apps/gradient
 
 #
 # App to load when the user clicks on the "info" button. Typically an
@@ -85,7 +79,7 @@ apps:
 # This new layout will only be used if the sum of all rows matches exactly the
 # number of apps, and if no row exceeds the maximum number of icons allowed (6).
 #
-iconsPerRow: [4, 5]
+#iconsPerRow: [4, 5]
 
 
 #
