@@ -1,0 +1,13 @@
+{
+  "id": "treasure",
+  "version": "0.1.0",
+  "main": "../../appslider.html?gradient#0",
+  "name": {
+    "de": "Gradientenverfahren"
+  },
+  "description": {
+    "en": "",
+    "de": "",
+    "es": ""
+  }
+}
