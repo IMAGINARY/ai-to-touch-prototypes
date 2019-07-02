@@ -31,6 +31,14 @@ let cycleiframes = function(forward) {
 
 
 let updateurls = function(prev, cur, next) {
+  if (collection == "gradient") {
+    //quick fix to avoid preloading demanding gradient apps
+    prev = false;
+    cur = true;
+    next = false;
+    iframes[0].src = "";
+    iframes[2].src = "";
+  }
   window.location.hash = active;
   if (active - 1 >= 0 && prev)
     iframes[0].src = urls[active - 1];
