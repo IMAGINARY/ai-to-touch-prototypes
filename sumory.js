@@ -32,6 +32,10 @@ let cards = [];
 let mode = getUrlParam("mode", "grid"); // "grid" or "image"
 let imgsrc = getUrlParam("imgsrc", "images/restaurants.svg");
 
+if (!(/^(images\/)?[a-zA-z0-9 _\-\.]*$/.test(imgsrc))) {
+  imgsrc = "images/restaurants.svg";
+}
+
 let values = getUrlParam("values", "numbers"); // "numbers" or "stars"
 let maxstars = getUrlParam("maxstars", 5); //an integer or "random"
 
@@ -113,7 +117,7 @@ addinteraction = function(card) {
   };
 
   card.text.onfocus = function(e) {
-    if(editmode)
+    if (editmode)
       this.innerHTML = this.card.value;
   };
 
