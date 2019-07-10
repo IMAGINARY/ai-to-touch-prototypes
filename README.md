@@ -5,7 +5,7 @@ Many of the applets can be launched in different modi, which are parameterized t
 
 ## Index through applauncher
 
-The version with applauncher is hosted [https://github.com/IMAGINARY/ai-to-touch-prototypes](https://github.com/IMAGINARY/ai-to-touch-prototypes).
+The version with applauncher is hosted at [https://imaginary.github.io/ai-to-touch-prototypes/](https://imaginary.github.io/ai-to-touch-prototypes/).
 
 A way to obtain an index is to use the [applauncher2 of IMAGINARY](https://github.com/IMAGINARY/applauncher2).
 To install the applauncher for this collection, check out the repository via git, run `install.sh` and serve the repository root via a web server.
