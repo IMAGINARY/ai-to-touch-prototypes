@@ -32,6 +32,10 @@ let cards = [];
 let mode = getUrlParam("mode", "grid"); // "grid" or "image"
 let imgsrc = getUrlParam("imgsrc", "images/restaurants.svg");
 
+if (!(/^(images\/)?[a-zA-z0-9 _\-\.]*$/.test(imgsrc))) {
+  imgsrc = "images/restaurants.svg";
+}
+
 let values = getUrlParam("values", "numbers"); // "numbers" or "stars"
 let maxstars = getUrlParam("maxstars", 5); //an integer or "random"
 
@@ -112,19 +116,14 @@ addinteraction = function(card) {
     }
   };
 
+  card.text.onfocus = function(e) {
+    if (editmode)
+      this.innerHTML = this.card.value;
+  };
+
   card.text.onblur = function(e) {
     if (editmode) {
-      if (values == "numbers") {
-        this.card.value = this.innerHTML | 0; //force integer
-      }
-      if (values == "stars") {
-        let m = this.innerHTML.match(/(\d+)/, '$1');
-        if (m) //an integer occurs
-          this.card.value = m[0] | 0;
-        else
-          this.card.value = (this.innerHTML.match(/⭐/g) || []).length; //numer of occurences of ⭐
-
-      }
+      this.card.value = this.innerHTML | 0; //force integer
       this.innerHTML = formatvalue(this.card.value, false);
     }
   };
