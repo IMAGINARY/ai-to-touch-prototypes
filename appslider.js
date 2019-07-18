@@ -1,9 +1,9 @@
 /*jshint esversion: 6 */
 
-let collection = window.location.search.substring(1); // would be sumory for level.html?sumory#2
-if (!collection) {
-  window.location.search = collection = "sumory";
-}
+var urlParams = new URLSearchParams(window.location.search);
+
+let collection = urlParams.get("set") || "sumory"; // would be sumory for level.html?set=sumory#2
+let lang = urlParams.get("lang") || "en";
 
 let urls = (collection == "sumory") ? [
   "sumory.html?mode=image&imgsrc=images/restaurants.svg&draws=7&values=stars&maxstars=5&buttons=hidden",
@@ -18,7 +18,7 @@ let urls = (collection == "sumory") ? [
 ] : ["default.html"];
 
 
-var active = window.location.hash.substring(1) | 0; // would be 2 for level.html?sumory#2
+var active = window.location.hash.substring(1) | 0; // would be 2 for level.html?set=sumory#2
 var iframes;
 
 let cycleiframes = function(forward) {
@@ -29,6 +29,11 @@ let cycleiframes = function(forward) {
   iframes[idx(2)] = tmp;
 };
 
+let addlang = function(reladdress) {
+  let url = new URL(reladdress, window.location.href);
+  url.searchParams.append("lang", lang);
+  return url.href;
+};
 
 let updateurls = function(prev, cur, next) {
   if (collection == "gradient") {
@@ -41,11 +46,11 @@ let updateurls = function(prev, cur, next) {
   }
   window.location.hash = active;
   if (active - 1 >= 0 && prev)
-    iframes[0].src = urls[active - 1];
+    iframes[0].src = addlang(urls[active - 1]);
   if (cur)
-    iframes[1].src = urls[active];
+    iframes[1].src = addlang(urls[active]);
   if (active + 1 < urls.length && next)
-    iframes[2].src = urls[active + 1];
+    iframes[2].src = addlang(urls[active + 1]);
 };
 
 let updatebuttons = function() {
