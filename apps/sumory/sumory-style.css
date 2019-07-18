@@ -42,8 +42,8 @@ body {
   font-family: Quicksand, Helvetica, Arial, sans-serif;
   margin: 0px;
   padding: 0px;
-  background-color: white;
-  color: rgb(10, 10, 100);
+  background-color: rgb(10, 0, 30);
+  color: white;
   font-size: 2vw;
 }
 
@@ -54,6 +54,8 @@ body {
 
 #buttons div, #buttons a {
   background-color: rgba(100, 100, 100, .4);
+  border: 0.1em solid white;
+  color: white;
   text-decoration: none;
   border-radius: 5px;
   /* width: 20vw; */
@@ -97,6 +99,7 @@ body {
   display: table-cell;
   vertical-align: middle;
   position: relative;
+  border: 2px solid;
 }
 
 .light:after, .dark:after {
@@ -106,7 +109,7 @@ body {
 }
 
 .light {
-  background-color: rgba(194, 192, 187, 0.5);
+  background-color: rgba(204, 106, 95, 0.5);
 }
 
 .light:hover {
@@ -114,8 +117,7 @@ body {
 }
 
 .dark {
-  background-color: rgba(156, 163, 159, 0.5);
-  ;
+  background-color: rgba(14, 47, 62, 0.3);
 }
 
 .dark:hover {
@@ -135,6 +137,7 @@ body {
   font-size: 1.5em;
   user-select: none;
   /* supported by Chrome and Opera */
+  text-shadow: 0 0 5px black;
   -webkit-user-select: none;
   /* Safari */
   -khtml-user-select: none;
@@ -234,9 +237,11 @@ h1 {
   left: 50vw;
   transform: translateX(-50%) translateY(-50%);
   margin: auto;
-  background: rgba(191, 210, 218, 0.87);
+  background: rgba(14, 47, 62, 0.87);
   border-radius: 15px;
   /* margin: 10px; */
+  /* border: 1px white; */
+  border: 2px solid;
   padding: 1em;
   text-align: justify;
 }
@@ -289,7 +294,7 @@ embed, #svgoverlay {
 }
 
 path:hover {
-  fill: #ff0000 !important;
+  fill: #ff8000 !important;
   fill-opacity: .2 !important;
 }
 

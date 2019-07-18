@@ -60,8 +60,8 @@
      id="layer1"
      transform="translate(91.830841,-7.2755346)">
     <image
-       sodipodi:absref="restaurants.jpg"
-       xlink:href="restaurants.jpg"
+       sodipodi:absref="restaurants-dark.png"
+       xlink:href="restaurants-dark.png"
        width="463.02084"
        height="330.72916"
        preserveAspectRatio="none"
