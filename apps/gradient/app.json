@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "main": "../../common/appslider/appslider.html?set=gradient",
   "name": {
-    "de": "Gradientenverfahren"
+    "de": "Gradientenverfahren",
+    "en": "gradient descent"
   },
   "description": {
     "en": "",

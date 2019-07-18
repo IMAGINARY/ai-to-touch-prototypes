@@ -1,0 +1,19 @@
+{
+  "shape-ocean": "Shape your own ocean.",
+  "shape-function": "Shape your own function.",
+  "done": "done",
+  "approach-deep": "The computer tries to find the deepest point of the ocean.",
+  "approach-minimum": "The computer tries to approach the minimum through gradient descent.",
+  "aim-deep": "Find the treasure at the deepest point!",
+  "aim-minimum": "Approach the minimal function value! Click to guess!",
+  "guess-1": "",
+  "guess-2": ["guess left", "guesses left"],
+  "found-treasure": "You have found the treasure!",
+  "computer-has": "The computer has",
+  "you-have": "You have",
+  "not-found-treasure": "not found the treasure.",
+  "computer-turn": "Click to see what the computer would have done.",
+  "your-turn": "Now its your turn. Click to restart.",
+  "reached-global-minimum": "reached the global minimum.",
+  "reached-global-minimum-up-to": "reached the global minimum up to"
+}

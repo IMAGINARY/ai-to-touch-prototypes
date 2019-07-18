@@ -29,6 +29,7 @@
   </style>
   <script type="text/javascript" src="../../common/js/Cindy.js"></script>
   <script type="text/javascript" src="../../common/js/url-parameters.js"></script>
+  <script type="text/javascript" src="../../common/js/i18n4js-1.3.0.min.js"></script>
 
   <script id="csinit" type="text/x-cindyscript">
     userdraw = geturlparameter("draw", false);
@@ -156,10 +157,10 @@ msg = "";
 
 if(mode == "draw",
   if(watertheme,
-    msg = "Forme deinen eigenen Meeresboden.",
-    msg = "Forme deine eigene Kurve."
+    msg = international("shape-ocean"),
+    msg = international("shape-function")
   );
-  drawtext(B0, align->"mid", "fertig", bold->|mouse().xy-B0|<B0r);
+  drawtext(B0, align->"mid", international("done"), bold->|mouse().xy-B0|<B0r);
 
   connect(transpose([xvals,apply(xvals,x,f(x))]));
 
@@ -171,9 +172,10 @@ if(autopilot, connect(transpose([xvals,apply(xvals,x,f(x))]),alpha->.2));
 if(autopilot & (mode=="select" % mode=="compute"),
 
   if(watertheme,
-    msg =  "Der Computer versucht die tiefste Stelle zu finden.",
-    msg = "The computer tries to approach the minimum through gradient descent."
+    msg = international("approach-deep"),
+    msg = international("approach-minimum")
   );
+
 );
 
 if(mode=="select",
@@ -188,15 +190,18 @@ if(mode=="select",
     );
     ,
     if(watertheme,
-      msg = "Finde den Schatz an der tiefsten Stelle!",
-      msg = "Approach the minimal function value! Click to guess!"
+      //msg = "Finde den Schatz an der tiefsten Stelle!",
+      //msg = "Approach the minimal function value! Click to guess!"
+      msg = international("aim-deep"),
+      msg = international("aim-minimum")
     );
 
   );
-  if(watertheme,
+  /*if(watertheme,
     msg = msg + newline + "noch $"+(N-length(pts))+"$ Versuch"+if((N-length(pts))==1,"","e"),
     msg = msg + newline + "$"+(N-length(pts))+"$ guess"+if((N-length(pts))==1,"","es")+" left"
-  );
+  );*/
+  msg = msg + newline + international("guess-1") + "$"+(N-length(pts))+"$" + " " + international("guess-2", (N-length(pts)));
 
 
 
@@ -276,29 +281,30 @@ if(mode=="final",
 
   if(watertheme,
     if(|best-yourbest|<EPS,
-      msg = "Schatz gefunden!";
+      msg = international("found-treasure"); //"Schatz gefunden!"
       ,
-      msg = if(autopilot, "Der Computer hat", "Du hast") + " den Schatz nicht gefunden (Fehler: $"+format(err,3)+"$)";
+      //msg = if(autopilot, "Der Computer hat", "Du hast") + " den Schatz nicht gefunden";
+      msg = if(autopilot, international("computer-has"), international("you-have")) + " " + international("not-found-treasure");
     );
     if(!autopilot,
-      msg = msg + newline + "Klicke um zu sehen, wie der Computer gehandelt hätte.";
+      msg = msg + newline + international("computer-turn");
       ,
-      msg = msg + newline + "Jetzt bist du am Zug! Klicke, um in einem anderem Meer neu zu beginnen.";
+      msg = msg + newline + international("your-turn");
     );
 
 
 
     ,
-    subjectverb = if(autopilot, "The computer has reached", "You have reached");
+    subjectverb = if(autopilot, international("computer-has"), international("you-have"));
     if(|best-yourbest|<EPS,
-      msg = subjectverb + " the global minimum.";
+      msg = subjectverb + " " + international("reached-global-minimum");
       ,
-      msg = subjectverb + " the global minimum up to $" + format(err,3) + "$.";
+      msg = subjectverb + " " + international("reached-global-minimum-up-to") +" $" + format(err, 3) + "$.";
     );
     if(!autopilot,
-      msg = msg + newline + "Click to see what the computer would have done.";
+      msg = msg + newline + international("computer-turn");
       ,
-      msg = msg + newline + "Now it is your turn! Click to restart the applet with another function.";
+      msg = msg + newline + international("your-turn");
     );
   );
 
@@ -416,7 +422,20 @@ if(mode == "draw",
   );
   </script>
   <script type="text/javascript">
+
+    var ready = CindyJS.waitFor('i18n');
+    var translations = {};
+    IMAGINARY.i18n.init().then(function(lang){
+      translations[lang] = IMAGINARY.i18n.getStrings();
+      ready();
+    }).catch(function(err){
+      console.log("Error loading translation: " + err);
+      throw err;
+    });
+
     var cdy = CindyJS({
+      language: IMAGINARY.i18n.getLang(),
+      translations: translations,
       scripts: "cs*",
       geometry: [
 
