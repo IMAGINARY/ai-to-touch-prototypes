@@ -1,0 +1,19 @@
+{
+  "shape-ocean": "Forme deinen eigenen Meeresboden.",
+  "shape-function": "Forme deine eigene Kurve.",
+  "done": "fertig",
+  "approach-deep": "Der Computer versucht die tiefste Stelle zu finden.",
+  "approach-minimum": "Der Computer versucht das Minimum mithilfe des Gradientenverfahrens zu finden.",
+  "aim-deep": "Finde den Schatz an der tiefsten Stelle!",
+  "aim-minimum": "Finde das Minimum der Funktion!",
+  "guess-1": "noch ",
+  "guess-2": ["Versuch", "Versuche"],
+  "found-treasure": "Schatz gefunden!",
+  "computer-has": "Der Computer hat",
+  "you-have": "Du hast",
+  "not-found-treasure": "den Schatz nicht gefunden.",
+  "computer-turn": "Klicke um zu sehen, wie der Computer gehandelt hätte.",
+  "your-turn": "Jetzt bist du am Zug! Klicke, um neu zu beginnen.",
+  "reached-global-minimum": " das globale Minimum gefunden.",
+  "reached-global-minimum-up-to": " das globale Minimum nicht gefunden. Abweichung:"
+}
