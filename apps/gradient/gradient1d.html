@@ -27,11 +27,11 @@
       filter: invert(1);
     }
   </style>
-  <script type="text/javascript" src="common/js/Cindy.js"></script>
-  <script src="url-parameters.js"></script>
+  <script type="text/javascript" src="../../common/js/Cindy.js"></script>
+  <script type="text/javascript" src="../../common/js/url-parameters.js"></script>
 
   <script id="csinit" type="text/x-cindyscript">
-      userdraw = geturlparameter("draw", false);
+    userdraw = geturlparameter("draw", false);
       autopilot = geturlparameter("autopilot", !userdraw);
       watertheme = geturlparameter("water", false);
 
@@ -369,7 +369,7 @@ forall(if(mode!="compute",1..length(pts),1..(length(pts)-1)), k,
 drawtext(textposition, msg);
       </script>
   <script id="csmousedown" type="text/x-cindyscript">
-if(mode=="select" & !autopilot & (N-length(pts))>0,
+    if(mode=="select" & !autopilot & (N-length(pts))>0,
    x = mouse().x;
    pts = pts :> x;
    mode = "compute";
@@ -394,7 +394,7 @@ if(mode == "draw",
 
       </script>
   <script id="csmousedrag" type="text/x-cindyscript">
-      if(mode=="draw",
+    if(mode=="draw",
         closestk = 1;
         x = mouse().x;
         y = mouse().y;
@@ -406,7 +406,7 @@ if(mode == "draw",
       );
   </script>
   <script id="csmouseup" type="text/x-cindyscript">
-  if(mode=="draw",
+    if(mode=="draw",
     forall(xvals, x, if(|f(x)|>|f(best)|, best=x));
     M = if(watertheme, waterh-.5, 7.5);
     if(|f(best)|>M,

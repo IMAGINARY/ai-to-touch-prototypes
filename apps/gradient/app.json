@@ -1,7 +1,7 @@
 {
   "id": "treasure",
   "version": "0.1.0",
-  "main": "../../appslider.html?set=gradient",
+  "main": "../../common/appslider/appslider.html?set=gradient",
   "name": {
     "de": "Gradientenverfahren"
   },

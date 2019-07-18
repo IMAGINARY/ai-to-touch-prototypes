@@ -6,15 +6,15 @@ let collection = urlParams.get("set") || "sumory"; // would be sumory for level.
 let lang = urlParams.get("lang") || "en";
 
 let urls = (collection == "sumory") ? [
-  "sumory.html?mode=image&imgsrc=images/restaurants.svg&draws=7&values=stars&maxstars=5&buttons=hidden",
-  "sumory.html?mode=image&imgsrc=images/restaurants.svg&draws=7&values=stars&maxstars=random&buttons=visible",
-  "sumory.html?mode=grid&Nw=7&Nh=3&draws=10&buttons=hidden",
-  "sumory.html?mode=grid&Nw=7&Nh=3&draws=10&buttons=visible"
+  "../../apps/sumory/sumory.html?mode=image&imgsrc=images/restaurants.svg&draws=7&values=stars&maxstars=5&buttons=hidden",
+  "../../apps/sumory/sumory.html?mode=image&imgsrc=images/restaurants.svg&draws=7&values=stars&maxstars=random&buttons=visible",
+  "../../apps/sumory/sumory.html?mode=grid&Nw=7&Nh=3&draws=10&buttons=hidden",
+  "../../apps/sumory/sumory.html?mode=grid&Nw=7&Nh=3&draws=10&buttons=visible"
 ] : (collection == "gradient") ? [
-  "gradient1d.html?water=true&autopilot=false",
-  "gradient1d.html?autopilot=true",
-  "gradient2d.html?autopilot=true",
-  "classifywithgradient.html"
+  "../../apps/gradient/gradient1d.html?water=true&autopilot=false",
+  "../../apps/gradient/gradient1d.html?autopilot=true",
+  "../../apps/gradient/gradient2d.html?autopilot=true",
+  "../../apps/gradient/classifywithgradient.html"
 ] : ["default.html"];
 
 

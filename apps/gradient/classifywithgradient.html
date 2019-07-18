@@ -1,29 +1,31 @@
 <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="UTF-8">
+<html>
 
-        <title>Gradient descent</title>
-        <style type="text/css">
-            body {
-                margin: 0px;
-                padding: 0px;
-                background-color: rgb(10, 0, 30);
-            }
+<head>
+  <meta charset="UTF-8">
 
-            #CSCanvas {
-              /*16:9*/
-                width: 100vw;
-                height: 56.25vw;
-                max-height: 100vh;
-                max-width: 177.77vh;
-                filter: invert(1);
-            }
-        </style>
-        <script type="text/javascript" src="common/js/Cindy.js"></script>
+  <title>Gradient descent</title>
+  <style type="text/css">
+    body {
+      margin: 0px;
+      padding: 0px;
+      background-color: rgb(10, 0, 30);
+    }
 
-      <script id="csinit" type="text/x-cindyscript">
-      tanh(x) := (
+    #CSCanvas {
+      /*16:9*/
+      width: 100vw;
+      height: 56.25vw;
+      max-height: 100vh;
+      max-width: 177.77vh;
+      filter: invert(1);
+    }
+  </style>
+  <script type="text/javascript" src="../../common/js/Cindy.js"></script>
+  <script type="text/javascript" src="../../common/js/url-parameters.js"></script>
+
+  <script id="csinit" type="text/x-cindyscript">
+    tanh(x) := (
         (exp(x)-exp(-x))/(exp(x)+exp(-x))
       );
 
@@ -169,9 +171,9 @@ gradientdescent() := (
 );
 
       </script>
-      <script id="csdraw" type="text/x-cindyscript">
+  <script id="csdraw" type="text/x-cindyscript">
 
-      if(autopilot % mode=="final", dx = .003);
+    if(autopilot % mode=="final", dx = .003);
       if (dragging,
           dx = -.3 * (sx - mouse().x); dy = -.3 * (sy - mouse().y);,
           dx = .9*dx; dy = .9*dy;
@@ -425,8 +427,8 @@ grestore();
 
       </script>
 
-<script id="csmousedown" type="text/x-cindyscript">
-  sx = mouse().x;
+  <script id="csmousedown" type="text/x-cindyscript">
+    sx = mouse().x;
   sy = mouse().y;
   x = inverseproject(mouse());
   //if(|x_1|>pi%|x_2|>pi,
@@ -434,12 +436,12 @@ grestore();
   //);
 </script>
 
-<script id="csmouseup" type="text/x-cindyscript">
-  dragging = false;
+  <script id="csmouseup" type="text/x-cindyscript">
+    dragging = false;
 </script>
 
-<script id="csmouseclick" type="text/x-cindyscript">
-if(mode=="select" & !autopilot & (N-length(pts))>0,
+  <script id="csmouseclick" type="text/x-cindyscript">
+    if(mode=="select" & !autopilot & (N-length(pts))>0,
    //x = mouse().x;
    x = inverseproject(mouse());
    if(|x_1|<S&|x_2|<S,
@@ -463,23 +465,27 @@ if(mode=="final",
 
       </script>
 
-        <script type="text/javascript">
-          var cdy = CindyJS({
-            scripts: "cs*",
-            geometry: [
+  <script type="text/javascript">
+    var cdy = CindyJS({
+      scripts: "cs*",
+      geometry: [
 
-            ],
-            ports: [
-              {id: "CSCanvas", transform: [{visibleRect: [-14, -9, 18, 9]}],
-                virtualheigth: 1080,
-                virtualwidth: 1920
-              }
-            ],
-            autoplay: true
-          });
-        </script>
-    </head>
-    <body>
-        <div id="CSCanvas"></div>
-    </body>
-    </html>
+      ],
+      ports: [{
+        id: "CSCanvas",
+        transform: [{
+          visibleRect: [-14, -9, 18, 9]
+        }],
+        virtualheigth: 1080,
+        virtualwidth: 1920
+      }],
+      autoplay: true
+    });
+  </script>
+</head>
+
+<body>
+  <div id="CSCanvas"></div>
+</body>
+
+</html>

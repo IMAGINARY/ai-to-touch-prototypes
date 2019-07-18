@@ -1,37 +1,39 @@
 <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="UTF-8">
+<html>
 
-        <title>Gradient descent seperating clusters</title>
-        <style type="text/css">
-            body {
-                margin: 0px;
-                padding: 0px;
-                background-color: rgb(10, 0, 30);
-            }
+<head>
+  <meta charset="UTF-8">
 
-            #CSCanvas {
-              /*16:9
+  <title>Gradient descent seperating clusters</title>
+  <style type="text/css">
+    body {
+      margin: 0px;
+      padding: 0px;
+      background-color: rgb(10, 0, 30);
+    }
+
+    #CSCanvas {
+      /*16:9
                 width: 100vw;
                 height: 56.25vw;
                 max-height: 100vh;
                 max-width: 177.77vh;*/
 
-                width: 100vw;
-                position: absolute; /* works if URL bar is displayed on mobile screens */
-                top: 0;
-                bottom: 0;
+      width: 100vw;
+      position: absolute;
+      /* works if URL bar is displayed on mobile screens */
+      top: 0;
+      bottom: 0;
 
-                filter: invert(1);
-            }
-        </style>
-        <script type="text/javascript" src="common/js/Cindy.js"></script>
-        <script src="url-parameters.js"></script>
+      filter: invert(1);
+    }
+  </style>
+  <script type="text/javascript" src="../../common/js/Cindy.js"></script>
+  <script type="text/javascript" src="../../common/js/url-parameters.js"></script>
 
-      <script id="csinit" type="text/x-cindyscript">
+  <script id="csinit" type="text/x-cindyscript">
 
-      updatescreenparameters() := (
+    updatescreenparameters() := (
           textposition = (screenbounds()_4).xy+(3,2);
       );
       updatescreenparameters();
@@ -145,9 +147,9 @@ gradientdescent() := (
 );
 
       </script>
-      <script id="csdraw" type="text/x-cindyscript">
+  <script id="csdraw" type="text/x-cindyscript">
 
-      updatescreenparameters();
+    updatescreenparameters();
 
       msg = "";
       if(autopilot % mode=="final", dx = .003);
@@ -327,8 +329,8 @@ if(mode=="final",
 drawtext(textposition, msg);
       </script>
 
-<script id="csmousedown" type="text/x-cindyscript">
-  sx = mouse().x;
+  <script id="csmousedown" type="text/x-cindyscript">
+    sx = mouse().x;
   sy = mouse().y;
   x = inverseproject(mouse());
   //if(|x_1|>pi%|x_2|>pi,
@@ -336,12 +338,12 @@ drawtext(textposition, msg);
   //);
 </script>
 
-<script id="csmouseup" type="text/x-cindyscript">
-  dragging = false;
+  <script id="csmouseup" type="text/x-cindyscript">
+    dragging = false;
 </script>
 
-<script id="csmouseclick" type="text/x-cindyscript">
-if(mode=="select" & !autopilot & (N-length(pts))>0,
+  <script id="csmouseclick" type="text/x-cindyscript">
+    if(mode=="select" & !autopilot & (N-length(pts))>0,
    //x = mouse().x;
    x = inverseproject(mouse());
    if(|x_1|<pi&|x_2|<pi,
@@ -365,21 +367,27 @@ if(mode=="final",
 
       </script>
 
-        <script type="text/javascript">
-          var cdy = CindyJS({
-            scripts: "cs*",
-            geometry: [
+  <script type="text/javascript">
+    var cdy = CindyJS({
+      scripts: "cs*",
+      geometry: [
 
-            ],
-            ports: [
-              {id: "CSCanvas", transform: [{visibleRect: [-16, -9, 16, 9]}], virtualwidth: 1280}
-            ],
-            autoplay: true,
-            use: ["url-parameters"]
-          });
-        </script>
-    </head>
-    <body>
-        <div id="CSCanvas"></div>
-    </body>
-    </html>
+      ],
+      ports: [{
+        id: "CSCanvas",
+        transform: [{
+          visibleRect: [-16, -9, 16, 9]
+        }],
+        virtualwidth: 1280
+      }],
+      autoplay: true,
+      use: ["url-parameters"]
+    });
+  </script>
+</head>
+
+<body>
+  <div id="CSCanvas"></div>
+</body>
+
+</html>
