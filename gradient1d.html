@@ -1,79 +1,125 @@
 <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="UTF-8">
+<html>
 
-        <title>Gradient descent</title>
-        <style type="text/css">
-            body {
-                margin: 0px;
-                padding: 0px;
-                background-color: rgb(10, 0, 30);
-            }
+<head>
+  <meta charset="UTF-8">
 
-            #CSCanvas {
-              /*16:9
+  <title>Gradient descent</title>
+  <style type="text/css">
+    body {
+      margin: 0px;
+      padding: 0px;
+      background-color: rgb(10, 0, 30);
+    }
+
+    #CSCanvas {
+      /*16:9
                 width: 100vw;
                 height: 56.25vw;
                 max-height: 100vh;
                 max-width: 177.77vh;
                 */
-                width: 100vw;
-                position: absolute; /* works if URL */
-                top: 0;
-                bottom: 0;
-                filter: invert(1);
-            }
-        </style>
-        <script type="text/javascript" src="common/js/Cindy.js"></script>
-        <script src="url-parameters.js"></script>
+      width: 100vw;
+      position: absolute;
+      /* works if URL */
+      top: 0;
+      bottom: 0;
+      filter: invert(1);
+    }
+  </style>
+  <script type="text/javascript" src="common/js/Cindy.js"></script>
+  <script src="url-parameters.js"></script>
 
-      <script id="csinit" type="text/x-cindyscript">
-      autopilot = geturlparameter("autopilot", true);
+  <script id="csinit" type="text/x-cindyscript">
+      userdraw = geturlparameter("draw", false);
+      autopilot = geturlparameter("autopilot", !userdraw);
       watertheme = geturlparameter("water", false);
+
+
       //waterh = 7.5;
 
       EPS = 0.2; //how close to minimum counts as won?
+      K = 9; //number of fourier coefficents
 
       updatescreenparameters() := (
           waterh = max(apply(screenbounds(),#.y))-1;
           textposition = (screenbounds()_4).xy+(3,2);
+          B0 = (screenbounds()_3).xy+(-3,2);
+          B0r = 3;
       );
       updatescreenparameters();
 
-      f(x) := r0+(x=pi*x/16; sum(1..length(r), k, re(r_k)*cos(k*x)+im(r_k)*sin(k*x)));
-      df(x) := (x=pi*x/16; pi/16*sum(1..length(r), k, -k*re(r_k)*sin(k*x)+k*im(r_k)*cos(k*x)));
+      f(x) := (x=pi*x/16; sum(1..K, k, re(r_k)*cos((k-1)*x)+im(r_k)*sin((k-1)*x)));
+      df(x) := (x=pi*x/16; pi/16*sum(1..K, k, -(k-1)*re(r_k)*sin((k-1)*x)+(k-1)*im(r_k)*cos((k-1)*x)));
 
+//xsamples = apply(1..(2*K-1),k, 16*2*(k/(2*K)-.5));
+xsamples = apply(1..(2*K-1), k, k/(2*K-1)*32-16);
+ysamples = apply(xsamples,0);
+
+mat = transpose(
+  apply(1..K,k,
+    r = apply(1..K,j,if(j==k,1,0));
+    //errc(r);
+    apply(xsamples, x, f(x))
+  ) ++
+  apply(2..K,k,
+    r = i*apply(1..K,j,if(j==k,1,0));
+    //errc(r);
+    apply(xsamples, x, f(x))
+  )
+);
+
+computecoefficients() := (
+  pr = r;
+  //imat = inverse(mat);
+  //errc(mat);
+  //r = inverse(mat)*ysamples;
+  sol = linearsolve(mat, ysamples);
+  //errc(sol);
+  r = apply(1..K,k,if(k==1, sol_k, sol_k+i*sol_(K+k-1)));
+  r = apply(1..K, k, r_k*1/k^.5); //smooth curve
+  r = .5*r+.5*pr;
+
+
+  //errc(f(best));
+
+  //errc(r)
+);
 xvals = (-160..160)/10;
 reset():=(
   best = -100;
-  r0 = randomnormal();
-  if(watertheme, r0 = r0-1);
-  while(|best|>13,
-    r = apply(1..10,k,randomnormal()/(k^1.8)+i*randomnormal()/(k^1.8));
-    r_1 = r_1-.8;//lift function at boundaries
-    forall(xvals, x, if(|f(x)-r0|>|f(best)-r0|, best=x));
-    r = r*(7.5-|r0|)/|f(best)-r0|;//fit screen (and water)
+  if(|best|>13, //TODO replace with while
+    r = apply(1..K,k,randomnormal()/(k^1.8)+i*randomnormal()/(k^1.8));
+    r_1 = r_1/3-.5; //function is lower than avg
+    r_2 = r_2-.7;//lift function at boundaries
 
+    //obtain
+    forall(xvals, x, if(|f(x)|>|f(best)|, best=x));
+    //errc(f(best));
+    r = r*if(watertheme, waterh-.5, 7.5)/|f(best)|;//fit screen (and water)
 
     best = xvals_1;
     forall(xvals, x, if(f(x)<f(best), best=x));
-
   );
   pts = [];
-
   mode = "select";
-  N = 7;
+  if(userdraw,
+    mode = "draw";
+    r = apply(1..K,0);
+  );
+  N = geturlparameter("draws", 7);
 );
 reset();
 
-initpt = -8;
-cnt = 0;
-while((|df(initpt)|<1 % f(initpt)<0) & cnt < 10,
-  //initpt = randomnormal();
-  reset();
-  cnt = cnt + 1;
-  errc(cnt);
+if(autopilot,
+  initpt = -8;
+  cnt = 0;
+  while((|df(initpt)|<1 % f(initpt)<0) & cnt < 10,
+    //initpt = randomnormal();
+    reset();
+    cnt = cnt + 1;
+    errc(cnt);
+  );
 );
 
 
@@ -99,14 +145,27 @@ resett0() := (
   l0 = seconds();
 );
       </script>
-      <script id="csdraw" type="text/x-cindyscript">
-      updatescreenparameters();
+  <script id="csdraw" type="text/x-cindyscript">
+    updatescreenparameters();
 
 //plot(f(x));
 
 x = mouse().x;
 
 msg = "";
+
+if(mode == "draw",
+  if(watertheme,
+    msg = "Forme deinen eigenen Meeresboden.",
+    msg = "Forme deine eigene Kurve."
+  );
+  drawtext(B0, align->"mid", "fertig", bold->|mouse().xy-B0|<B0r);
+
+  connect(transpose([xvals,apply(xvals,x,f(x))]));
+
+  //forall(1..(2*K-1), k, draw([xsamples_k, ysamples_k]));
+
+);
 if(autopilot, connect(transpose([xvals,apply(xvals,x,f(x))]),alpha->.2));
 
 if(autopilot & (mode=="select" % mode=="compute"),
@@ -171,7 +230,6 @@ if(mode=="compute",
   	mode = "select";
     forall(pts,x,
       if(|x-best|<EPS,
-        //drawtreasure = true;
         mode = "final";
       );
     );
@@ -205,7 +263,7 @@ if(mode=="compute",
   );
 );
 
-drawtreasure = false;
+
 if(mode=="final",
   a = min(1,t0());
   //plot(f(x),alpha->a);
@@ -281,11 +339,13 @@ if(mode=="final",
 
 
 if(watertheme,
-  boat  = [[-2,-1],[2,-1],[2.5,1],[-2.5,1]]*.5;
-  angle = sin(4*seconds())*.04;
-  R = [[cos(angle),-sin(angle)],[sin(angle),cos(angle)]];
+  if(mode!="draw",
+    boat  = [[-2,-1],[2,-1],[2.5,1],[-2.5,1]]*.5;
+    angle = sin(4*seconds())*.04;
+    R = [[cos(angle),-sin(angle)],[sin(angle),cos(angle)]];
+    drawpoly(apply(boat,R*#+(x,waterh)));
+  );
 
-  drawpoly(apply(boat,R*#+(x,waterh)));
 
   watersize = .2;
 
@@ -308,7 +368,7 @@ forall(if(mode!="compute",1..length(pts),1..(length(pts)-1)), k,
 
 drawtext(textposition, msg);
       </script>
-      <script id="csmousedown" type="text/x-cindyscript">
+  <script id="csmousedown" type="text/x-cindyscript">
 if(mode=="select" & !autopilot & (N-length(pts))>0,
    x = mouse().x;
    pts = pts :> x;
@@ -326,26 +386,56 @@ if(mode=="final",
     reset();
     autopilot = false;
   );
+);
 
+if(mode == "draw",
+  if(|mouse().xy-B0|<B0r, mode = "select");
 );
 
       </script>
+  <script id="csmousedrag" type="text/x-cindyscript">
+      if(mode=="draw",
+        closestk = 1;
+        x = mouse().x;
+        y = mouse().y;
+        forall(2..(2*K-1), k, if(|xsamples_k-x|<|xsamples_closestk-x|, closestk = k));
+        ysamples_closestk=y;
+        //xsamples = xsamples_(2..K) ++ [x];
+        //ysamples = ysamples_(2..K) ++ [y];
+        computecoefficients();
+      );
+  </script>
+  <script id="csmouseup" type="text/x-cindyscript">
+  if(mode=="draw",
+    forall(xvals, x, if(|f(x)|>|f(best)|, best=x));
+    M = if(watertheme, waterh-.5, 7.5);
+    if(|f(best)|>M,
+      r = r*M/|f(best)|;//fit screen (and water)
+    );
+    forall(xvals, x, if(f(x)<f(best), best=x));
+  );
+  </script>
+  <script type="text/javascript">
+    var cdy = CindyJS({
+      scripts: "cs*",
+      geometry: [
 
-        <script type="text/javascript">
-          var cdy = CindyJS({
-            scripts: "cs*",
-            geometry: [
+      ],
+      ports: [{
+        id: "CSCanvas",
+        transform: [{
+          visibleRect: [-16, -9, 16, 9]
+        }],
+        virtualwidth: 1024
+      }],
+      autoplay: true,
+      use: ["url-parameters"]
+    });
+  </script>
+</head>
 
-            ],
-            ports: [
-              {id: "CSCanvas", transform: [{visibleRect: [-16, -9, 16, 9]}], virtualwidth: 1024}
-            ],
-            autoplay: true,
-            use: ["url-parameters"]
-          });
-        </script>
-    </head>
-    <body>
-        <div id="CSCanvas"></div>
-    </body>
-    </html>
+<body>
+  <div id="CSCanvas"></div>
+</body>
+
+</html>
