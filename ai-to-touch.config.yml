@@ -10,8 +10,8 @@ lang: de
 # a default fallback title.
 #
 title:
-  en: AI to touch
-  de: KI zum Anfassen
+  en: Experiencing AI
+  de: KI erleben
 
 #
 # Logo image to show on top of the menu.
@@ -104,7 +104,7 @@ apps:
 # more than one local variant of the same language.
 # Also only enable languages for which translations are available.
 #
-langMenuShow: false
+langMenuShow: true
 
 #
 # Indicate which languages to show if the language switcher menu is shown
@@ -112,3 +112,4 @@ langMenuShow: false
 #
 langMenuItems:
   - de
+  - en

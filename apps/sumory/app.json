@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "main": "../../common/appslider/appslider.html?set=sumory",
   "name": {
-    "de": "Sumory"
+    "de": "Erkunden vs. Ausnutzen",
+    "en": "Explore vs Exploit"
   },
   "description": {
     "en": "",
