@@ -15,5 +15,8 @@
   "computer-turn": "Click to see what the computer would have done.",
   "your-turn": "Now its your turn. Click to restart.",
   "reached-global-minimum": "reached the global minimum.",
-  "reached-global-minimum-up-to": "reached the global minimum up to"
+  "reached-global-minimum-up-to": "reached the global minimum up to",
+  "neural-network": "Neural network",
+  "classification-by-neural-network": "Classification done by neural network",
+  "error": "total error"
 }
