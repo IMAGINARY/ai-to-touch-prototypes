@@ -35,6 +35,7 @@ let imgsrc = getUrlParam("imgsrc", "images/restaurants.svg");
 if (!(/^(images\/)?[a-zA-z0-9 _\-\.]*$/.test(imgsrc))) {
   imgsrc = "images/restaurants.svg";
 }
+let restaurantmode = (mode == "image" && imgsrc == "images/restaurants.svg");
 
 let values = getUrlParam("values", "numbers"); // "numbers" or "stars"
 let maxstars = getUrlParam("maxstars", 5); //an integer or "random"
@@ -110,8 +111,8 @@ addinteraction = function(card) {
           if (l == 1 || strats[l] < best) best = strats[l];
         }
 
-        show_message(`<div>Endergebnis: ${formatvalue(score, true)}.</div>
-          <div>${score>best  ? `Dies ist um ${(score-best).toFixed(1)} <em>besser</em> als die durchschnittlich beste Strategie` : `Dies ist um ${(best-score).toFixed(1)} <em>schlechter</em> als die durchschnittlich beste Strategie` }.</div>`, assignvalues);
+        show_message(`<div>${international('final-result')} ${formatvalue(score, true)}.</div>
+          <div>${score>best  ? `${international('better-0')} ${(score-best).toFixed(1)} ${international('better-1')}` : `${international('worse-0')} ${(best-score).toFixed(1)} ${international('worse-1')}`}</div>`, assignvalues);
       }
     }
   };
@@ -129,7 +130,18 @@ addinteraction = function(card) {
   };
 };
 
-window.onload = function(e) {
+var international = (x => x);
+Promise.all([
+  new Promise(function(resolve, reject) {
+    window.onload = resolve;
+  }),
+  IMAGINARY.i18n.init({
+    queryStringVariable: 'lang',
+    translationsDirectory: 'tr',
+    defaultLanguage: 'en'
+  })
+]).then(function() {
+  international = (x => IMAGINARY.i18n.t(restaurantmode ? x + "-restaurants" : x) || IMAGINARY.i18n.t(x));
   if (mode == "grid") {
     let cardcontainer = document.createElement("div");
     cardcontainer.id = "cardcontainer";
@@ -175,14 +187,19 @@ window.onload = function(e) {
     };
   }
 
-  if (mode == "image" && imgsrc == "images/restaurants.svg") {
-    document.getElementById("shuffle-button").innerHTML = "Köche zufällig vertauschen";
-    document.getElementById("assignvalues-button").innerHTML = "neue Köche einfliegen";
-    document.getElementById("showall-button").innerHTML = "alle Bewertungen anzeigen (und verändern)";
-  }
+  document.getElementById("shuffle-button").innerHTML = international("shuffle");
+  document.getElementById("assignvalues-button").innerHTML = international("assignvalues");
+  document.getElementById("strategies-button").innerHTML = international("strategies");
+  document.getElementById("showall-button").innerHTML = international("showall");
+
+  document.getElementById("header").innerHTML = international("header");
+
 
   document.getElementById("buttons").className = buttonclass;
-};
+}).catch(function(err) {
+  console.error(err);
+});
+
 
 window.onresize = function() {
   if (mode == "image") {
@@ -269,8 +286,8 @@ function shufflecards() {
 }
 
 var update_parameters = function() {
-  document.getElementById("contadortext").innerHTML = `Spielz&uuml;ge ${draws-cdraws}`;
-  document.getElementById("scoretext").innerHTML = `Summe ${formatvalue(score, true)}`;
+  document.getElementById("countertext").innerHTML = international("draws") + " " + (draws - cdraws);
+  document.getElementById("scoretext").innerHTML = international("sum") + " " + formatvalue(score, true);
 };
 
 
@@ -324,7 +341,7 @@ var show_strategies = function() {
   }
   msg += `<div class="zeroline" style="bottom: ${z}%;"></div>`;
   msg += `</div>`;
-  msg += `Durschnittswert für Strat(n)`;
+  msg += `${international('avg-for')} Strat(n)`;
   show_message(msg, shufflecards);
 };
 
@@ -378,16 +395,5 @@ hide_footer = function() {
 
 
 show_description = function() {
-  if (mode == "image" && imgsrc == "images/restaurants.svg") {
-    show_message(`Du bist für ${draws} Tage in einer fremden Stadt und möchtest jeden Abend einmal essen gehen.<br>
-        Wenn du ein Restaurant anklickst oder antippst, besuchst du ein Restaurant und die Anzahl der Sterne wird zu deiner Summe addiert.<br>
-        Du möchtest deinen Genuss maximieren und daher eine h&ouml;chstm&ouml;gliche Summe erreichen.<br>
-        Bereits besuchte Restaurants können erneut besucht werden.
-        `, assignvalues);
-  } else {
-    show_message(`Erkl&auml;rung: Hinter jeder Karte befindet sich eine Zahl.<br>
-        Jede Zahl, die du anklickst oder tippst, wird zu deiner Summe addiert.<br>
-        Du kannst ${draws} Zahlen antippen, um die h&ouml;chstm&ouml;gliche Summe zu erreichen.<br>
-        Eine bereits aufgedeckte Zahl kannst du auch mehrmals antippen.`, assignvalues);
-  }
+  show_message(international("description-0") + draws + international("description-1"), assignvalues);
 };
