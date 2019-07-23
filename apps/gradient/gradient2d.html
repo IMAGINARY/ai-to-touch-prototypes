@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
 
-  <title>Gradient descent seperating clusters</title>
+  <title>Gradient descent</title>
   <style type="text/css">
     body {
       margin: 0px;
@@ -30,6 +30,7 @@
   </style>
   <script type="text/javascript" src="../../common/js/Cindy.js"></script>
   <script type="text/javascript" src="../../common/js/url-parameters.js"></script>
+  <script type="text/javascript" src="../../common/js/i18n4js-1.3.0.min.js"></script>
 
   <script id="csinit" type="text/x-cindyscript">
 
@@ -228,7 +229,7 @@ if(autopilot,
 
 
 if(autopilot & (mode=="select" % mode=="compute"),
-  msg = "The computer tries to approach the minimum through gradient descent.";
+  msg = international("approach-minimum");
 );
 
 
@@ -243,9 +244,9 @@ if(mode=="select" & !dragging,
       resetclock();
     );
     ,
-    msg = "Approach the minimal function value! Click to guess!";
+    msg = international("aim-minimum");
   );
-  msg = msg + newline + "$"+(N-length(pts))+"$ guess"+if((N-length(pts))==1,"","es")+" left";
+  msg = msg + newline + international("guess-1") + "$"+(N-length(pts))+"$" + " " + international("guess-2", (N-length(pts)));
 
   if(!autopilot,
     x = inverseproject(mouse().xy);
@@ -309,16 +310,17 @@ if(mode=="final",
 
   err = |f(best)-f(yourbest)|;
 
-  subjectverb = if(autopilot, "The computer has reached", "You have reached");
-  if(err<.02,
-    msg = subjectverb + " the global minimum.";
+
+  subjectverb = if(autopilot, international("computer-has"), international("you-have"));
+  if(err<0.02,
+    msg = subjectverb + " " + international("reached-global-minimum");
     ,
-    msg = subjectverb + " the global minimum up to $" + format(err,3) + "$.";
+    msg = subjectverb + " " + international("reached-global-minimum-up-to") +" $" + format(err, 3) + "$.";
   );
   if(!autopilot,
-    msg = msg + newline + "Click to see what the computer would have done.";
+    msg = msg + newline + international("computer-turn");
     ,
-    msg = msg + newline + "Now it is your turn! Click to restart the applet with another function.";
+    msg = msg + newline + international("your-turn");
   );
 
   draw(project(best_1, best_2, f(best)), size->10, alpha->.8*a);
@@ -368,7 +370,19 @@ if(mode=="final",
       </script>
 
   <script type="text/javascript">
+    var ready = CindyJS.waitFor('i18n');
+    var translations = {};
+    IMAGINARY.i18n.init().then(function(lang) {
+      translations[lang] = IMAGINARY.i18n.getStrings();
+      ready();
+    }).catch(function(err) {
+      console.log("Error loading translation: " + err);
+      throw err;
+    });
+
     var cdy = CindyJS({
+      language: IMAGINARY.i18n.getLang(),
+      translations: translations,
       scripts: "cs*",
       geometry: [
 
