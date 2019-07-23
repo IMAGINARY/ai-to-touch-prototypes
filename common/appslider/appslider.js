@@ -14,7 +14,7 @@ let urls = (collection == "sumory") ? [
   "../../apps/gradient/gradient1d.html?water=true&autopilot=false",
   "../../apps/gradient/gradient1d.html?autopilot=true",
   "../../apps/gradient/gradient2d.html?autopilot=true",
-  "../../apps/gradient/classifywithgradient.html"
+  "../../apps/gradient/gradient2d.html?autopilot=true&classify=true"
 ] : ["default.html"];
 
 

@@ -15,5 +15,8 @@
   "computer-turn": "Klicke um zu sehen, wie der Computer gehandelt hätte.",
   "your-turn": "Jetzt bist du am Zug! Klicke, um neu zu beginnen.",
   "reached-global-minimum": " das globale Minimum gefunden.",
-  "reached-global-minimum-up-to": " das globale Minimum nicht gefunden. Abweichung:"
+  "reached-global-minimum-up-to": " das globale Minimum nicht gefunden. Abweichung:",
+  "neural-network": "Neuronales Netzwerk",
+  "classification-by-neural-network": "Klassifikation durch neuronales Netzwerk",
+  "error": "Fehler"
 }
