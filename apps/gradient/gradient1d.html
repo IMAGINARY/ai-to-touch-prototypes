@@ -92,7 +92,7 @@ reset():=(
   if(|best|>13, //TODO replace with while
     r = apply(1..K,k,randomnormal()/(k^1.8)+i*randomnormal()/(k^1.8));
     r_1 = r_1/3-.5; //function is lower than avg
-    r_2 = r_2-.7;//lift function at boundaries
+    r_2 = r_2-.1;//lift function at boundaries
 
     //obtain
     forall(xvals, x, if(|f(x)|>|f(best)|, best=x));
