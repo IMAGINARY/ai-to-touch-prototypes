@@ -91,3 +91,12 @@ body.mode-app .util-bar {
 .titlePane {
   display: none;
 }
+
+
+body > div > div.util-bar {
+  pointer-events: none;
+}
+
+body > div > div.util-bar > a.util-button {
+  pointer-events: all;
+}
