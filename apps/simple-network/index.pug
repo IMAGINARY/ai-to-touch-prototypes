@@ -1,0 +1,15 @@
+//out: index.html, pretty: true
+
+doctype html
+html(lang="en")
+  head
+    title= pageTitle
+    script(type='text/javascript', src="d3.js")
+    script(src="main.js", type="module")
+  body
+    svg(style="width:95vw; height:95vh;")
+      g#activations
+      g#edges
+      g#nodes
+      g#node-parameters
+      g#edge-parameters

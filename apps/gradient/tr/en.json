@@ -8,7 +8,7 @@
   "aim-minimum": "Approach the minimal function value! Click to guess!",
   "guess-1": "",
   "guess-2": ["guess left", "guesses left"],
-  "found-treasure": "You have found the treasure!",
+  "found-treasure": "treasure found!",
   "computer-has": "The computer has",
   "you-have": "You have",
   "not-found-treasure": "not found the treasure.",
