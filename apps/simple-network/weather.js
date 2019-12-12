@@ -57,12 +57,16 @@ nodes[1].addChild(nodes[3], 1);
 nodes[2].addChild(nodes[4], 1);
 nodes[3].addChild(nodes[4], 1);
 
-
-const nv = new NetworkVisualization(new Network(
+const nw = new Network(
   nodes,
   [nodes[0], nodes[1]], //input nodes
   [nodes[4]] //output nodes
-));
+);
+
+const nv = new NetworkVisualization(nw);
 
 nv.animate();
 nv.addInteraction();
+
+console.log(nw.predict([1,2]));
+console.log(nw.predict([0,0]));
