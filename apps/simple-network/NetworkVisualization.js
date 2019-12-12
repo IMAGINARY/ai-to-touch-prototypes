@@ -27,6 +27,7 @@ export class NetworkVisualization {
   animate() {
     const nodes = this.nodes;
     const inputnodes = this.inputnodes;
+    const outputnodes = this.outputnodes;
     const edges = this.edges;
 
     updateActivations();
@@ -49,7 +50,7 @@ export class NetworkVisualization {
       .attr("fill-opacity", 0.5);
 
 
-    d3.select("#node-parameters").selectAll("circle").data(nodes.filter(n => !this.inputnodes.includes(n)))
+    d3.select("#node-parameters").selectAll("circle").data(nodes.filter(n => !this.inputnodes.includes(n) && !this.outputnodes.includes(n)))
       .join("circle")
       .attr("cx", n => n.x)
       .attr("cy", n => n.y - unit * n.bias)
@@ -108,6 +109,16 @@ export class NetworkVisualization {
       .attr("stroke", "black")
       .attr("stroke-width", 2)
       .attr("stroke-opacity", 0.6);
+
+    const outputwidth = inputwidth;
+
+    d3.select("#outputs").selectAll("rect").data(outputnodes).join("rect")
+      .attr("x", node => node.x)
+      .attr("y", node => node.y - Math.max(0, node.getActivation() * unit))
+      .attr("width", outputwidth)
+      .attr("height", node => Math.abs(node.getActivation() * unit))
+      .attr("fill", "blue")
+      .attr("fill-opacity", 0.5);
 
     var group = d3.select("#edges").selectAll("g").data(edges);
     //exit, remove

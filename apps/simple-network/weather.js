@@ -11,6 +11,10 @@ import {
 } from './InputNode.js';
 
 import {
+  OutputNode
+} from './OutputNode.js';
+
+import {
   Network
 } from './Network.js';
 
@@ -37,7 +41,7 @@ const nodes = [
   new Node(),
   new Node(),
 
-  new Node()
+  new OutputNode()
 ];
 
 for (let i in [2, 3]) {

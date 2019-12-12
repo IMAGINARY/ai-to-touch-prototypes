@@ -11,6 +11,10 @@ import {
 } from './InputNode.js';
 
 import {
+  OutputNode
+} from './OutputNode.js';
+
+import {
   Network
 } from './Network.js';
 
@@ -33,11 +37,11 @@ const nodes = [
   new Node(),
   new Node(),
 
-  new Node()
+  new OutputNode()
 ];
 
 //TODO
-for (let i in nodes) {
+for (let i in [2, 3, 4]) {
   nodes[i].bias = -5 + 7 * Math.random();
 }
 //output from console
