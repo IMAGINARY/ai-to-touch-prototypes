@@ -61,9 +61,9 @@ export class NetworkVisualization {
       .join("circle")
       .attr("cx", edge => (edge.from.x + edge.to.x) / 2)
       .attr("cy", edge => {
-        const sactivation = edge.from.getActivation();
-        const eactivation = sactivation * edge.weight;
-        return edge.firstHalfBezier()[3][1] - unit * eactivation;
+        //const sactivation = edge.from.getActivation();
+        //const eactivation = sactivation * edge.weight;
+        return edge.firstHalfBezier()[3][1] - unit * edge.weight;
       })
       .attr("r", 8)
       .attr("fill", "blue")
@@ -179,9 +179,9 @@ export class NetworkVisualization {
       })
       .on("drag", function() {
         const edge = d3.select(this).data()[0];
-        if (edge.from.getActivation() > 0.001) {
-          edge.weight = -(d3.event.y - this.y0) / unit / edge.from.getActivation();
-        }
+        //if (edge.from.getActivation() > 0.001) {
+        edge.weight = -(d3.event.y - this.y0) / unit;
+        //}
 
         //node.y = d3.event.y + this.deltaX;
       })(d3.select("#edge-parameters").selectAll("circle"));
