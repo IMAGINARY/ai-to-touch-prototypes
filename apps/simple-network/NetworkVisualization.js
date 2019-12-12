@@ -124,7 +124,7 @@ export class NetworkVisualization {
     //draw bottom lines
     group.selectAll(".bottom").attr("d", edge => {
         const p = d3.path();
-        if (edge.from.bias < 0 || this.inputnodes.includes(edges.from)) {
+        if (edge.from.bias <= 0 || this.inputnodes.includes(edges.from)) {
           p.moveTo(edge.from.x, edge.from.y);
         } else {
           //make "waterproof"
