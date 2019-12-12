@@ -132,8 +132,10 @@ function updatepredictions() {
 
       d3.select("#target-temperature")
         .text("target:" + formattemperature(d.temperature))
+        .transition()
         .attr("x", nodes[4].x + 50)
-        .attr("y", nodes[4].y - unit * d.temperature);
+        .attr("y", nodes[4].y - unit * d.temperature)
+        .attr("opacity", 1);
     });
 }
 
@@ -143,7 +145,6 @@ function animatecallback() {
     .text(formattemperature(nodes[4].getActivation()))
     .attr("x", nodes[4].x)
     .attr("y", nodes[4].y - unit * nodes[4].getActivation());
-
 
   d3.select("#cloudiness")
     .text("cloudiness: " + nodes[0].getActivation().toFixed(2))

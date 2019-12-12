@@ -214,6 +214,10 @@ export class NetworkVisualization {
       .on("drag", function() {
         const node = d3.select(this).data()[0];
         node.setUserParameter(Math.max(0, -(d3.event.y - this.y0) / unit));
+
+        d3.select("#target-temperature")
+          .transition()
+          .attr("opacity", 0);
         //node.y = d3.event.y + this.deltaX;
       })(d3.select("#input-parameters").selectAll("circle"));
 
