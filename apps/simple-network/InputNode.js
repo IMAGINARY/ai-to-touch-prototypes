@@ -12,4 +12,11 @@ export class InputNode extends Node {
   getActivation() {
     return this.activationcb();
   }
+
+  setUserParameter(val) {
+    if(!this.hasOwnProperty("userparamter")) {
+      this.activationcb = (()=>this.userparamter);
+    }
+    this.userparamter = val;
+  }
 }

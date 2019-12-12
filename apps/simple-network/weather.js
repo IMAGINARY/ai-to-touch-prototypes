@@ -119,11 +119,9 @@ function updatepredictions() {
     .text(d => JSON.stringify(d))
     .style("background-color", d => errorcolor(d.error))
     .on('click', d => {
-      d3.select(this)
-            .classed("background-color", "orange");
       //overwrite input functions
-      nodes[0].activationcb = (() => d.cloudiness);
-      nodes[1].activationcb = (() => d.inside);
+      nodes[0].setUserParameter(d.cloudiness);
+      nodes[1].setUserParameter(d.inside);
       console.log(this);
     });
 }

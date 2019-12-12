@@ -25,6 +25,7 @@ export class NetworkVisualization {
 
   animate() {
     const nodes = this.nodes;
+    const inputnodes = this.inputnodes;
     const edges = this.edges;
 
     updateActivations();
@@ -74,11 +75,30 @@ export class NetworkVisualization {
       .attr("stroke-width", 2)
       .attr("stroke-opacity", 0.2);
 
-    var group = d3.select("#edges").selectAll("g").data(edges);
+    const inputwidth = 20;
 
+    d3.select("#input-parameters").selectAll("rect").data(inputnodes).join("rect")
+      .attr("x", node => node.x - inputwidth)
+      .attr("y", node => node.y - Math.max(0, node.getActivation() * unit))
+      .attr("width", inputwidth)
+      .attr("height", node => Math.abs(node.getActivation() * unit))
+      .attr("fill", "blue")
+      .attr("fill-opacity", 0.5);
+
+    d3.select("#input-parameters").selectAll("circle").data(inputnodes)
+      .join("circle")
+      .attr("cx", node => (node.x - inputwidth))
+      .attr("cy", node => node.y - unit * node.getActivation())
+      .attr("r", 8)
+      .attr("fill", "orange")
+      .attr("fill-opacity", 0.6)
+      .attr("stroke", "black")
+      .attr("stroke-width", 2)
+      .attr("stroke-opacity", 0.6);
+
+    var group = d3.select("#edges").selectAll("g").data(edges);
     //exit, remove
     group.exit().remove();
-
     //add new elements
     const enter = group.enter().append("g");
     enter.append("path").classed("bottom", true);
@@ -91,8 +111,6 @@ export class NetworkVisualization {
     //draw bottom lines
     group.selectAll(".bottom").attr("d", edge => {
         const p = d3.path();
-
-
         if (edge.from.bias < 0 || this.inputnodes.includes(edges.from)) {
           p.moveTo(edge.from.x, edge.from.y);
         } else {
@@ -133,10 +151,11 @@ export class NetworkVisualization {
 
         return p;
       })
-      //.attr("stroke", "none")
-      //.attr("stroke-width", 2)
       .attr("fill", e => e.weight > 0 ? "blue" : "red")
       .attr("fill-opacity", 0.5);
+
+
+
     requestAnimationFrame(() => this.animate());
   }
 
@@ -176,7 +195,6 @@ export class NetworkVisualization {
     d3.drag()
       .on("start", function() {
         var current = d3.select(this);
-        //this.deltaX = current.attr("cx") - d3.event.x;
         this.y0 = d3.event.y;
       })
       .on("drag", function() {
@@ -184,8 +202,19 @@ export class NetworkVisualization {
         //if (edge.from.getActivation() > 0.001) {
         edge.weight = -(d3.event.y - this.y0) / unit;
         //}
-
         //node.y = d3.event.y + this.deltaX;
       })(d3.select("#edge-parameters").selectAll("circle"));
+
+    d3.drag()
+      .on("start", function() {
+        var current = d3.select(this);
+        this.y0 = d3.event.y;
+      })
+      .on("drag", function() {
+        const node = d3.select(this).data()[0];
+        node.setUserParameter(Math.max(0, -(d3.event.y - this.y0) / unit));
+        //node.y = d3.event.y + this.deltaX;
+      })(d3.select("#input-parameters").selectAll("circle"));
+
   }
 }
