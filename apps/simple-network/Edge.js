@@ -58,13 +58,10 @@ export class Edge {
   }
 
   getdWeight() {
-    this.dweight.update(() => {
+    return this.dweight.update(() => {
       let dactivation = 0;
-      for (let eid in this.outedges) {
-        const edge = this.outedges[eid];
-        if (edge.to.getActivation(cid) >= 0) { //TODO: or || next node output node
-          dactivation += edge.weight * edge.to.getdActivation();
-        }
+      if (this.to.getActivation() >= 0) { //TODO: or || next node output node
+        dactivation += this.weight * this.to.getdActivation();
       }
       return dactivation;
     });

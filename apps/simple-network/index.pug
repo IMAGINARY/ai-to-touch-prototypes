@@ -10,18 +10,25 @@ html(lang="en")
 
   body
     svg
-      text#cloudiness
-      text#insideness
-      text#current-temperature
-      text#target-temperature
-      g#edges
-      g#nodes
-      g#gradient
-      g#input-parameters
+      g
+        text#cloudiness
+        text#insideness
+        text#current-temperature
+        text#target-temperature
+      g#input
+        g.parameters
+        g.activations
       g#outputs
-      g#node-parameters
-      g#edge-parameters
-      g#normalized-edge-parameters
+      g#edges
+        g.edges
+        g.activations
+        g.gradient
+        g.parameters
+        g.normalized-parameters
+      g#nodes
+        g.nodes
+        g.gradient
+        g.parameters
     div(style="display:flex;")
       div
         h3 Training Data (click on row to select as input)

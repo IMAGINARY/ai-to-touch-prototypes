@@ -58,7 +58,7 @@ export class NetworkVisualization {
       edge.to.offset += edge.from.getActivation() * edge.weight;
     }
 
-    d3.select("#nodes").selectAll("circle").data(nodes)
+    d3.select("#nodes").select(".nodes").selectAll("circle").data(nodes)
       .join("circle")
       .attr("cx", (d) => d.x)
       .attr("cy", (d) => d.y)
@@ -67,7 +67,7 @@ export class NetworkVisualization {
       .attr("fill-opacity", 0.5);
 
 
-    d3.select("#node-parameters").selectAll("circle").data(nodes.filter(n => !this.inputnodes.includes(n) && !this.outputnodes.includes(n)))
+    d3.select("#nodes").select(".parameters").selectAll("circle").data(nodes.filter(n => !this.inputnodes.includes(n) && !this.outputnodes.includes(n)))
       .join("circle")
       .attr("cx", n => n.x)
       .attr("cy", n => n.y - unit * n.bias)
@@ -78,7 +78,7 @@ export class NetworkVisualization {
       .attr("stroke-width", 2)
       .attr("stroke-opacity", 0.5);
 
-    d3.select("#gradient").selectAll("path").data(nodes.filter(n => !this.inputnodes.includes(n) && !this.outputnodes.includes(n)))
+    d3.select("#nodes").select(".gradient").selectAll("path").data(nodes.filter(n => !this.inputnodes.includes(n) && !this.outputnodes.includes(n)))
       .join("path")
       .filter(node => node.getdBias() != 0)
       .attr("d", (node) => {
@@ -92,9 +92,25 @@ export class NetworkVisualization {
       .attr("stroke-width", 2)
       .attr("fill", "none");
 
+    d3.select("#edges").select(".gradient").selectAll("path").data(edges)
+      .join("path")
+      .filter(edge => edge.getdWeight() != 0)
+      .attr("d", (edge) => {
+        const p = d3.path();
+        const x = (edge.from.x + edge.to.x) / 2;
+        const y = edge.firstHalfBezier()[3][1] - unit * edge.weight;
+        console.log( edge.getdWeight());
+        p.moveTo(x, y);
+        p.lineTo(x, y - unit * (edge.getdWeight()));
+        return p;
+      })
+      .attr("marker-end", "url(#triangle)")
+      .attr("stroke", "orange")
+      .attr("stroke-width", 2)
+      .attr("fill", "none");
 
 
-    d3.select("#edge-parameters").selectAll("circle").data(edges)
+    d3.select("#edges").select(".parameters").selectAll("circle").data(edges)
       .join("circle")
       .attr("cx", edge => (edge.from.x + edge.to.x) / 2)
       .attr("cy", edge => {
@@ -110,7 +126,7 @@ export class NetworkVisualization {
       .attr("stroke-opacity", edge => Math.min(0.5, edge.from.getActivation()));
 
 
-    d3.select("#normalized-edge-parameters").selectAll("circle").data(edges)
+    d3.select("#edges").select(".normalized-parameters").selectAll("circle").data(edges)
       .join("circle")
       .attr("cx", edge => (edge.from.x + edge.to.x) / 2)
       .attr("cy", edge => edge.firstHalfBezier()[3][1] - unit * edge.weight)
@@ -121,9 +137,9 @@ export class NetworkVisualization {
       .attr("fill-opacity", edge => 0.5 - (edge.from.getActivation()))
       .attr("stroke-opacity", edge => 0.5 - (edge.from.getActivation()));
 
-    const inputwidth = 20;
+    const inputwidth = 60;
 
-    d3.select("#input-parameters").selectAll("rect").data(inputnodes).join("rect")
+    d3.select("#input").select(".activations").selectAll("rect").data(inputnodes).join("rect")
       .attr("x", node => node.x - inputwidth)
       .attr("y", node => node.y - Math.max(0, node.getActivation() * unit))
       .attr("width", inputwidth)
@@ -131,7 +147,7 @@ export class NetworkVisualization {
       .attr("fill", "blue")
       .attr("fill-opacity", 0.5);
 
-    d3.select("#input-parameters").selectAll("circle").data(inputnodes)
+    d3.select("#input").select(".parameters").selectAll("circle").data(inputnodes)
       .join("circle")
       .attr("cx", node => (node.x - inputwidth))
       .attr("cy", node => node.y - unit * node.getActivation())
@@ -152,20 +168,8 @@ export class NetworkVisualization {
       .attr("fill", "blue")
       .attr("fill-opacity", 0.5);
 
-    var group = d3.select("#edges").selectAll("g").data(edges);
-    //exit, remove
-    group.exit().remove();
-    //add new elements
-    const enter = group.enter().append("g");
-    enter.append("path").classed("bottom", true);
-    enter.append("path").classed("activation", true);
-
-    //consider new and old, already exising elements
-    group = group.merge(enter);
-
-
-    //draw bottom lines
-    group.selectAll(".bottom").attr("d", edge => {
+    d3.select("#edges").select(".edges").selectAll("path").data(edges).join("path")
+      .attr("d", edge => {
         const p = d3.path();
         if (edge.from.bias <= 0 || this.inputnodes.includes(edges.from)) {
           p.moveTo(edge.from.x, edge.from.y);
@@ -187,7 +191,8 @@ export class NetworkVisualization {
       .attr("fill", "none");
 
 
-    group.selectAll(".activation").attr("d", edge => {
+    d3.select("#edges").select(".activations").selectAll("path").data(edges).join("path")
+      .attr("d", edge => {
         const sactivation = edge.from.getActivation();
         const eactivation = sactivation * edge.weight;
         const p = d3.path();
@@ -218,6 +223,8 @@ export class NetworkVisualization {
 
   addInteraction() {
     const nodes = this.nodes;
+
+    /*
     d3.drag()
       .on("start", function() {
         var current = d3.select(this);
@@ -228,14 +235,14 @@ export class NetworkVisualization {
         const node = d3.select(this).data()[0];
         node.x = d3.event.x + this.deltaX;
         node.y = d3.event.y + this.deltaX;
-        /*
+
         for (let i in nodes) {
           console.log(
             `nodes[${i}].x = ${nodes[i].x}; nodes[${i}].y = ${nodes[i].y};`
           );
-        }*/
+        }
       })(d3.select("#nodes").selectAll("circle"));
-
+      */
     d3.drag()
       .on("start", function() {
         var current = d3.select(this);
@@ -244,9 +251,10 @@ export class NetworkVisualization {
       })
       .on("drag", function() {
         const node = d3.select(this).data()[0];
-        node.bias = -(d3.event.y + this.deltaY - node.y) / unit;
+        if (node.constructor.name == "Node")
+          node.bias = -(d3.event.y + this.deltaY - node.y) / unit;
         //node.y = d3.event.y + this.deltaX;
-      })(d3.select("#node-parameters").selectAll("circle"));
+      })(d3.select("#nodes").selectAll("circle"));
 
     d3.drag()
       .on("start", function() {
@@ -260,7 +268,7 @@ export class NetworkVisualization {
         if (edge.from.getActivation() > 0.001) {
           edge.weight = this.weight0 - (d3.event.y - this.y0) / edge.from.getActivation() / unit;
         }
-      })(d3.select("#edge-parameters").selectAll("circle"));
+      })(d3.select("#edges").selectAll("path, circle"));
 
     d3.drag()
       .on("start", function() {
@@ -272,7 +280,7 @@ export class NetworkVisualization {
       .on("drag", function() {
         const edge = d3.select(this).data()[0];
         edge.weight = this.weight0 - (d3.event.y - this.y0) / unit;
-      })(d3.select("#normalized-edge-parameters").selectAll("circle"));
+      })(d3.select("#edges").select(".normalized-parameters").selectAll("circle"));
 
     d3.drag()
       .on("start", function() {
@@ -286,7 +294,7 @@ export class NetworkVisualization {
           .transition()
           .attr("opacity", 0);
         //node.y = d3.event.y + this.deltaX;
-      })(d3.select("#input-parameters").selectAll("circle"));
+      })(d3.select("#input").selectAll("circle, rect"));
 
   }
 }
