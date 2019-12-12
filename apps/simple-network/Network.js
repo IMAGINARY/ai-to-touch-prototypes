@@ -1,6 +1,6 @@
 import {
-  updateActivations
-} from './Node.js';
+  updateDynamicVariables
+} from './DynamicVariable.js';
 
 export class Network {
   constructor(nodes, inputnodes, outputnodes) {
@@ -22,7 +22,7 @@ export class Network {
 
 
     //get prediction in this 'modified network'
-    updateActivations();
+    updateDynamicVariables();
     const values = this.outputnodes.map(o => o.getActivation());
 
     //restore input functions from backup

@@ -19,4 +19,8 @@ export class OutputNode extends Node {
     this.activation = this.activation; // no ReLu
     return this.activation;
   }
+
+  getdActivation() {
+    return 1; //TODO
+  }
 }

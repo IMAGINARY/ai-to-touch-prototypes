@@ -3,8 +3,12 @@
 
 import {
   Node,
-  updateActivations
 } from './Node.js';
+
+import {
+  updateDynamicVariables
+} from './DynamicVariable.js';
+
 
 import {
   InputNode

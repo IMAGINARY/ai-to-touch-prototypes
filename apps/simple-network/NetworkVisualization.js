@@ -3,8 +3,9 @@ import {
 } from './constants.js';
 
 import {
-  updateActivations
-} from './Node.js';
+  DynamicVariable,
+  updateDynamicVariables
+} from './DynamicVariable.js';
 
 export class NetworkVisualization {
   constructor(network, animatecallback) {
@@ -30,7 +31,7 @@ export class NetworkVisualization {
     const outputnodes = this.outputnodes;
     const edges = this.edges;
 
-    updateActivations();
+    updateDynamicVariables();
     for (let i in nodes) {
       nodes[i].offset = nodes[i].bias;
     }
