@@ -109,8 +109,24 @@ const trainingdata = [{
 
 
 function formattemperature(temp) {
-  return `${(temp*10).toFixed(1)}°C`;
+  return `${(temp*10).toFixed(0)}°C`;
 }
+
+
+const columns = ["cloudiness", "inside", "temperature", "predictedtemperature"];
+const table = d3.select('#trainingpreview');
+const thead = table.append('thead');
+const tbody = table.append('tbody');
+
+// append the header row
+thead.append('tr')
+  .selectAll('th')
+  .data(columns).enter()
+  .append('th')
+  .text(function(column) {
+    return column;
+  });
+
 
 function updatepredictions() {
   for (let i in trainingdata) {
@@ -122,6 +138,41 @@ function updatepredictions() {
   var errorcolor = d3.scaleSequential().domain([2, 0])
     .interpolator(d3.interpolateRdYlGn);
 
+  // create a row for each object in the data
+  var rows = tbody.selectAll('tr')
+    .data(trainingdata)
+    .join('tr')
+    .on('click', d => {
+      nodes[0].setUserParameter(d.cloudiness);
+      nodes[1].setUserParameter(d.inside);
+
+      d3.select("#target-temperature")
+        .text("target:" + formattemperature(d.temperature))
+        .transition()
+        .attr("x", nodes[4].x + 50)
+        .attr("y", nodes[4].y - unit * d.temperature)
+        .attr("opacity", 1);
+    });
+
+  // create a cell in each row for each column
+  var cells = rows.selectAll('td')
+    .data(function(row) {
+      return columns.map(function(column) {
+        return {
+          column: column,
+          value: row[column],
+          error: row.error
+        };
+      });
+    })
+    .join('td')
+    .text(d=>(d.column == "temperature" || d.column == "predictedtemperature") ? formattemperature(d.value) : d.value)
+    .style("background-color", d => d.column == "predictedtemperature" ? errorcolor(d.error) : "white");
+
+
+
+
+  /*
   d3.select('.trainingpreview').selectAll("div").data(trainingdata).join("div")
     .text(d => JSON.stringify(d))
     .style("background-color", d => errorcolor(d.error))
@@ -137,6 +188,7 @@ function updatepredictions() {
         .attr("y", nodes[4].y - unit * d.temperature)
         .attr("opacity", 1);
     });
+    */
 }
 
 function animatecallback() {
