@@ -44,16 +44,16 @@ for (let i in [2, 3]) {
   nodes[i].bias = -5 + 7 * Math.random();
 }
 //output from console
-nodes[0].x = 112;
-nodes[0].y = 190;
-nodes[1].x = 129;
-nodes[1].y = 405.6588393923159;
-nodes[2].x = 359;
-nodes[2].y = 105.3718970730273;
-nodes[3].x = 476;
-nodes[3].y = 288.64480032239464;
-nodes[4].x = 663;
-nodes[4].y = 297.64302901347446;
+nodes[0].x = 155;
+nodes[0].y = 184;
+nodes[1].x = 161;
+nodes[1].y = 315.6588393923159;
+nodes[2].x = 507;
+nodes[2].y = 122.3718970730273;
+nodes[3].x = 611;
+nodes[3].y = 354.64480032239464;
+nodes[4].x = 803;
+nodes[4].y = 232.64302901347446;
 
 nodes[0].addChild(nodes[2], 1);
 nodes[0].addChild(nodes[3], 1);
@@ -166,7 +166,7 @@ function updatepredictions() {
       });
     })
     .join('td')
-    .text(d=>(d.column == "temperature" || d.column == "predictedtemperature") ? formattemperature(d.value) : d.value)
+    .text(d => (d.column == "temperature" || d.column == "predictedtemperature") ? formattemperature(d.value) : d.value)
     .style("background-color", d => d.column == "predictedtemperature" ? errorcolor(d.error) : "white");
 
 
@@ -200,13 +200,13 @@ function animatecallback() {
 
   d3.select("#cloudiness")
     .text("cloudiness: " + nodes[0].getActivation().toFixed(2))
-    .attr("x", nodes[0].x - 100)
-    .attr("y", nodes[0].y - unit * nodes[0].getActivation());
+    .attr("x", nodes[0].x - 110)
+    .attr("y", nodes[0].y - 10 - unit * nodes[0].getActivation());
 
   d3.select("#insideness")
     .text("insideness: " + nodes[1].getActivation().toFixed(2))
-    .attr("x", nodes[1].x - 100)
-    .attr("y", nodes[1].y - unit * nodes[1].getActivation());
+    .attr("x", nodes[1].x - 110)
+    .attr("y", nodes[1].y - 10 - unit * nodes[1].getActivation());
 
   updatepredictions();
 }

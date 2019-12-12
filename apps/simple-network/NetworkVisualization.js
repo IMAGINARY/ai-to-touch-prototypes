@@ -174,11 +174,11 @@ export class NetworkVisualization {
         node.x = d3.event.x + this.deltaX;
         node.y = d3.event.y + this.deltaX;
 
-        /*  for (let i in nodes) {
+          for (let i in nodes) {
             console.log(
               `nodes[${i}].x = ${nodes[i].x}; nodes[${i}].y = ${nodes[i].y};`
             );
-          }*/
+          }
       })(d3.select("#nodes").selectAll("circle"));
 
     d3.drag()
