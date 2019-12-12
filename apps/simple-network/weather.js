@@ -20,14 +20,19 @@ import {
 } from './NetworkVisualization.js';
 
 
+import {
+  unit
+} from './constants.js';
+
+
 // some toy example
 
 const omega1 = 1 + Math.random();
 const omega2 = 1 + Math.random();
 
 const nodes = [
-  new InputNode(() => 1 + 0.5 * Math.sin(omega1 * Date.now() / 1000)),
-  new InputNode(() => 1 + 0.5 * Math.sin(omega2 * Date.now() / 1000)),
+  new InputNode(() => .5 + 0.5 * Math.sin(omega1 * Date.now() / 1000)),
+  new InputNode(() => .5 + 0.5 * Math.sin(omega2 * Date.now() / 1000)),
 
   new Node(),
   new Node(),
@@ -63,10 +68,7 @@ const nw = new Network(
   [nodes[4]] //output nodes
 );
 
-const nv = new NetworkVisualization(nw);
 
-nv.animate();
-nv.addInteraction();
 
 const trainingdata = [{
     cloudiness: 1,
@@ -105,6 +107,11 @@ const trainingdata = [{
   }
 ];
 
+
+function formattemperature(temp) {
+  return `${(temp*10).toFixed(1)}°C`;
+}
+
 function updatepredictions() {
   for (let i in trainingdata) {
     const td = trainingdata[i];
@@ -122,13 +129,37 @@ function updatepredictions() {
       //overwrite input functions
       nodes[0].setUserParameter(d.cloudiness);
       nodes[1].setUserParameter(d.inside);
-      console.log(this);
+
+      d3.select("#target-temperature")
+        .text("target:" + formattemperature(d.temperature))
+        .attr("x", nodes[4].x + 50)
+        .attr("y", nodes[4].y - unit * d.temperature);
     });
 }
 
-function animatepredictions() {
+function animatecallback() {
+
+  d3.select("#current-temperature")
+    .text(formattemperature(nodes[4].getActivation()))
+    .attr("x", nodes[4].x)
+    .attr("y", nodes[4].y - unit * nodes[4].getActivation());
+
+
+  d3.select("#cloudiness")
+    .text("cloudiness: " + nodes[0].getActivation().toFixed(2))
+    .attr("x", nodes[0].x - 100)
+    .attr("y", nodes[0].y - unit * nodes[0].getActivation());
+
+  d3.select("#insideness")
+    .text("insideness: " + nodes[1].getActivation().toFixed(2))
+    .attr("x", nodes[1].x - 100)
+    .attr("y", nodes[1].y - unit * nodes[1].getActivation());
+
   updatepredictions();
-  requestAnimationFrame(animatepredictions);
 }
 
-animatepredictions();
+
+const nv = new NetworkVisualization(nw, animatecallback);
+
+nv.animate();
+nv.addInteraction();

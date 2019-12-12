@@ -7,15 +7,19 @@ html(lang="en")
     link(rel='stylesheet', href='style.css')
     script(type='text/javascript', src="d3.js")
     script(src="weather.js", type="module")
-      
+
   body
     svg
+      text#cloudiness
+      text#insideness
+      text#current-temperature
+      text#target-temperature
       g#edges
       g#nodes
       g#node-parameters
       g#edge-parameters
       g#input-parameters
-      g#outputs
+
     div
       h3 Training Data (click to set as input):
       div.trainingpreview

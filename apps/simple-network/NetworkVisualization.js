@@ -7,10 +7,11 @@ import {
 } from './Node.js';
 
 export class NetworkVisualization {
-  constructor(network) {
+  constructor(network, animatecallback) {
     const nodes = this.nodes = network.nodes;
     this.inputnodes = network.inputnodes;
     this.outputnodes = network.outputnodes;
+    this.animatecallback = animatecallback;
 
     this.edges = [];
 
@@ -155,7 +156,7 @@ export class NetworkVisualization {
       .attr("fill-opacity", 0.5);
 
 
-
+    this.animatecallback();
     requestAnimationFrame(() => this.animate());
   }
 

@@ -4,7 +4,7 @@ import {
 
 
 export class InputNode extends Node {
-  constructor(activationcb) {
+  constructor(activationcb = (() => 0)) {
     super();
     this.activationcb = activationcb;
   }
@@ -14,8 +14,8 @@ export class InputNode extends Node {
   }
 
   setUserParameter(val) {
-    if(!this.hasOwnProperty("userparamter")) {
-      this.activationcb = (()=>this.userparamter);
+    if (!this.hasOwnProperty("userparamter")) {
+      this.activationcb = (() => this.userparamter);
     }
     this.userparamter = val;
   }
