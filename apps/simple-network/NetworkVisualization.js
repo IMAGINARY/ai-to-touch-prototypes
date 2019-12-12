@@ -1,4 +1,6 @@
-const unit = 10; //1 unit equals 10 pixels
+import {
+  unit
+} from './constants.js';
 
 import {
   updateActivations
