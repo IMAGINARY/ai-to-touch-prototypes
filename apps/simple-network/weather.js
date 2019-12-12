@@ -68,5 +68,69 @@ const nv = new NetworkVisualization(nw);
 nv.animate();
 nv.addInteraction();
 
-console.log(nw.predict([1,2]));
-console.log(nw.predict([0,0]));
+const trainingdata = [{
+    cloudiness: 1,
+    inside: 0,
+    temperature: 1.2
+  },
+  {
+    cloudiness: 0.5,
+    inside: 0,
+    temperature: 1.7
+  },
+  {
+    cloudiness: 0,
+    inside: 0,
+    temperature: 2.8
+  },
+  {
+    cloudiness: 0.3,
+    inside: 0,
+    temperature: 2.3
+  },
+  {
+    cloudiness: 1,
+    inside: 1,
+    temperature: 2.0
+  },
+  {
+    cloudiness: 0.5,
+    inside: 1,
+    temperature: 2.0
+  },
+  {
+    cloudiness: 0,
+    inside: 1,
+    temperature: 2.1
+  }
+];
+
+function updatepredictions() {
+  for (let i in trainingdata) {
+    const td = trainingdata[i];
+    td.predictedtemperature = nw.predict([td.cloudiness, td.inside])[0];
+    td.error = Math.abs(td.predictedtemperature - td.temperature);
+  }
+
+  var errorcolor = d3.scaleSequential().domain([2, 0])
+    .interpolator(d3.interpolateRdYlGn);
+
+  d3.select('.trainingpreview').selectAll("div").data(trainingdata).join("div")
+    .text(d => JSON.stringify(d))
+    .style("background-color", d => errorcolor(d.error))
+    .on('click', d => {
+      d3.select(this)
+            .classed("background-color", "orange");
+      //overwrite input functions
+      nodes[0].activationcb = (() => d.cloudiness);
+      nodes[1].activationcb = (() => d.inside);
+      console.log(this);
+    });
+}
+
+function animatepredictions() {
+  updatepredictions();
+  requestAnimationFrame(animatepredictions);
+}
+
+animatepredictions();

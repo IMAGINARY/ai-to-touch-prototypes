@@ -7,9 +7,12 @@ html(lang="en")
     script(type='text/javascript', src="d3.js")
     script(src="weather.js", type="module")
   body
-    svg(style="width:95vw; height:95vh;")
+    svg(style="width:95vw; height:70vh;")
       g#activations
       g#edges
       g#nodes
       g#node-parameters
       g#edge-parameters
+    div
+      h3 Training Data:
+      div.trainingpreview(style="display:flex; flex-wrap: wrap;")
