@@ -42,7 +42,7 @@ const nodes = [
 
 //TODO
 for (let i in [2, 3, 4]) {
-  nodes[i].bias = -5 + 7 * Math.random();
+  nodes[[2, 3, 4][i]].bias = -5 + 7 * Math.random();
 }
 //output from console
 nodes[0].x = 112;

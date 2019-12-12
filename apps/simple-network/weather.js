@@ -45,8 +45,9 @@ const nodes = [
 ];
 
 for (let i in [2, 3]) {
-  nodes[i].bias = -5 + 7 * Math.random();
+  nodes[[2, 3][i]].bias = -5 + 7 * Math.random();
 }
+
 //output from console
 nodes[0].x = 155;
 nodes[0].y = 184;
