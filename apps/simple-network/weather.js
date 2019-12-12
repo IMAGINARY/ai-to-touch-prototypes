@@ -14,10 +14,10 @@ import {
   Network
 } from './Network.js';
 
+
 import {
   NetworkVisualization
 } from './NetworkVisualization.js';
-
 
 
 // some toy example
@@ -31,13 +31,11 @@ const nodes = [
 
   new Node(),
   new Node(),
-  new Node(),
 
   new Node()
 ];
 
-//TODO
-for (let i in nodes) {
+for (let i in [2, 3]) {
   nodes[i].bias = -5 + 7 * Math.random();
 }
 //output from console
@@ -49,26 +47,21 @@ nodes[2].x = 359;
 nodes[2].y = 105.3718970730273;
 nodes[3].x = 476;
 nodes[3].y = 288.64480032239464;
-nodes[4].x = 382;
-nodes[4].y = 516.7279001876828;
-nodes[5].x = 663;
-nodes[5].y = 297.64302901347446;
+nodes[4].x = 663;
+nodes[4].y = 297.64302901347446;
 
 nodes[0].addChild(nodes[2], 1);
 nodes[0].addChild(nodes[3], 1);
-nodes[0].addChild(nodes[4], 1);
 nodes[1].addChild(nodes[2], 1);
 nodes[1].addChild(nodes[3], 1);
-nodes[1].addChild(nodes[4], 1);
-nodes[2].addChild(nodes[5], 1);
-nodes[3].addChild(nodes[5], 1);
-nodes[4].addChild(nodes[5], 1);
+nodes[2].addChild(nodes[4], 1);
+nodes[3].addChild(nodes[4], 1);
 
 
 const nv = new NetworkVisualization(new Network(
   nodes,
-  [nodes[0], nodes[1]],
-  [nodes[5]]
+  [nodes[0], nodes[1]], //input nodes
+  [nodes[4]] //output nodes
 ));
 
 nv.animate();

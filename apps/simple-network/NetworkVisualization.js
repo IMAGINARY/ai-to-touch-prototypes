@@ -5,8 +5,11 @@ import {
 } from './Node.js';
 
 export class NetworkVisualization {
-  constructor(nodes) {
-    this.nodes = nodes;
+  constructor(network) {
+    const nodes = this.nodes = network.nodes;
+    this.inputnodes = network.inputnodes;
+    this.outputnodes = network.outputnodes;
+
     this.edges = [];
 
     for (let i in nodes) {
@@ -42,7 +45,7 @@ export class NetworkVisualization {
       .attr("fill-opacity", 0.5);
 
 
-    d3.select("#node-parameters").selectAll("circle").data(nodes.filter(n => (n.constructor.name == "Node")))
+    d3.select("#node-parameters").selectAll("circle").data(nodes.filter(n => !this.inputnodes.includes(n)))
       .join("circle")
       .attr("cx", n => n.x)
       .attr("cy", n => n.y - unit * n.bias)
@@ -87,10 +90,11 @@ export class NetworkVisualization {
     group.selectAll(".bottom").attr("d", edge => {
         const p = d3.path();
 
-        //make "waterproof"
-        if (edge.from.bias < 0) {
+
+        if (edge.from.bias < 0 || this.inputnodes.includes(edges.from)) {
           p.moveTo(edge.from.x, edge.from.y);
         } else {
+          //make "waterproof"
           p.moveTo(edge.from.x, edge.from.y - unit * edge.from.bias);
           p.lineTo(edge.from.x, edge.from.y);
         }
