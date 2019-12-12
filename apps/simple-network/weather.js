@@ -236,3 +236,11 @@ const nv = new NetworkVisualization(nw, animatecallback);
 
 nv.animate();
 nv.addInteraction();
+
+
+for(let i in nodes){
+  console.log(nodes[i].getdActivation());
+}
+
+console.log(nodes[2].getdBias());
+console.log(nodes[3].getdBias());

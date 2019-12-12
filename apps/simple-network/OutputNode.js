@@ -21,6 +21,6 @@ export class OutputNode extends Node {
   }
 
   getdActivation() {
-    return 1; //TODO
+    return 1; //TODO: make dependent on loss function
   }
 }

@@ -23,6 +23,22 @@ export class NetworkVisualization {
     }
     //TODO: sort based on y coordinates of incoming edges
     this.edges = this.edges.reverse();
+
+    //arrow from http://jsfiddle.net/igbatov/v0ekdzw1/
+    d3.select("svg").append("svg:defs").append("svg:marker")
+      .attr("id", "triangle")
+      .attr("refX", 6)
+      .attr("refY", 6)
+      .attr("markerWidth", 30)
+      .attr("markerHeight", 30)
+      .attr("markerUnits", "userSpaceOnUse")
+      .attr("orient", "auto")
+      .append("path")
+      .attr("d", "M 0 0 12 6 0 12 3 6")
+      .style("fill", "orange");
+
+
+
   }
 
   animate() {
@@ -61,6 +77,21 @@ export class NetworkVisualization {
       .attr("stroke", "black")
       .attr("stroke-width", 2)
       .attr("stroke-opacity", 0.5);
+
+    d3.select("#gradient").selectAll("path").data(nodes.filter(n => !this.inputnodes.includes(n) && !this.outputnodes.includes(n)))
+      .join("path")
+      .filter(node => node.getdBias() != 0)
+      .attr("d", (node) => {
+        const p = d3.path();
+        p.moveTo(node.x, node.y - unit * node.bias);
+        p.lineTo(node.x, node.y - unit * (node.bias + node.getdBias()));
+        return p;
+      })
+      .attr("marker-end", "url(#triangle)")
+      .attr("stroke", "orange")
+      .attr("stroke-width", 2)
+      .attr("fill", "none");
+
 
 
     d3.select("#edge-parameters").selectAll("circle").data(edges)
@@ -109,7 +140,7 @@ export class NetworkVisualization {
       .attr("fill-opacity", 0.6)
       .attr("stroke", "black")
       .attr("stroke-width", 2)
-      .attr("stroke-opacity", 0.6);
+      .attr("stroke-opacity", 0.6)
 
     const outputwidth = inputwidth;
 
