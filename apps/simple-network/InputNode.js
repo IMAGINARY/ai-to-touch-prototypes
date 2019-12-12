@@ -4,12 +4,19 @@ import {
 
 
 export class InputNode extends Node {
-  constructor() {
+  constructor(activationcb = (() => 0)) {
     super();
-    this.omega = 1 + Math.random();
+    this.activationcb = activationcb;
   }
 
   getActivation() {
-    return 1 + 0.5 * Math.sin(this.omega * Date.now() / 1000);
+    return this.activationcb();
+  }
+
+  setUserParameter(val) {
+    if (!this.hasOwnProperty("userparamter")) {
+      this.activationcb = (() => this.userparamter);
+    }
+    this.userparamter = val;
   }
 }

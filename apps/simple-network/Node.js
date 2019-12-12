@@ -1,35 +1,13 @@
 //jshint: "esversion": 8
 
+import {
+  Edge
+} from './Edge.js';
+
 var currentcomputetime = 0;
 
 export function updateActivations() {
   currentcomputetime++;
-}
-
-class Edge {
-  constructor(from, to, weight) {
-    this.from = from;
-    this.to = to;
-    this.weight = weight;
-  }
-
-  bezier(unit) {
-    const edge = this;
-    return [
-      [
-        edge.from.x,
-        (edge.from.x + edge.to.x) / 2,
-        (edge.from.x + edge.to.x) / 2,
-        edge.to.x
-      ],
-      [
-        edge.from.y,
-        edge.from.y,
-        edge.to.y - unit * (edge.offset),
-        edge.to.y - unit * (edge.offset)
-      ]
-    ];
-  }
 }
 
 

@@ -3,13 +3,26 @@
 doctype html
 html(lang="en")
   head
-    title= pageTitle
+    title= "Predict the temperature given the cloudiness and being inside!"
+    link(rel='stylesheet', href='style.css')
     script(type='text/javascript', src="d3.js")
-    script(src="main.js", type="module")
+    script(src="weather.js", type="module")
+
   body
-    svg(style="width:95vw; height:95vh;")
-      g#activations
+    svg
+      text#cloudiness
+      text#insideness
+      text#current-temperature
+      text#target-temperature
       g#edges
       g#nodes
+      g#input-parameters
+      g#outputs
       g#node-parameters
       g#edge-parameters
+      g#normalized-edge-parameters
+
+
+    div
+      h3 Training Data (click on row to select as input):
+      table#trainingpreview
