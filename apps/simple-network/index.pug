@@ -3,11 +3,13 @@
 doctype html
 html(lang="en")
   head
-    title= pageTitle
+    title= "Predict the temperature given the cloudiness and being inside!"
+    link(rel='stylesheet', href='style.css')
     script(type='text/javascript', src="d3.js")
     script(src="weather.js", type="module")
+      
   body
-    svg(style="width:95vw; height:70vh;")
+    svg
       g#activations
       g#edges
       g#nodes
@@ -15,4 +17,4 @@ html(lang="en")
       g#edge-parameters
     div
       h3 Training Data:
-      div.trainingpreview(style="display:flex; flex-wrap: wrap;")
+      div.trainingpreview

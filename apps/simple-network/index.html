@@ -2,12 +2,13 @@
 <html lang="en">
 
     <head>
-        <title></title>
+        <title>Predict the temperature given the cloudiness and being inside!</title>
+        <link rel="stylesheet" href="style.css">
         <script type="text/javascript" src="d3.js"></script>
         <script src="weather.js" type="module"></script>
     </head>
 
-    <body><svg style="width:95vw; height:70vh;">
+    <body><svg>
             <g id="activations"></g>
             <g id="edges"></g>
             <g id="nodes"></g>
@@ -16,7 +17,7 @@
         </svg>
         <div>
             <h3>Training Data:</h3>
-            <div class="trainingpreview" style="display:flex; flex-wrap: wrap;"></div>
+            <div class="trainingpreview"></div>
         </div>
     </body>
 

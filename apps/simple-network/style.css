@@ -1,0 +1,9 @@
+.trainingpreview {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+svg {
+  width: 95vw;
+  height: 70vh;
+}

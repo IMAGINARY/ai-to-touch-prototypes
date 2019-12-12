@@ -3,11 +3,12 @@
 doctype html
 html(lang="en")
   head
-    title= pageTitle
+    title= "A playground for a simple Network"
+    link(rel='stylesheet', href='style.css')
     script(type='text/javascript', src="d3.js")
     script(src="playground.js", type="module")
   body
-    svg(style="width:95vw; height:95vh;")
+    svg
       g#activations
       g#edges
       g#nodes
