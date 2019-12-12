@@ -234,12 +234,11 @@ export class NetworkVisualization {
     d3.drag()
       .on("start", function() {
         var current = d3.select(this);
-        this.y0 = d3.event.y;
+        this.deltaY = current.attr("cy") - d3.event.y;
       })
       .on("drag", function() {
         const node = d3.select(this).data()[0];
-        node.setUserParameter(Math.max(0, -(d3.event.y - this.y0) / unit));
-
+        node.setUserParameter(Math.max(0, -(d3.event.y + this.deltaY - node.y) / unit));
         d3.select("#target-temperature")
           .transition()
           .attr("opacity", 0);
