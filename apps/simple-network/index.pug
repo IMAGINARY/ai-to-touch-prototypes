@@ -21,8 +21,11 @@ html(lang="en")
       g#node-parameters
       g#edge-parameters
       g#normalized-edge-parameters
-
-
-    div
-      h3 Training Data (click on row to select as input):
-      table#trainingpreview
+    div(style="display:flex;")
+      div
+        h3 Training Data (click on row to select as input)
+        table#trainingpreview
+      div
+        h3 Total error on training data
+        #totalerror
+        
