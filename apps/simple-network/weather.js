@@ -200,15 +200,9 @@ function updatepredictions() {
     */
 }
 
-function loss() {
-  let sqsum = 0;
-  for (let i in trainingdata) {
-    const td = trainingdata[i];
-    td.predictedtemperature = nw.predict([td.cloudiness, td.inside])[0];
-    sqsum += (td.predictedtemperature - td.temperature) * (td.predictedtemperature - td.temperature);
-  }
-  return sqsum;
-}
+
+const trainX = trainingdata.map(td => [td.cloudiness, td.inside]);
+const trainY = trainingdata.map(td => [td.temperature]);
 
 function animatecallback() {
   d3.select("#current-temperature")
@@ -227,7 +221,7 @@ function animatecallback() {
     .attr("y", nodes[1].y - 10 - unit * nodes[1].getActivation());
 
   d3.select("#totalerror")
-    .text("value of loss function (to be minimized): " + loss());
+    .text("value of loss function (to be minimized): " + nw.loss(trainX, trainY));
   updatepredictions();
 }
 
@@ -238,6 +232,6 @@ nv.animate();
 nv.addInteraction();
 
 
-for(let i in nodes){
+for (let i in nodes) {
   console.log(nodes[i].getdActivation());
 }

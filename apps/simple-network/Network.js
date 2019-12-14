@@ -16,9 +16,8 @@ export class Network {
 
     //overwrite activation callbacks for input
     for (let i in this.inputnodes) {
-      this.inputnodes[i].temporarilyReplaceGetActivation(() => input[i])
+      this.inputnodes[i].temporarilyReplaceGetActivation(() => input[i]);
     }
-
 
     //get prediction in this 'modified network'
     updateDynamicVariables();
@@ -29,5 +28,15 @@ export class Network {
       this.inputnodes[i].restoreGetActivation();
     }
     return values;
+  }
+
+  loss(trainX, trainY) {
+    let sqsum = 0;
+    for (let i in trainX) {
+      const predicted = this.predict(trainX[i]);
+      for (let k in predicted)
+        sqsum += (predicted[k] - trainY[i][k]) * (predicted[k] - trainY[i][k]);
+    }
+    return sqsum;
   }
 }
