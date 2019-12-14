@@ -14,11 +14,11 @@ export class Node {
     this.activation = new DynamicVariable(0);
     this.dactivation = new DynamicVariable(0);
     this.bias = 0;
+    this.dloss = 0;
     this.dbias = new DynamicVariable(0);
     this.outedges = [];
     this.inedges = [];
   }
-
 
   addChild(other, weight, reverse = true) {
     const edge = new Edge(this, other, weight);
@@ -39,12 +39,12 @@ export class Node {
     });
   }
 
-  getdActivation(cid = -1) {
+  getdActivation() {
     return this.dactivation.update(() => {
       let dactivation = 0;
       for (let eid in this.outedges) {
         const edge = this.outedges[eid];
-        if (edge.to.getActivation(cid) > 0) { //TODO: or || next node output node
+        if (edge.to.getActivation() > 0) { //TODO: or || next node output node
           dactivation += edge.weight * edge.to.getdActivation();
         }
       }
@@ -52,7 +52,7 @@ export class Node {
     });
   }
 
-  getdBias(cid = -1) {
+  getdBias() {
     return this.dbias.update(() => {
       let dbias = 0;
       if (this.getActivation() > 0) {

@@ -24,6 +24,7 @@ export class Edge {
     this.from = from;
     this.to = to;
     this.weight = weight;
+    this.dloss = 0;
     this.dweight = new DynamicVariable();
   }
 
@@ -60,7 +61,7 @@ export class Edge {
   getdWeight() {
     return this.dweight.update(() => {
       let dactivation = 0;
-      if (this.to.getActivation() >= 0) { //TODO: or || next node output node
+      if (this.to.getActivation() > 0) { //TODO: or || next node output node
         dactivation += this.weight * this.to.getdActivation();
       }
       return dactivation;

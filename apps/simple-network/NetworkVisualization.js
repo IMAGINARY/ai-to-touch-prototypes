@@ -80,11 +80,11 @@ export class NetworkVisualization {
 
     d3.select("#nodes").select(".gradient").selectAll("path").data(nodes.filter(n => !this.inputnodes.includes(n) && !this.outputnodes.includes(n)))
       .join("path")
-      .filter(node => node.getdBias() != 0)
+      .filter(node => node.dloss != 0)
       .attr("d", (node) => {
         const p = d3.path();
         p.moveTo(node.x, node.y - unit * node.bias);
-        p.lineTo(node.x, node.y - unit * (node.bias + node.getdBias()));
+        p.lineTo(node.x, node.y - unit * (node.bias + node.dloss));
         return p;
       })
       .attr("marker-end", "url(#triangle)")
@@ -94,13 +94,13 @@ export class NetworkVisualization {
 
     d3.select("#edges").select(".gradient").selectAll("path").data(edges)
       .join("path")
-      .filter(edge => edge.getdWeight() != 0)
+      .filter(edge => edge.dloss != 0)
       .attr("d", (edge) => {
         const p = d3.path();
         const x = (edge.from.x + edge.to.x) / 2;
         const y = edge.firstHalfBezier()[3][1] - unit * edge.weight;
         p.moveTo(x, y);
-        p.lineTo(x, y - unit * (edge.getdWeight()));
+        p.lineTo(x, y - unit * (edge.dloss));
         return p;
       })
       .attr("marker-end", "url(#triangle)")

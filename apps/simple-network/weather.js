@@ -221,7 +221,7 @@ function animatecallback() {
     .attr("y", nodes[1].y - 10 - unit * nodes[1].getActivation());
 
   d3.select("#totalerror")
-    .text("value of loss function (to be minimized): " + nw.loss(trainX, trainY));
+    .text("value of loss function (to be minimized): " + nw.loss(trainX, trainY) + " including gradients" + nw.gradientLoss(trainX, trainY));
   updatepredictions();
 }
 

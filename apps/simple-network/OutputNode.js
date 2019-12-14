@@ -2,6 +2,10 @@ import {
   Node
 } from './Node.js';
 
+import {
+  DynamicVariable,
+  updateDynamicVariables
+} from './DynamicVariable.js';
 
 // a node that just sums up inputs (no ReLu to enable negative outputs)
 
@@ -20,13 +24,14 @@ export class OutputNode extends Node {
     return this.activation;
   }
 
+  //this function might be overwriten
   getdActivation() {
     return 1; //TODO: make dependent on loss function
   }
 
-  temporarilyReplaceGetdActivation(tempActivation) {
+  temporarilyReplaceGetdActivation(tempdActivation) {
     this.getdActivationBackup = this.getdActivation;
-    this.getdActivation = tempActivation;
+    this.getdActivation = tempdActivation;
     updateDynamicVariables();
   }
 
