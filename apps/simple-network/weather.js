@@ -221,7 +221,7 @@ function animatecallback() {
     .attr("y", nodes[1].y - 10 - unit * nodes[1].getActivation());
 
   d3.select("#totalerror")
-    .text("value of loss function (to be minimized): " + nw.loss(trainX, trainY) + " including gradients" + nw.gradientLoss(trainX, trainY));
+    .text("value of loss function (to be minimized): " + nw.loss(trainX, trainY));
   updatepredictions();
 }
 
@@ -235,3 +235,12 @@ nv.addInteraction();
 for (let i in nodes) {
   console.log(nodes[i].getdActivation());
 }
+
+d3.select('#gradientdescent').on('click', () => {
+  nw.gradientstep(trainX, trainY, 0.001);
+});
+
+d3.select('#gradientdescent100').on('click', () => {
+  for (let i = 0; i < 100; i++)
+    nw.gradientstep(trainX, trainY, 0.001);
+});

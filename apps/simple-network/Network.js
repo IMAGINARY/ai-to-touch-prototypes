@@ -75,7 +75,7 @@ export class Network {
         sqsum += (predicted[i] - target[i]) * (predicted[i] - target[i]);
 
       for (let i in this.outputnodes) {
-        this.outputnodes[i].temporarilyReplaceGetdActivation(() => 2 * (target[i] - predicted[i]));
+        this.outputnodes[i].temporarilyReplaceGetdActivation(() => 2 * (predicted[i] - target[i]));
       }
       updateDynamicVariables();
 
@@ -85,7 +85,6 @@ export class Network {
 
       for (let i in this.edges) {
         this.edges[i].dloss += this.edges[i].getdWeight();
-        console.log(this.edges[i].dloss);
       }
 
 
@@ -100,6 +99,19 @@ export class Network {
       }
     }
     return sqsum;
+  }
+
+  gradientstep(trainX, trainY, stepsize) {
+    this.gradientLoss(trainX, trainY);
+
+    for (let i in this.nodes) {
+      this.nodes[i].bias -= stepsize * this.nodes[i].dloss;
+    }
+
+    for (let i in this.edges) {
+      this.edges[i].weight -= stepsize * this.edges[i].dloss;
+    }
+    updateDynamicVariables();
   }
 
 }
