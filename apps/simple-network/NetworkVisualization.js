@@ -99,7 +99,6 @@ export class NetworkVisualization {
         const p = d3.path();
         const x = (edge.from.x + edge.to.x) / 2;
         const y = edge.firstHalfBezier()[3][1] - unit * edge.weight;
-        console.log( edge.getdWeight());
         p.moveTo(x, y);
         p.lineTo(x, y - unit * (edge.getdWeight()));
         return p;
