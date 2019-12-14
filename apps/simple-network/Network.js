@@ -16,8 +16,7 @@ export class Network {
 
     //overwrite activation callbacks for input
     for (let i in this.inputnodes) {
-      this.inputnodes[i].backupActivationcb = this.inputnodes[i].activationcb;
-      this.inputnodes[i].activationcb = (() => input[i]);
+      this.inputnodes[i].temporarilyReplaceGetActivation(() => input[i])
     }
 
 
@@ -27,7 +26,7 @@ export class Network {
 
     //restore input functions from backup
     for (let i in this.inputnodes) {
-      this.inputnodes[i].activationcb = this.inputnodes[i].backupActivationcb;
+      this.inputnodes[i].restoreGetActivation();
     }
     return values;
   }
