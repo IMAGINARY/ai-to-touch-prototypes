@@ -23,4 +23,15 @@ export class OutputNode extends Node {
   getdActivation() {
     return 1; //TODO: make dependent on loss function
   }
+
+  temporarilyReplaceGetdActivation(tempActivation) {
+    this.getdActivationBackup = this.getdActivation;
+    this.getdActivation = tempActivation;
+    updateDynamicVariables();
+  }
+
+  restoreGetdActivation() {
+    this.getdActivation = this.getdActivationBackup;
+    updateDynamicVariables();
+  }
 }
