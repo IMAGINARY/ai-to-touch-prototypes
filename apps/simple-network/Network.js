@@ -47,10 +47,7 @@ export class Network {
     return sqsum;
   }
 
-  //computes loss function and saves its gradient as parameters to objects in network
-  gradientLoss(trainX, trainY) {
-    let sqsum = 0;
-
+  resetdloss() {
     for (let i in this.nodes) {
       this.nodes[i].dloss = 0;
     }
@@ -58,8 +55,12 @@ export class Network {
     for (let i in this.edges) {
       this.edges[i].dloss = 0;
     }
+  }
 
-
+  //computes loss function and saves its gradient as parameters to objects in network
+  gradientLoss(trainX, trainY) {
+    let sqsum = 0;
+    this.resetdloss();
     for (let k in trainX) {
       const input = trainX[k];
       const target = trainY[k];

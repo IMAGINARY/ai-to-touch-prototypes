@@ -223,6 +223,12 @@ function animatecallback() {
   d3.select("#totalerror")
     .text("value of loss function (to be minimized): " + nw.loss(trainX, trainY));
   updatepredictions();
+
+  if (document.querySelector("#showgradient").checked) {
+    nw.gradientLoss(trainX, trainY);
+  } else {
+    nw.resetdloss();
+  }
 }
 
 
@@ -231,10 +237,6 @@ const nv = new NetworkVisualization(nw, animatecallback);
 nv.animate();
 nv.addInteraction();
 
-
-for (let i in nodes) {
-  console.log(nodes[i].getdActivation());
-}
 
 d3.select('#gradientdescent').on('click', () => {
   nw.gradientstep(trainX, trainY, 0.01);

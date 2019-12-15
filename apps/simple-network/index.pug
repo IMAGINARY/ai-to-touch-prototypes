@@ -35,9 +35,13 @@ html(lang="en")
         table#trainingpreview
       div
         h3 Total error on training data
-        #totalerror
         p
-        button#gradientdescent Adjust parameters with gradient descent
+          #totalerror
         p
-        button#gradientdescent100 Adjust parameters with 100 gradient descent steps
+          input(type="checkbox")#showgradient
+          label(for="showgradient") show negative gradient of loss function
+        p
+          button#gradientdescent Adjust parameters with gradient descent
+        p
+          button#gradientdescent100 Adjust parameters with 100 gradient descent steps
         

@@ -42,6 +42,8 @@ export class NetworkVisualization {
   }
 
   animate() {
+    if (this.animatecallback)
+      this.animatecallback();
     const nodes = this.nodes;
     const inputnodes = this.inputnodes;
     const outputnodes = this.outputnodes;
@@ -67,7 +69,7 @@ export class NetworkVisualization {
       .attr("fill-opacity", 0.5);
 
 
-    d3.select("#nodes").select(".parameters").selectAll("circle").data(nodes.filter(n => !this.inputnodes.includes(n) && !this.outputnodes.includes(n)))
+    d3.select("#nodes").select(".parameters").selectAll("circle").data(nodes.filter(node => node.constructor.name == "Node"))
       .join("circle")
       .attr("cx", n => n.x)
       .attr("cy", n => n.y - unit * n.bias)
@@ -78,13 +80,12 @@ export class NetworkVisualization {
       .attr("stroke-width", 2)
       .attr("stroke-opacity", 0.5);
 
-    d3.select("#nodes").select(".gradient").selectAll("path").data(nodes.filter(n => !this.inputnodes.includes(n) && !this.outputnodes.includes(n)))
+    d3.select("#nodes").select(".gradient").selectAll("path").data(nodes.filter(node => node.dloss != 0 && node.constructor.name == "Node"))
       .join("path")
-      .filter(node => node.dloss != 0)
       .attr("d", (node) => {
         const p = d3.path();
         p.moveTo(node.x, node.y - unit * node.bias);
-        p.lineTo(node.x, node.y - unit * (node.bias + node.dloss));
+        p.lineTo(node.x, node.y - unit * (node.bias - node.dloss));
         return p;
       })
       .attr("marker-end", "url(#triangle)")
@@ -92,15 +93,14 @@ export class NetworkVisualization {
       .attr("stroke-width", 2)
       .attr("fill", "none");
 
-    d3.select("#edges").select(".gradient").selectAll("path").data(edges)
+    d3.select("#edges").select(".gradient").selectAll("path").data(edges.filter(edge => edge.dloss != 0))
       .join("path")
-      .filter(edge => edge.dloss != 0)
       .attr("d", (edge) => {
         const p = d3.path();
         const x = (edge.from.x + edge.to.x) / 2;
         const y = edge.firstHalfBezier()[3][1] - unit * edge.weight;
         p.moveTo(x, y);
-        p.lineTo(x, y - unit * (edge.dloss));
+        p.lineTo(x, y + unit * (edge.dloss));
         return p;
       })
       .attr("marker-end", "url(#triangle)")
@@ -170,7 +170,7 @@ export class NetworkVisualization {
     d3.select("#edges").select(".edges").selectAll("path").data(edges).join("path")
       .attr("d", edge => {
         const p = d3.path();
-        if (edge.from.bias <= 0 || this.inputnodes.includes(edges.from)) {
+        if (edge.from.bias <= 0 || edge.from.constructor.name == "InputNode") {
           p.moveTo(edge.from.x, edge.from.y);
         } else {
           //make "waterproof"
@@ -214,8 +214,6 @@ export class NetworkVisualization {
       .attr("fill", e => e.weight > 0 ? "blue" : "red")
       .attr("fill-opacity", 0.5);
 
-    if (this.animatecallback)
-      this.animatecallback();
     requestAnimationFrame(() => this.animate());
   }
 
