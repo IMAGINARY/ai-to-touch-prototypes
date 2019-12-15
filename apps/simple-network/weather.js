@@ -49,7 +49,7 @@ const nodes = [
 ];
 
 for (let i in [2, 3]) {
-  nodes[[2, 3][i]].bias = Math.random();
+  nodes[[2, 3][i]].bias = 2 * (Math.random() - .5);
 }
 
 //output from console
@@ -237,10 +237,10 @@ for (let i in nodes) {
 }
 
 d3.select('#gradientdescent').on('click', () => {
-  nw.gradientstep(trainX, trainY, 0.001);
+  nw.gradientstep(trainX, trainY, 0.01);
 });
 
 d3.select('#gradientdescent100').on('click', () => {
   for (let i = 0; i < 100; i++)
-    nw.gradientstep(trainX, trainY, 0.001);
+    nw.gradientstep(trainX, trainY, 0.01);
 });
