@@ -243,6 +243,9 @@ d3.select('#gradientdescent').on('click', () => {
 });
 
 d3.select('#gradientdescent100').on('click', () => {
-  for (let i = 0; i < 100; i++)
-    nw.gradientstep(trainX, trainY, 0.01);
+  for (let i = 0; i < 100; i++) { //animation
+    setTimeout(() => nw.gradientstep(trainX, trainY, 0.01),
+      i * 10
+    );
+  }
 });
