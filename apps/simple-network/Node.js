@@ -4,22 +4,21 @@ import {
   Edge
 } from './Edge.js';
 
-var currentcomputetime = 0;
-
-export function updateActivations() {
-  currentcomputetime++;
-}
-
+import {
+  DynamicVariable,
+  updateDynamicVariables
+} from './DynamicVariable.js';
 
 export class Node {
   constructor() {
-    this.activation = 0;
+    this.activation = new DynamicVariable(0);
+    this.dactivation = new DynamicVariable(0);
     this.bias = 0;
+    this.dloss = 0;
+    this.dbias = new DynamicVariable(0);
     this.outedges = [];
     this.inedges = [];
-    this.ctime = -1;
   }
-
 
   addChild(other, weight, reverse = true) {
     const edge = new Edge(this, other, weight);
@@ -29,21 +28,37 @@ export class Node {
     }
   }
 
-  getActivation(cid = -1) {
-    if (cid == -1) {
-      cid = currentcomputetime;
-    }
-    if (cid == this.ctime) {
-      return this.activation;
-    } else {
-      this.activation = this.bias;
+  getActivation() {
+    return this.activation.update(() => {
+      let activation = this.bias;
       for (let eid in this.inedges) {
         const edge = this.inedges[eid];
-        this.activation += edge.weight * edge.from.getActivation(cid);
+        activation += edge.weight * edge.from.getActivation();
       }
-      this.activation = Math.max(0, this.activation); //ReLu
-      this.ctime = cid;
-      return this.activation;
-    }
+      return Math.max(0, activation); //ReLu
+    });
+  }
+
+  getdActivation() {
+    return this.dactivation.update(() => {
+      let dactivation = 0;
+      for (let eid in this.outedges) {
+        const edge = this.outedges[eid];
+        if (edge.to.getActivation() > 0 || edge.to.constructor.name == "OutputNode") {
+          dactivation += edge.weight * edge.to.getdActivation();
+        }
+      }
+      return dactivation;
+    });
+  }
+
+  getdBias() {
+    return this.dbias.update(() => {
+      let dbias = 0;
+      if (this.getActivation() > 0) {
+        dbias = this.getdActivation();
+      }
+      return dbias;
+    });
   }
 }

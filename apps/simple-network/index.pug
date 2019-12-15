@@ -10,19 +10,38 @@ html(lang="en")
 
   body
     svg
-      text#cloudiness
-      text#insideness
-      text#current-temperature
-      text#target-temperature
-      g#edges
-      g#nodes
-      g#input-parameters
+      g
+        text#cloudiness
+        text#insideness
+        text#current-temperature
+        text#target-temperature
+      g#input
+        g.parameters
+        g.activations
       g#outputs
-      g#node-parameters
-      g#edge-parameters
-      g#normalized-edge-parameters
-
-
-    div
-      h3 Training Data (click on row to select as input):
-      table#trainingpreview
+      g#edges
+        g.edges
+        g.activations
+        g.gradient
+        g.parameters
+        g.normalized-parameters
+      g#nodes
+        g.nodes
+        g.gradient
+        g.parameters
+    div(style="display:flex;")
+      div
+        h3 Training Data (click on row to select as input)
+        table#trainingpreview
+      div
+        h3 Total error on training data
+        p
+          #totalerror
+        p
+          input(type="checkbox")#showgradient
+          label(for="showgradient") show negative gradient of loss function
+        p
+          button#gradientdescent Adjust parameters with gradient descent
+        p
+          button#gradientdescent100 Adjust parameters with 100 gradient descent steps
+        

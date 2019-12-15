@@ -4,6 +4,9 @@ import {
 
 //jshint: "esversion": 8
 
+import {
+  DynamicVariable
+} from './DynamicVariable.js';
 
 //one-dimensional De Casteljau to clip bezier
 //1st half
@@ -21,6 +24,8 @@ export class Edge {
     this.from = from;
     this.to = to;
     this.weight = weight;
+    this.dloss = 0;
+    this.dweight = new DynamicVariable();
   }
 
   bezier() {
@@ -46,10 +51,20 @@ export class Edge {
   }
 
   firstHalfBezier() {
-    return applySeperatelyToEachCoordinate(this.bezier(),casteljau1);
+    return applySeperatelyToEachCoordinate(this.bezier(), casteljau1);
   }
 
   secondHalfBezier() {
-    return applySeperatelyToEachCoordinate(this.bezier(),casteljau2);
+    return applySeperatelyToEachCoordinate(this.bezier(), casteljau2);
+  }
+
+  getdWeight() {
+    return this.dweight.update(() => {
+      let dactivation = 0;
+      if (this.to.getActivation() > 0 || this.to.constructor.name == "OutputNode") {
+        dactivation += this.from.getActivation() * this.to.getdActivation();
+      }
+      return dactivation;
+    });
   }
 }

@@ -3,8 +3,12 @@
 
 import {
   Node,
-  updateActivations
 } from './Node.js';
+
+import {
+  updateDynamicVariables
+} from './DynamicVariable.js';
+
 
 import {
   InputNode
@@ -45,7 +49,7 @@ const nodes = [
 ];
 
 for (let i in [2, 3]) {
-  nodes[[2, 3][i]].bias = -5 + 7 * Math.random();
+  nodes[[2, 3][i]].bias = 2 * (Math.random() - .5);
 }
 
 //output from console
@@ -196,8 +200,11 @@ function updatepredictions() {
     */
 }
 
-function animatecallback() {
 
+const trainX = trainingdata.map(td => [td.cloudiness, td.inside]);
+const trainY = trainingdata.map(td => [td.temperature]);
+
+function animatecallback() {
   d3.select("#current-temperature")
     .text(formattemperature(nodes[4].getActivation()))
     .attr("x", nodes[4].x)
@@ -213,7 +220,15 @@ function animatecallback() {
     .attr("x", nodes[1].x - 110)
     .attr("y", nodes[1].y - 10 - unit * nodes[1].getActivation());
 
+  d3.select("#totalerror")
+    .text("value of loss function (to be minimized): " + nw.loss(trainX, trainY));
   updatepredictions();
+
+  if (document.querySelector("#showgradient").checked) {
+    nw.gradientLoss(trainX, trainY);
+  } else {
+    nw.resetdloss();
+  }
 }
 
 
@@ -221,3 +236,16 @@ const nv = new NetworkVisualization(nw, animatecallback);
 
 nv.animate();
 nv.addInteraction();
+
+
+d3.select('#gradientdescent').on('click', () => {
+  nw.gradientstep(trainX, trainY, 0.01);
+});
+
+d3.select('#gradientdescent100').on('click', () => {
+  for (let i = 0; i < 100; i++) { //animation
+    setTimeout(() => nw.gradientstep(trainX, trainY, 0.01),
+      i * 10
+    );
+  }
+});
