@@ -62,7 +62,7 @@ export class Edge {
     return this.dweight.update(() => {
       let dactivation = 0;
       if (this.to.getActivation() > 0) { //TODO: or || next node output node
-        dactivation += this.weight * this.to.getdActivation();
+        dactivation += this.from.getActivation() * this.to.getdActivation();
       }
       return dactivation;
     });

@@ -105,7 +105,7 @@ export class Network {
     this.gradientLoss(trainX, trainY);
 
     for (let i in this.nodes) {
-      if (this.nodes[i].constructor.name == "Node") {//only internal nodes
+      if (this.nodes[i].constructor.name == "Node") { //only internal nodes
         this.nodes[i].bias -= stepsize * this.nodes[i].dloss;
       }
     }
