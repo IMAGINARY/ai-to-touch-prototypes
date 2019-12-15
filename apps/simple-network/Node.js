@@ -44,7 +44,7 @@ export class Node {
       let dactivation = 0;
       for (let eid in this.outedges) {
         const edge = this.outedges[eid];
-        if (edge.to.getActivation() > 0) { //TODO: or || next node output node
+        if (edge.to.getActivation() > 0 || edge.to.constructor.name == "OutputNode") {
           dactivation += edge.weight * edge.to.getdActivation();
         }
       }

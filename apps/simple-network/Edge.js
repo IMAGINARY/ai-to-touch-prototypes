@@ -61,7 +61,7 @@ export class Edge {
   getdWeight() {
     return this.dweight.update(() => {
       let dactivation = 0;
-      if (this.to.getActivation() > 0) { //TODO: or || next node output node
+      if (this.to.getActivation() > 0 || this.to.constructor.name == "OutputNode") {
         dactivation += this.from.getActivation() * this.to.getdActivation();
       }
       return dactivation;
