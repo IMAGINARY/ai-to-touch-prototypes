@@ -117,4 +117,11 @@ export class Network {
     updateDynamicVariables();
   }
 
+  pauseAnimatedInput() {
+    for (let i in this.inputnodes) {
+      const node = this.inputnodes[i];
+      node.pauseInput();
+    }
+  }
+
 }
