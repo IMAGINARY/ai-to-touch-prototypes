@@ -31,4 +31,8 @@ export class InputNode extends Node {
     this.getActivation = this.getActivationBackup;
     updateDynamicVariables();
   }
+
+  pauseInput() {
+    this.setUserParameter(this.getActivation());
+  }
 }

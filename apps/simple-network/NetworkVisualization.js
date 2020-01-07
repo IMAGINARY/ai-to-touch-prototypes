@@ -10,6 +10,7 @@ import {
 export class NetworkVisualization {
   constructor(network, animatecallback) {
     const nodes = this.nodes = network.nodes;
+    this.network = network;
     this.inputnodes = network.inputnodes;
     this.outputnodes = network.outputnodes;
     this.animatecallback = animatecallback;
@@ -36,9 +37,6 @@ export class NetworkVisualization {
       .append("path")
       .attr("d", "M 0 0 12 6 0 12 3 6")
       .style("fill", "orange");
-
-
-
   }
 
   animate() {
@@ -240,11 +238,13 @@ export class NetworkVisualization {
         }
       })(d3.select("#nodes").selectAll("circle"));
       */
+    const that = this;
     d3.drag()
       .on("start", function() {
         var current = d3.select(this);
         //this.deltaX = current.attr("cx") - d3.event.x;
         this.deltaY = current.attr("cy") - d3.event.y;
+        that.network.pauseAnimatedInput();
       })
       .on("drag", function() {
         const node = d3.select(this).data()[0];
@@ -259,6 +259,7 @@ export class NetworkVisualization {
         var current = d3.select(this);
         this.y0 = d3.event.y;
         this.weight0 = edge.weight;
+        that.network.pauseAnimatedInput();
       })
       .on("drag", function() {
         const edge = d3.select(this).data()[0];
@@ -273,6 +274,7 @@ export class NetworkVisualization {
         var current = d3.select(this);
         this.y0 = d3.event.y;
         this.weight0 = edge.weight;
+        that.network.pauseAnimatedInput();
       })
       .on("drag", function() {
         const edge = d3.select(this).data()[0];
