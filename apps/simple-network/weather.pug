@@ -1,4 +1,4 @@
-//out: index.html, pretty: true
+//out: weather.html, pretty: true
 
 doctype html
 html(lang="en")
@@ -6,26 +6,19 @@ html(lang="en")
     title= "Predict the temperature given the cloudiness and being inside!"
     link(rel='stylesheet', href='style.css')
     script(type='text/javascript', src="d3.js")
-    script(src="LevelController.js", type="module")
+    script(src="weather.js", type="module")
 
   body
-    div(style="display:flex;")
-      div
-        button#backbutton Previous Level
-      div
-        button#nextbutton Next Level
-    
-    h1#leveltitle Adjust the Neural Network
-    
     svg
+      g
+        text#cloudiness
+        text#insideness
+        text#current-temperature
+        text#target-temperature
       g#input
         g.parameters
         g.activations
-        g.values
       g#outputs
-        g.flow
-        g.target
-        g.values
       g#edges
         g.edges
         g.activations
@@ -39,7 +32,7 @@ html(lang="en")
     div(style="display:flex;")
       div
         h3 Training Data (click on row to select as input)
-        table(style="border-collapse: collapse;")#trainingtable
+        table#trainingpreview
       div
         h3 Total error on training data
         p
@@ -51,3 +44,4 @@ html(lang="en")
           button#gradientdescent Adjust parameters with gradient descent
         p
           button#gradientdescent100 Adjust parameters with 100 gradient descent steps
+        

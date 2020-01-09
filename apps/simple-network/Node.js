@@ -61,4 +61,8 @@ export class Node {
       return dbias;
     });
   }
+
+  format(v) {
+    return v.toFixed(2);
+  }
 }

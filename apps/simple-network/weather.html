@@ -5,25 +5,16 @@
         <title>Predict the temperature given the cloudiness and being inside!</title>
         <link rel="stylesheet" href="style.css">
         <script type="text/javascript" src="d3.js"></script>
-        <script src="LevelController.js" type="module"></script>
+        <script src="weather.js" type="module"></script>
     </head>
 
-    <body>
-        <div style="display:flex;">
-            <div><button id="backbutton">Previous Level</button></div>
-            <div><button id="nextbutton">Next Level</button></div>
-        </div>
-        <h1 id="leveltitle">Adjust the Neural Network</h1><svg>
+    <body><svg>
+            <g><text id="cloudiness"></text><text id="insideness"></text><text id="current-temperature"></text><text id="target-temperature"></text></g>
             <g id="input">
                 <g class="parameters"></g>
                 <g class="activations"></g>
-                <g class="values"></g>
             </g>
-            <g id="outputs">
-                <g class="flow"></g>
-                <g class="target"></g>
-                <g class="values"></g>
-            </g>
+            <g id="outputs"></g>
             <g id="edges">
                 <g class="edges"></g>
                 <g class="activations"></g>
@@ -40,7 +31,7 @@
         <div style="display:flex;">
             <div>
                 <h3>Training Data (click on row to select as input)</h3>
-                <table style="border-collapse: collapse;" id="trainingtable"></table>
+                <table id="trainingpreview"></table>
             </div>
             <div>
                 <h3>Total error on training data</h3>

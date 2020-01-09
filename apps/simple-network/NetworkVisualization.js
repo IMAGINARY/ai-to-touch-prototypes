@@ -39,7 +39,18 @@ export class NetworkVisualization {
       .style("fill", "orange");
   }
 
+  stop() {
+    this.animating = false;
+  }
+
   animate() {
+    this.animating = true;
+    this.animateloop();
+  }
+
+  animateloop() {
+    if (!this.animating) return;
+
     if (this.animatecallback)
       this.animatecallback();
     const nodes = this.nodes;
@@ -157,13 +168,21 @@ export class NetworkVisualization {
 
     const outputwidth = inputwidth;
 
-    d3.select("#outputs").selectAll("rect").data(outputnodes).join("rect")
+    d3.select("#outputs").select(".flow").selectAll("rect").data(outputnodes).join("rect")
       .attr("x", node => node.x)
       .attr("y", node => node.y - Math.max(0, node.getActivation() * unit))
       .attr("width", outputwidth)
       .attr("height", node => Math.abs(node.getActivation() * unit))
       .attr("fill", "blue")
       .attr("fill-opacity", 0.5);
+
+    d3.select("#outputs").select(".target").selectAll("text")
+      .data(outputnodes.filter(n => n.target))
+      .join("text")
+      .text(n => "target: " + n.format(n.target))
+      .attr("x", n => n.x + 50)
+      .attr("y", n => n.y - unit * n.target)
+      .attr("opacity", 1);
 
     d3.select("#edges").select(".edges").selectAll("path").data(edges).join("path")
       .attr("d", edge => {
@@ -212,7 +231,7 @@ export class NetworkVisualization {
       .attr("fill", e => e.weight > 0 ? "blue" : "red")
       .attr("fill-opacity", 0.5);
 
-    requestAnimationFrame(() => this.animate());
+    requestAnimationFrame(() => this.animateloop());
   }
 
 
@@ -289,9 +308,9 @@ export class NetworkVisualization {
       .on("drag", function() {
         const node = d3.select(this).data()[0];
         node.setUserParameter(Math.max(0, -(d3.event.y + this.deltaY - node.y) / unit));
-        d3.select("#target-temperature")
-          .transition()
-          .attr("opacity", 0);
+        for(let k in that.network.outputnodes) {
+          delete that.network.outputnodes[k].target;
+        }
         //node.y = d3.event.y + this.deltaX;
       })(d3.select("#input").selectAll("circle, rect"));
 
