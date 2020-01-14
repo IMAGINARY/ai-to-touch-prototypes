@@ -240,42 +240,42 @@ export class MaxLevel extends Level {
     const omega2 = 1 + Math.random();
 
     const nodes = [
-      new InputNode(() => 0.5 + 0.5 * Math.sin(omega1 * Date.now() / 1000)* Math.exp(-0.3 * (Date.now() - this.t0) / 1000)),
-      new InputNode(() => 0.5 + 0.5 * Math.sin(omega2 * Date.now() / 1000)* Math.exp(-0.3 * (Date.now() - this.t0) / 1000)),
+      new InputNode(() => 1.5 + 1 * Math.sin(omega1 * Date.now() / 1000)* Math.exp(-0.3 * (Date.now() - this.t0) / 1000)),
+      new InputNode(() => 1 + 1 * Math.sin(omega2 * Date.now() / 1000)* Math.exp(-0.3 * (Date.now() - this.t0) / 1000)),
 
-      new Node(),
       new Node(),
 
       new OutputNode()
     ];
 
-    for (let i in [2, 3]) {
-      nodes[[2, 3][i]].bias = 2 * (Math.random() - 0.5);
+    for (let i in [2]) {
+      nodes[[2][i]].bias = 2 * (Math.random() - 0.5);
     }
 
     //output from console
-    nodes[0].x = 200;
-    nodes[0].y = 184;
+    nodes[0].x = 250;
+    nodes[0].y = 150;
     nodes[1].x = 100;
     nodes[1].y = 315.6588393923159;
     nodes[2].x = 507;
-    nodes[2].y = 122.3718970730273;
-    nodes[3].x = 611;
-    nodes[3].y = 354.64480032239464;
-    nodes[4].x = 803;
-    nodes[4].y = 232.64302901347446;
+    nodes[2].y = 180;
+    //nodes[3].x = 611;
+    //nodes[3].y = 354.64480032239464;
+    nodes[3].x = 803;
+    nodes[3].y = 300.64302901347446;
 
     nodes[0].addChild(nodes[2], 1);
-    nodes[0].addChild(nodes[3], 1);
-    nodes[1].addChild(nodes[2], 1);
+    //nodes[0].addChild(nodes[3], 1);
+    nodes[1].addChild(nodes[2], -.2);
+
+
+    nodes[2].addChild(nodes[3], 1);
     nodes[1].addChild(nodes[3], 1);
-    nodes[2].addChild(nodes[4], 1);
-    nodes[3].addChild(nodes[4], 1);
 
     const nw = new Network(
       nodes,
       [nodes[0], nodes[1]], //input nodes
-      [nodes[4]] //output nodes
+      [nodes[3]] //output nodes
     );
     const trainXs = [0, 0, 0, 0, 0, 0, 0].map(v => [Math.random(), Math.random()]);
     const trainYs = trainXs.map(p => [Math.max(p[0], p[1])]);
@@ -287,7 +287,7 @@ export class MaxLevel extends Level {
     );
     this.animatecallback = function() {
       this.updateUI();
-      nodes[4].target = Math.max(nodes[0].getActivation(), nodes[1].getActivation());
+      nodes[3].target = Math.max(nodes[0].getActivation(), nodes[1].getActivation());
     };
 
   }

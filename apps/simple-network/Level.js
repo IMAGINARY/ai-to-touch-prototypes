@@ -46,9 +46,9 @@ export class Level {
     });
 
     d3.select('#gradientdescent100').on('click', () => {
-      for (let i = 0; i < 100; i++) { //animation
-        setTimeout(() => this.network.gradientstep(this.trainXs, this.trainYs, 0.01),
-          i * 10
+      for (let i = 0; i < 1000; i++) { //animation
+        setTimeout(() => this.network.gradientstep(this.trainXs, this.trainYs, 0.001),
+          i * 2
         );
       }
     });

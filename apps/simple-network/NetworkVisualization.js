@@ -22,8 +22,8 @@ export class NetworkVisualization {
         this.edges.push(nodes[i].outedges[k]);
       }
     }
-    //TODO: sort based on y coordinates of incoming edges
-    this.edges = this.edges.reverse();
+    //sort based on y coordinates of incoming edges
+    this.edges = this.edges.sort((a, b) => (b.from.y - a.from.y));
 
     //arrow from http://jsfiddle.net/igbatov/v0ekdzw1/
     d3.select("svg").append("svg:defs").append("svg:marker")
@@ -62,8 +62,7 @@ export class NetworkVisualization {
     for (let i in nodes) {
       nodes[i].offset = nodes[i].bias;
     }
-
-    for (let i in edges) { //TODO: order based on y coordinate of incoming nodes
+    for (let i in edges) {
       const edge = edges[i];
       edge.offset = edge.to.offset;
       edge.to.offset += edge.from.getActivation() * edge.weight;
@@ -308,7 +307,7 @@ export class NetworkVisualization {
       .on("drag", function() {
         const node = d3.select(this).data()[0];
         node.setUserParameter(Math.max(0, -(d3.event.y + this.deltaY - node.y) / unit));
-        for(let k in that.network.outputnodes) {
+        for (let k in that.network.outputnodes) {
           delete that.network.outputnodes[k].target;
         }
         //node.y = d3.event.y + this.deltaX;
