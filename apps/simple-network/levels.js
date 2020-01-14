@@ -32,8 +32,8 @@ export class WeatherLevel extends Level {
     const omega2 = 1 + Math.random();
 
     const nodes = [
-      new InputNode(() => 0.5 + 0.5 * Math.sin(omega1 * Date.now() / 1000)),
-      new InputNode(() => 0.5 + 0.5 * Math.sin(omega2 * Date.now() / 1000)),
+      new InputNode(() => 0.5 + 0.5 * Math.sin(omega1 * Date.now() / 1000)* Math.exp(-0.3 * (Date.now() - this.t0) / 1000)),
+      new InputNode(() => 0.5 + 0.5 * Math.sin(omega2 * Date.now() / 1000)* Math.exp(-0.3 * (Date.now() - this.t0) / 1000)),
 
       new Node(),
       new Node(),
@@ -131,7 +131,7 @@ export class FahrenheitLevel extends Level {
     const omega1 = 1 + Math.random();
 
     const nodes = [
-      new InputNode(() => 0.5 + 0.5 * Math.sin(omega1 * Date.now() / 1000)),
+      new InputNode(() => 0.5 + 0.5 * Math.sin(omega1 * Date.now() / 1000) * Math.exp(-0.3 * (Date.now() - this.t0) / 1000)),
       new Node(), //TODO: No ReLu Nodes here!
       new OutputNode()
     ];
@@ -181,8 +181,8 @@ export class SumLevel extends Level {
     const omega2 = 1 + Math.random();
 
     const nodes = [
-      new InputNode(() => 0.5 + 0.5 * Math.sin(omega1 * Date.now() / 1000)),
-      new InputNode(() => 0.5 + 0.5 * Math.sin(omega2 * Date.now() / 1000)),
+      new InputNode(() => 0.5 + 0.5 * Math.sin(omega1 * Date.now() / 1000)* Math.exp(-0.3 * (Date.now() - this.t0) / 1000)),
+      new InputNode(() => 0.5 + 0.5 * Math.sin(omega2 * Date.now() / 1000)* Math.exp(-0.3 * (Date.now() - this.t0) / 1000)),
       new Node(), //TODO: No ReLu Nodes here!
       new OutputNode()
     ];
@@ -240,8 +240,8 @@ export class MaxLevel extends Level {
     const omega2 = 1 + Math.random();
 
     const nodes = [
-      new InputNode(() => 0.5 + 0.5 * Math.sin(omega1 * Date.now() / 1000)),
-      new InputNode(() => 0.5 + 0.5 * Math.sin(omega2 * Date.now() / 1000)),
+      new InputNode(() => 0.5 + 0.5 * Math.sin(omega1 * Date.now() / 1000)* Math.exp(-0.3 * (Date.now() - this.t0) / 1000)),
+      new InputNode(() => 0.5 + 0.5 * Math.sin(omega2 * Date.now() / 1000)* Math.exp(-0.3 * (Date.now() - this.t0) / 1000)),
 
       new Node(),
       new Node(),
@@ -301,8 +301,8 @@ export class XorLevel extends Level {
     const omega2 = 1 + Math.random();
 
     const nodes = [
-      new InputNode(() => 0.5 + 0.5 * Math.sin(omega1 * Date.now() / 1000)),
-      new InputNode(() => 0.5 + 0.5 * Math.sin(omega2 * Date.now() / 1000)),
+      new InputNode(() => 0.5 + 0.5 * Math.sin(omega1 * Date.now() / 1000)* Math.exp(-0.3 * (Date.now() - this.t0) / 1000)),
+      new InputNode(() => 0.5 + 0.5 * Math.sin(omega2 * Date.now() / 1000)* Math.exp(-0.3 * (Date.now() - this.t0) / 1000)),
 
       new Node(),
       new Node(),
@@ -371,9 +371,9 @@ export class AvgLevel extends Level {
     const omega3 = 1 + Math.random();
 
     const nodes = [
-      new InputNode(() => 0.5 + 0.5 * Math.sin(omega1 * Date.now() / 1000)),
-      new InputNode(() => 0.5 + 0.5 * Math.sin(omega2 * Date.now() / 1000)),
-      new InputNode(() => 0.5 + 0.5 * Math.sin(omega2 * Date.now() / 1000)),
+      new InputNode(() => 0.5 + 0.5 * Math.sin(omega1 * Date.now() / 1000)* Math.exp(-0.3 * (Date.now() - this.t0) / 1000)),
+      new InputNode(() => 0.5 + 0.5 * Math.sin(omega2 * Date.now() / 1000)* Math.exp(-0.3 * (Date.now() - this.t0) / 1000)),
+      new InputNode(() => 0.5 + 0.5 * Math.sin(omega2 * Date.now() / 1000)* Math.exp(-0.3 * (Date.now() - this.t0) / 1000)),
 
       new Node(),
 

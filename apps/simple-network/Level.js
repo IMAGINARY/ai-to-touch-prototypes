@@ -22,6 +22,7 @@ export class Level {
 
   show() {
     this.createUI();
+    this.t0 = Date.now();
     const nv = this.nv = new NetworkVisualization(this.network, () => this.animatecallback());
     nv.animate();
     nv.addInteraction();
