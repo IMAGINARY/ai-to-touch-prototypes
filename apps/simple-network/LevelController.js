@@ -13,13 +13,13 @@ class LevelController {
 
   constructor() {
     this.createEvents();
-    this.levels = [
-      new FahrenheitLevel(),
-      new SumLevel(),
-      new AvgLevel(),
-      new MaxLevel(),
-      new WeatherLevel(),
-      new XorLevel()
+    this.levels = [ //generators for levels
+      () => new FahrenheitLevel(),
+      () => new SumLevel(),
+      () => new AvgLevel(),
+      () => new MaxLevel(),
+      () => new WeatherLevel(),
+      () => new XorLevel()
     ];
     this.NUMBER_OF_LEVELS = this.levels.length;
   }
@@ -77,11 +77,12 @@ class LevelController {
   }
 
   showLevel(lid) {
-    for (let k in this.levels)
-      if (k != lid) {
-        this.levels[k].hide();
-      }
-    this.levels[lid].show();
+    if(this.clevel) {
+      this.clevel.hide();
+    }
+    //regenerate level
+    this.clevel = (this.levels[lid])();
+    this.clevel.show();
   }
 }
 

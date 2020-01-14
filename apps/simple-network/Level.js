@@ -11,7 +11,8 @@ import {
 
 
 export class Level {
-  constructor(network, xlabels, trainXs, ylabels, trainYs) {
+  constructor(title, network, xlabels, trainXs, ylabels, trainYs) {
+    this.title = title;
     this.network = network;
     this.trainXs = trainXs;
     this.trainYs = trainYs;
@@ -21,6 +22,7 @@ export class Level {
 
   show() {
     this.createUI();
+    this.t0 = Date.now();
     const nv = this.nv = new NetworkVisualization(this.network, () => this.animatecallback());
     nv.animate();
     nv.addInteraction();
@@ -34,6 +36,9 @@ export class Level {
   }
 
   createUI() {
+    if(this.title)
+      d3.select("#leveltitle").text(this.title);
+
     this.createTable();
 
     d3.select('#gradientdescent').on('click', () => {
@@ -41,9 +46,9 @@ export class Level {
     });
 
     d3.select('#gradientdescent100').on('click', () => {
-      for (let i = 0; i < 100; i++) { //animation
-        setTimeout(() => this.network.gradientstep(this.trainXs, this.trainYs, 0.01),
-          i * 10
+      for (let i = 0; i < 1000; i++) { //animation
+        setTimeout(() => this.network.gradientstep(this.trainXs, this.trainYs, 0.001),
+          i * 2
         );
       }
     });
