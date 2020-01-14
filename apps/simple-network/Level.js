@@ -120,19 +120,19 @@ export class Level {
         for (let k in this.network.inputnodes) {
           this.network.inputnodes[k].setUserParameter(this.trainXs[i][k]);
         }
-
         for (let k in this.network.outputnodes) {
           this.network.outputnodes[k].target = (this.trainYs[i][k]);
         }
-
-
-      }).style("background-color", errorcolor(row => row.error));
-
+      });
 
     // create a cell in each row for each column
-    var cells = trs.selectAll('td')
-      .data(row => row)
+    var cells = trs
+      .selectAll('td')
+      .data(d => d.map(v => {return {value: v, error: d.error};}))
       .join('td')
-      .text(d => d);
+      .text(d => d.value)
+      .style("background-color", d => errorcolor(d.error));
+
+
   }
 }
