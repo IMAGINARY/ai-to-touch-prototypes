@@ -37,12 +37,18 @@ export class Network {
     return predicted;
   }
 
-  loss(trainX, trainY) {
+  sqerror(trainX, trainY) {
+    const predicted = this.predict(trainX);
     let sqsum = 0;
-    for (let i in trainX) {
-      const predicted = this.predict(trainX[i]);
-      for (let k in predicted)
-        sqsum += (predicted[k] - trainY[i][k]) * (predicted[k] - trainY[i][k]);
+    for (let k in predicted)
+      sqsum += (predicted[k] - trainY[k]) * (predicted[k] - trainY[k]);
+    return sqsum;
+  }
+
+  loss(trainXs, trainYs) {
+    let sqsum = 0;
+    for (let i in trainXs) {
+      sqsum += this.sqerror(trainXs[i], trainYs[i]);
     }
     return sqsum;
   }
@@ -58,12 +64,12 @@ export class Network {
   }
 
   //computes loss function and saves its gradient as parameters to objects in network
-  gradientLoss(trainX, trainY) {
+  gradientLoss(trainXs, trainYs) {
     let sqsum = 0;
     this.resetdloss();
-    for (let k in trainX) {
-      const input = trainX[k];
-      const target = trainY[k];
+    for (let k in trainXs) {
+      const input = trainXs[k];
+      const target = trainYs[k];
       //overwrite activation callbacks for input
       for (let i in this.inputnodes) {
         this.inputnodes[i].temporarilyReplaceGetActivation(() => input[i]);
@@ -102,8 +108,8 @@ export class Network {
     return sqsum;
   }
 
-  gradientstep(trainX, trainY, stepsize) {
-    this.gradientLoss(trainX, trainY);
+  gradientstep(trainXs, trainYs, stepsize) {
+    this.gradientLoss(trainXs, trainYs);
 
     for (let i in this.nodes) {
       if (this.nodes[i].constructor.name == "Node") { //only internal nodes
