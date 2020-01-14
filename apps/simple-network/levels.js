@@ -306,37 +306,44 @@ export class XorLevel extends Level {
 
       new Node(),
       new Node(),
+      new Node(),
 
       new OutputNode()
     ];
 
-    for (let i in [2, 3]) {
-      nodes[[2, 3][i]].bias = 2 * (Math.random() - 0.5);
+    for (let i in [2, 3,4]) {
+      nodes[[2, 3,4][i]].bias = 2 * (Math.random() - 0.5);
     }
 
     //output from console
-    nodes[0].x = 200;
+    nodes[0].x = 220;
     nodes[0].y = 184;
-    nodes[1].x = 100;
-    nodes[1].y = 315.6588393923159;
+    nodes[1].x = 70;
+    nodes[1].y = 400.6588393923159;
     nodes[2].x = 507;
     nodes[2].y = 122.3718970730273;
-    nodes[3].x = 611;
-    nodes[3].y = 354.64480032239464;
-    nodes[4].x = 803;
-    nodes[4].y = 232.64302901347446;
+    nodes[3].x = 580;
+    nodes[3].y = 305;
+    nodes[4].x = 490;
+    nodes[4].y = 450;
+    nodes[5].x = 803;
+    nodes[5].y = 300.64302901347446;
 
     nodes[0].addChild(nodes[2], 1);
     nodes[0].addChild(nodes[3], 1);
+    nodes[0].addChild(nodes[4], 1);
     nodes[1].addChild(nodes[2], 1);
     nodes[1].addChild(nodes[3], 1);
-    nodes[2].addChild(nodes[4], 1);
-    nodes[3].addChild(nodes[4], 1);
+    nodes[1].addChild(nodes[4], 1);
+
+    nodes[2].addChild(nodes[5], 1);
+    nodes[3].addChild(nodes[5], 1);
+    nodes[4].addChild(nodes[5], 1);
 
     const nw = new Network(
       nodes,
       [nodes[0], nodes[1]], //input nodes
-      [nodes[4]] //output nodes
+      [nodes[5]] //output nodes
     );
     const trainXs = [
       [0, 0],
