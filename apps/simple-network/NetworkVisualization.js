@@ -88,6 +88,7 @@ export class NetworkVisualization {
       .attr("stroke-width", 2)
       .attr("stroke-opacity", 0.5);
 
+
     d3.select("#nodes").select(".gradient").selectAll("path").data(nodes.filter(node => node.dloss != 0 && node.constructor.name == "Node"))
       .join("path")
       .attr("d", (node) => {
@@ -105,8 +106,8 @@ export class NetworkVisualization {
       .join("path")
       .attr("d", (edge) => {
         const p = d3.path();
-        const x = (edge.from.x + edge.to.x) / 2;
-        const y = edge.firstHalfBezier()[3][1] - unit * edge.weight;
+        const x = edge.normalizedParameterPosition()[0];
+        const y = edge.normalizedParameterPosition()[1];
         p.moveTo(x, y);
         p.lineTo(x, y + unit * (edge.dloss));
         return p;
@@ -119,12 +120,8 @@ export class NetworkVisualization {
 
     d3.select("#edges").select(".parameters").selectAll("circle").data(edges)
       .join("circle")
-      .attr("cx", edge => (edge.from.x + edge.to.x) / 2)
-      .attr("cy", edge => {
-        const sactivation = edge.from.getActivation();
-        const eactivation = sactivation * edge.weight;
-        return edge.firstHalfBezier()[3][1] - unit * eactivation;
-      })
+      .attr("cx", edge => edge.parameterPosition()[0])
+      .attr("cy", edge => edge.parameterPosition()[1])
       .attr("r", 15)
       .attr("fill", "blue")
       .attr("stroke", "black")
@@ -135,8 +132,8 @@ export class NetworkVisualization {
 
     d3.select("#edges").select(".normalized-parameters").selectAll("circle").data(edges)
       .join("circle")
-      .attr("cx", edge => (edge.from.x + edge.to.x) / 2)
-      .attr("cy", edge => edge.firstHalfBezier()[3][1] - unit * edge.weight)
+      .attr("cx", edge => edge.normalizedParameterPosition()[0])
+      .attr("cy", edge => edge.normalizedParameterPosition()[1])
       .attr("r", 15)
       .attr("fill", "white")
       .attr("stroke", "black")
@@ -258,6 +255,7 @@ export class NetworkVisualization {
       })(d3.select("#nodes").selectAll("circle"));
       */
     const that = this;
+    var tooltip;
     d3.drag()
       .on("start", function() {
         var current = d3.select(this);
@@ -265,12 +263,20 @@ export class NetworkVisualization {
         const node = d3.select(this).data()[0];
         this.v0 = node.bias;
         that.network.pauseAnimatedInput();
+        tooltip = d3.select("#tooltip").append("text");
       })
       .on("drag", function() {
         const node = d3.select(this).data()[0];
         if (node.constructor.name == "Node")
           node.bias = this.v0 - (d3.event.y - this.y0) / unit;
         //node.y = d3.event.y + this.deltaX;
+        tooltip
+          .attr("x", node.x)
+          .attr("y", node.y - unit * node.bias)
+          .text(`bias: ${node.bias.toFixed(2)}`);
+      })
+      .on("end", () => {
+        tooltip.remove();
       })(d3.select("#nodes").selectAll("circle"));
 
     d3.drag()
@@ -280,12 +286,20 @@ export class NetworkVisualization {
         this.y0 = d3.event.y;
         this.weight0 = edge.weight;
         that.network.pauseAnimatedInput();
+        tooltip = d3.select("#tooltip").append("text");
       })
       .on("drag", function() {
         const edge = d3.select(this).data()[0];
         if (edge.from.getActivation() > 0.001) {
           edge.weight = this.weight0 - (d3.event.y - this.y0) / edge.from.getActivation() / unit;
         }
+        tooltip
+          .attr("x", edge.parameterPosition()[0])
+          .attr("y", edge.parameterPosition()[1])
+          .text(`multiplication factor: ${edge.weight.toFixed(2)}`);
+      })
+      .on("end", () => {
+        tooltip.remove();
       })(d3.select("#edges").selectAll("path, circle"));
 
     d3.drag()
@@ -295,10 +309,17 @@ export class NetworkVisualization {
         this.y0 = d3.event.y;
         this.weight0 = edge.weight;
         that.network.pauseAnimatedInput();
+        tooltip = d3.select("#tooltip").append("text");
       })
       .on("drag", function() {
         const edge = d3.select(this).data()[0];
         edge.weight = this.weight0 - (d3.event.y - this.y0) / unit;
+        tooltip
+          .attr("x", edge.normalizedParameterPosition()[0])
+          .attr("y", edge.normalizedParameterPosition()[1])
+          .text(`multiplication factor: ${edge.weight.toFixed(2)}`);
+      }).on("end", () => {
+        tooltip.remove();
       })(d3.select("#edges").select(".normalized-parameters").selectAll("circle"));
 
     d3.drag()
