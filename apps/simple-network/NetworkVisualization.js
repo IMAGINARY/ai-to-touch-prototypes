@@ -260,14 +260,15 @@ export class NetworkVisualization {
     d3.drag()
       .on("start", function() {
         var current = d3.select(this);
-        //this.deltaX = current.attr("cx") - d3.event.x;
-        this.deltaY = current.attr("cy") - d3.event.y;
+        this.y0 = d3.event.y;
+        const node = d3.select(this).data()[0];
+        this.v0 = node.bias;
         that.network.pauseAnimatedInput();
       })
       .on("drag", function() {
         const node = d3.select(this).data()[0];
         if (node.constructor.name == "Node")
-          node.bias = -(d3.event.y + this.deltaY - node.y) / unit;
+          node.bias = this.v0 - (d3.event.y - this.y0) / unit;
         //node.y = d3.event.y + this.deltaX;
       })(d3.select("#nodes").selectAll("circle"));
 
@@ -301,12 +302,15 @@ export class NetworkVisualization {
 
     d3.drag()
       .on("start", function() {
-        var current = d3.select(this);
-        this.deltaY = current.attr("cy") - d3.event.y;
+        this.y0 = d3.event.y;
+        const node = d3.select(this).data()[0];
+        this.v0 = node.getActivation();
+        node.setUserParameter(this.v0);
       })
       .on("drag", function() {
         const node = d3.select(this).data()[0];
-        node.setUserParameter(Math.max(0, -(d3.event.y + this.deltaY - node.y) / unit));
+        node.setUserParameter(Math.max(0, this.v0 - (d3.event.y - this.y0) / unit));
+
         for (let k in that.network.outputnodes) {
           delete that.network.outputnodes[k].target;
         }
