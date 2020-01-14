@@ -63,6 +63,6 @@ export class Node {
   }
 
   format(v) {
-    return v.toFixed(2);
+    return v.toFixed(1);
   }
 }

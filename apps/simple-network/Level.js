@@ -11,13 +11,16 @@ import {
 
 
 export class Level {
-  constructor(title, network, xlabels, trainXs, ylabels, trainYs) {
-    this.title = title;
+  constructor(title, network, xlabels, trainXs, ylabels, trainYs, description) {
+    this.title = title || "";
+
     this.network = network;
     this.trainXs = trainXs;
     this.trainYs = trainYs;
     this.xlabels = xlabels;
     this.ylabels = ylabels;
+
+    this.description = description || "";
   }
 
   show() {
@@ -36,8 +39,8 @@ export class Level {
   }
 
   createUI() {
-    if(this.title)
-      d3.select("#leveltitle").text(this.title);
+    d3.select("#leveltitle").text(this.title);
+    d3.select("#description").text(this.description);
 
     this.createTable();
 
@@ -114,7 +117,7 @@ export class Level {
       rows.push(row);
     }
 
-    var errorcolor = d3.scaleSequential().domain([2, 0])
+    var errorcolor = d3.scaleSequential().domain([1, 0])
       .interpolator(d3.interpolateRdYlGn);
 
     // create a row for each object in the data
@@ -133,10 +136,15 @@ export class Level {
     // create a cell in each row for each column
     var cells = trs
       .selectAll('td')
-      .data(d => d.map(v => {return {value: v, error: d.error};}))
+      .data(d => d.map(v => {
+        return {
+          value: v,
+          error: d.error
+        };
+      }))
       .join('td')
       .text(d => d.value)
-      .style("background-color", d => errorcolor(d.error));
+      .style("background-color", (d, i) => (i >= this.trainXs[0].length + this.trainYs[0].length) ? errorcolor(d.error) : 'white');
 
 
   }

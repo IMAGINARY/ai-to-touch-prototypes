@@ -81,7 +81,7 @@ export class NetworkVisualization {
       .join("circle")
       .attr("cx", n => n.x)
       .attr("cy", n => n.y - unit * n.bias)
-      .attr("r", 8)
+      .attr("r", 15)
       .attr("fill", "white")
       .attr("fill-opacity", 0.5)
       .attr("stroke", "black")
@@ -125,7 +125,7 @@ export class NetworkVisualization {
         const eactivation = sactivation * edge.weight;
         return edge.firstHalfBezier()[3][1] - unit * eactivation;
       })
-      .attr("r", 8)
+      .attr("r", 15)
       .attr("fill", "blue")
       .attr("stroke", "black")
       .attr("stroke-width", 2)
@@ -137,7 +137,7 @@ export class NetworkVisualization {
       .join("circle")
       .attr("cx", edge => (edge.from.x + edge.to.x) / 2)
       .attr("cy", edge => edge.firstHalfBezier()[3][1] - unit * edge.weight)
-      .attr("r", 8)
+      .attr("r", 15)
       .attr("fill", "white")
       .attr("stroke", "black")
       .attr("stroke-width", 2)
@@ -158,7 +158,7 @@ export class NetworkVisualization {
       .join("circle")
       .attr("cx", node => (node.x - inputwidth))
       .attr("cy", node => node.y - unit * node.getActivation())
-      .attr("r", 8)
+      .attr("r", 15)
       .attr("fill", "orange")
       .attr("fill-opacity", 0.6)
       .attr("stroke", "black")
@@ -181,7 +181,8 @@ export class NetworkVisualization {
       .text(n => "target: " + n.format(n.target))
       .attr("x", n => n.x + 50)
       .attr("y", n => n.y - unit * n.target)
-      .attr("opacity", 1);
+      .attr("opacity", 1)
+      .attr("fill", n => d3.scaleSequential().domain([1, 0]).interpolator(d3.interpolateRdYlGn)(Math.abs(n.target - n.getActivation())));
 
     d3.select("#edges").select(".edges").selectAll("path").data(edges).join("path")
       .attr("d", edge => {
