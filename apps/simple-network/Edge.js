@@ -58,6 +58,16 @@ export class Edge {
     return applySeperatelyToEachCoordinate(this.bezier(), casteljau2);
   }
 
+  normalizedParameterPosition() {
+    const edge = this;
+    return [(edge.from.x + edge.to.x) / 2, edge.firstHalfBezier()[3][1] - unit * edge.weight];
+  }
+
+  parameterPosition() {
+    const edge = this;
+    return [(edge.from.x + edge.to.x) / 2, edge.firstHalfBezier()[3][1] - unit * edge.from.getActivation() * edge.weight];
+  }
+
   getdWeight() {
     return this.dweight.update(() => {
       let dactivation = 0;
