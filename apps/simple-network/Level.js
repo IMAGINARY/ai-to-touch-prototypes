@@ -11,7 +11,8 @@ import {
 
 
 export class Level {
-  constructor(network, xlabels, trainXs, ylabels, trainYs) {
+  constructor(title, network, xlabels, trainXs, ylabels, trainYs) {
+    this.title = title;
     this.network = network;
     this.trainXs = trainXs;
     this.trainYs = trainYs;
@@ -34,6 +35,9 @@ export class Level {
   }
 
   createUI() {
+    if(this.title)
+      d3.select("#leveltitle").text(this.title);
+
     this.createTable();
 
     d3.select('#gradientdescent').on('click', () => {

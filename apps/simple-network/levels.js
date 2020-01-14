@@ -110,7 +110,7 @@ export class WeatherLevel extends Level {
     nodes[0].format = cls => `cloudiness: ${cls.toFixed(1)}`;
     nodes[1].format = ins => `insideness: ${ins.toFixed(1)}`;
     nodes[4].format = temp => `${(temp*10).toFixed(0)}°C`;
-    super(nw,
+    super("Can you predict the temperature given the cloudiness and the fact of being inside?", nw,
       ["cloudiness", "inside"], trainingdata.map(td => [td.cloudiness, td.inside]),
       ["temperature"], trainingdata.map(td => [td.temperature])
     );
@@ -118,8 +118,6 @@ export class WeatherLevel extends Level {
     this.animatecallback = function() {
       this.updateUI();
       nodes[3].target = (nodes[0].getActivation()) + (nodes[1].getActivation());
-      d3.select("#leveltitle").text("Can you predict the temperature given the cloudiness and the fact of being inside?");
-
       //TODO add some nicer visualization for inside, cloudiness, and temperature.
     };
 
@@ -159,7 +157,7 @@ export class FahrenheitLevel extends Level {
 
     nodes[0].format = temp => `${(temp*10).toFixed(0)}°C`;
     nodes[2].format = temp => `${(temp*10).toFixed(0)}°F`;
-    super(
+    super("Convert Celsius to Fahrenheit.",
       new Network(
         nodes,
         [nodes[0]], //input nodes
@@ -171,7 +169,6 @@ export class FahrenheitLevel extends Level {
     this.animatecallback = function() {
       this.updateUI();
       nodes[2].target = c2f(nodes[0].getActivation() * 10) / 10;
-      d3.select("#leveltitle").text("Convert Celsius to Fahrenheit.");
     };
 
   }
@@ -219,7 +216,7 @@ export class SumLevel extends Level {
     ];
     const trainYs = trainXs.map(p => [p[0] + p[1]]);
 
-    super(
+    super("Compute the sum of the input activations.",
       new Network(
         nodes,
         [nodes[0], nodes[1]], //input nodes
@@ -231,7 +228,6 @@ export class SumLevel extends Level {
     this.animatecallback = function() {
       this.updateUI();
       nodes[3].target = (nodes[0].getActivation()) + (nodes[1].getActivation());
-      d3.select("#leveltitle").text("Compute the sum of the input activations.");
     };
 
   }
@@ -284,7 +280,7 @@ export class MaxLevel extends Level {
     const trainXs = [0, 0, 0, 0, 0, 0, 0].map(v => [Math.random(), Math.random()]);
     const trainYs = trainXs.map(p => [Math.max(p[0], p[1])]);
 
-    super(
+    super("Compute the maximum of the input activations.",
       nw,
       ["input 1", "input 2"], trainXs, //temperatures are internally divided by 10.
       ["maximum"], trainYs
@@ -292,7 +288,6 @@ export class MaxLevel extends Level {
     this.animatecallback = function() {
       this.updateUI();
       nodes[4].target = Math.max(nodes[0].getActivation(), nodes[1].getActivation());
-      d3.select("#leveltitle").text("Compute the maximum of the input activations.");
     };
 
   }
@@ -356,14 +351,13 @@ export class XorLevel extends Level {
       [0]
     ];
 
-    super(
+    super("Compute the XOR of the input bits.",
       nw,
       ["bit 1", "bit 2"], trainXs, //temperatures are internally divided by 10.
       ["XOR"], trainYs
     );
     this.animatecallback = function() {
       this.updateUI();
-      d3.select("#leveltitle").text("Compute the XOR of the input bits.");
     };
 
   }
@@ -416,7 +410,7 @@ export class AvgLevel extends Level {
     const trainXs = [0, 0, 0, 0, 0, 0, 0].map(v => [Math.random(), Math.random(), Math.random()]);
     const trainYs = trainXs.map(p => [(p[0] + p[1] + p[2]) / 3]);
 
-    super(
+    super("Compute the average of the input values.",
       nw,
       ["number 1", "number 2", "number 3"], trainXs, //temperatures are internally divided by 10.
       ["average"], trainYs
@@ -424,7 +418,6 @@ export class AvgLevel extends Level {
     this.animatecallback = function() {
       this.updateUI();
       nodes[4].target = (nodes[0].getActivation() + nodes[1].getActivation() + nodes[2].getActivation()) / 3;
-      d3.select("#leveltitle").text("Compute the average of the input values.");
     };
 
   }
