@@ -273,7 +273,7 @@ export class NetworkVisualization {
         tooltip
           .attr("x", node.x)
           .attr("y", node.y - unit * node.bias)
-          .text(`bias: ${node.bias.toFixed(2)}`);
+          .text(`add bias ${node.bias.toFixed(2)}`);
       })
       .on("end", () => {
         tooltip.remove();
@@ -296,7 +296,7 @@ export class NetworkVisualization {
         tooltip
           .attr("x", edge.parameterPosition()[0])
           .attr("y", edge.parameterPosition()[1])
-          .text(`multiplication factor: ${edge.weight.toFixed(2)}`);
+          .text(`multiply by ${edge.weight.toFixed(2)}`);
       })
       .on("end", () => {
         tooltip.remove();
@@ -317,7 +317,7 @@ export class NetworkVisualization {
         tooltip
           .attr("x", edge.normalizedParameterPosition()[0])
           .attr("y", edge.normalizedParameterPosition()[1])
-          .text(`multiplication factor: ${edge.weight.toFixed(2)}`);
+          .text(`multiply by ${edge.weight.toFixed(2)}`);
       }).on("end", () => {
         tooltip.remove();
       })(d3.select("#edges").select(".normalized-parameters").selectAll("circle"));
