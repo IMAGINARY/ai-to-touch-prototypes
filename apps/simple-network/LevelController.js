@@ -1,4 +1,5 @@
 import {
+  TutorialLevel,
   WeatherLevel,
   FahrenheitLevel,
   SumLevel,
@@ -14,6 +15,7 @@ class LevelController {
   constructor() {
     this.createEvents();
     this.levels = [ //generators for levels
+      () => new TutorialLevel(),
       () => new FahrenheitLevel(),
       () => new SumLevel(),
       () => new AvgLevel(),
