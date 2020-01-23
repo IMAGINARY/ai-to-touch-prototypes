@@ -25,7 +25,7 @@ import {
   unit
 } from './constants.js';
 
-export class TutorialLevel extends Level {
+export class TutorialLevelA extends Level {
   constructor() {
     const omega1 = 1 + Math.random();
 
@@ -35,13 +35,14 @@ export class TutorialLevel extends Level {
     ];
     nodes[0].x = 200;
     nodes[0].y = 200;
-    nodes[1].x = 600;
+    nodes[0].allownegative = true;
+    nodes[1].x = 700;
     nodes[1].y = 300;
     nodes[0].addChild(nodes[1], 1);
 
-    const m2 = c => ((c * 2));
+    const f = c => ((c * 2));
     const trainXs = [1, 2, 3];
-    const trainYs = trainXs.map(m2);
+    const trainYs = trainXs.map(f);
 
     super("A simple Network: Double its input.",
       new Network(
@@ -57,7 +58,99 @@ export class TutorialLevel extends Level {
 
     this.animatecallback = function() {
       this.updateUI();
-      nodes[1].target = m2(nodes[0].getActivation());
+      nodes[1].target = f(nodes[0].getActivation());
+    };
+
+
+  }
+}
+
+export class TutorialLevelB extends Level {
+  constructor() {
+    const omega1 = 1 + Math.random();
+
+    const nodes = [
+      new InputNode(() => -0.2 + 1 * Math.sin(omega1 * Date.now() / 1000) * Math.exp(-0.1 * (Date.now() - this.t0) / 1000)),
+      new Node(),
+      new OutputNode()
+    ];
+    nodes[0].allownegative = true;
+    nodes[0].x = 200;
+    nodes[0].y = 200;
+    nodes[1].x = 450;
+    nodes[1].y = 250;
+    nodes[1].adjustable = false;
+    nodes[2].x = 700;
+    nodes[2].y = 300;
+    nodes[0].addChild(nodes[1], 2);
+    nodes[1].addChild(nodes[2], -1);
+
+    const f = c => Math.max(0, (c * 1));
+    const trainXs = [-2, -1, 0, 1, 2, 3];
+    const trainYs = trainXs.map(f);
+
+    super("A Network with an internal node that ignores negative inputs",
+      new Network(
+        nodes,
+        [nodes[0]], //input nodes
+        [nodes[2]] //output nodes
+      ),
+      ["input"], trainXs.map(x => [x]), //temperatures are internally divided by 10.
+      ["desired output"], trainYs.map(x => [x]),
+      "This network has one internal node. It processes its input in a special way (it is a so called ReLU node). Whenever it recives an negative input, it does not propagate its input further. It is ignored. Can you modify this network such that it outputs its positive input or zero if the input was negative?"
+    );
+
+
+    this.animatecallback = function() {
+      this.updateUI();
+      nodes[2].target = f(nodes[0].getActivation());
+    };
+
+
+  }
+}
+
+export class TutorialLevelC extends Level {
+  constructor() {
+    const omega1 = 1 + Math.random();
+
+    const nodes = [
+      new InputNode(() => -0.2 + 1 * Math.sin(omega1 * Date.now() / 1000) * Math.exp(-0.1 * (Date.now() - this.t0) / 1000)),
+      new Node(),
+      new OutputNode()
+    ];
+    nodes[0].allownegative = true;
+    nodes[0].x = 200;
+    nodes[0].y = 200;
+    nodes[1].x = 450;
+    nodes[1].y = 250;
+    nodes[1].adjustable = true;
+    nodes[2].x = 700;
+    nodes[2].y = 300;
+    nodes[0].addChild(nodes[1], 1);
+    nodes[1].addChild(nodes[2], 1);
+
+    nodes[1].bias = 1;
+
+    const f = c => Math.max(0, (c - 1));
+    const trainXs = [-2, -1, 0, 1, 2, 3];
+    const trainYs = trainXs.map(f);
+
+    super("Add bias to the internal nodes.",
+      new Network(
+        nodes,
+        [nodes[0]], //input nodes
+        [nodes[2]] //output nodes
+      ),
+      ["input"], trainXs.map(x => [x]), //temperatures are internally divided by 10.
+      ["desired output"], trainYs.map(x => [x]),
+      "The internal nodes can also have an bias: A constant value is added to their input activation. With this, more complicated functions can be computed. Can you modify the parameters of this network such that it outputs by how much the input is greater than 1. If the input is smaller than 1 it should output zero."
+    );
+
+
+    this.animatecallback = function() {
+      this.updateUI();
+      nodes[2].target = f(nodes[0].getActivation());
     };
 
 
@@ -156,9 +249,11 @@ export class WeatherLevel extends Level {
     this.animatecallback = function() {
       this.updateUI();
       //TODO add some nicer visualization for inside, cloudiness, and temperature.
-      //round input
 
+      nodes[0].setUserParameter(Math.min(1, Math.max(0, (nodes[0].getActivation()))));
+      //round input
       nodes[1].setUserParameter(Math.min(1, Math.max(0, Math.round(nodes[1].getActivation()))));
+
     };
 
   }
@@ -182,6 +277,7 @@ export class FahrenheitLevel extends Level {
 
     nodes[0].x = 155;
     nodes[0].y = 300;
+    nodes[0].allownegative = false;
     nodes[1].x = 507;
     nodes[1].y = 300;
     nodes[2].x = 803;
@@ -205,7 +301,7 @@ export class FahrenheitLevel extends Level {
       ),
       ["Celsius"], trainXs.map(v => [v / 10]), //temperatures are internally divided by 10.
       ["Fahrenheit"], trainYs.map(v => [v / 10]),
-      "Given the temperature in Celsius (left, orange slider), the temperature in Fahrenheit is to be computed (output of the network on the right side). Adjust the parameters (blue and white sliders) of the network such that it computes the target value for each input. All values of the table below should be obtained."
+      "Given an positive temperature in Celsius (left, orange slider), the temperature in Fahrenheit is to be computed (output of the network on the right side). Adjust the parameters (blue and white sliders) of the network such that it computes the target value for each input. All values of the table below should be obtained."
     );
     this.animatecallback = function() {
       this.updateUI();
@@ -228,14 +324,14 @@ export class SumLevel extends Level {
       new OutputNode()
     ];
 
-    for (let i in [1, 2]) {
-      nodes[[1, 2][i]].bias = 2 * (Math.random() - 0.5);
-    }
+    nodes[2].bias = 1;
 
     nodes[0].x = 155;
     nodes[0].y = 150;
+    nodes[0].allownegative = false;
     nodes[1].x = 110;
     nodes[1].y = 300;
+    nodes[1].allownegative = false;
     nodes[2].x = 507;
     nodes[2].y = 300;
     nodes[3].x = 803;
@@ -265,7 +361,7 @@ export class SumLevel extends Level {
       ),
       ["summand 1", "summand 2"], trainXs, //temperatures are internally divided by 10.
       ["sum"], trainYs,
-      "Adjust the parameters of the network such that the output on the left equals the sum of the two inputs on the right for every possible non-negative input."
+      "Adjust the parameters of the network such that the output on the left equals the sum of the two non-negative inputs on the right."
     );
     this.animatecallback = function() {
       this.updateUI();
@@ -326,7 +422,7 @@ export class MaxLevel extends Level {
       nw,
       ["input 1", "input 2"], trainXs, //temperatures are internally divided by 10.
       ["maximum"], trainYs,
-      "The output on the right should be the maximum of the input. Hint: The output of the internal node is the weighted sum of the inputs if it is positive, otherwise zero. Furthermore, max(a, b) = max(0, a-b) + b."
+      "The output on the right should be the maximum of the input. Hint: max(a, b) = max(0, a-b) + b. Remember that the internal node ignores its input if it is negative."
     );
     this.animatecallback = function() {
       this.updateUI();
@@ -414,6 +510,7 @@ export class XorLevel extends Level {
       nodes[1].format = v => Math.round(v);
       nodes[0].setUserParameter(Math.min(1, Math.max(0, Math.round(nodes[0].getActivation()))));
       nodes[1].setUserParameter(Math.min(1, Math.max(0, Math.round(nodes[1].getActivation()))));
+      nodes[5].target = ((nodes[0].getActivation() + nodes[1].getActivation()) | 0) % 2;
     };
 
   }
@@ -443,10 +540,13 @@ export class AvgLevel extends Level {
     //output from console
     nodes[0].x = 200;
     nodes[0].y = 184;
+    nodes[0].allownegative = false;
     nodes[1].x = 100;
     nodes[1].y = 315.6588393923159;
+    nodes[1].allownegative = false;
     nodes[2].x = 155;
     nodes[2].y = 420;
+    nodes[2].allownegative = false;
 
     nodes[3].x = 611;
     nodes[3].y = 354.64480032239464;

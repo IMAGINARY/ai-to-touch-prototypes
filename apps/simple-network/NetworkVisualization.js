@@ -77,7 +77,7 @@ export class NetworkVisualization {
       .attr("fill-opacity", 0.5);
 
 
-    d3.select("#nodes").select(".parameters").selectAll("circle").data(nodes.filter(node => node.constructor.name == "Node"))
+    d3.select("#nodes").select(".parameters").selectAll("circle").data(nodes.filter(node => node.adjustable))
       .join("circle")
       .attr("cx", n => n.x)
       .attr("cy", n => n.y - unit * n.bias)
@@ -89,7 +89,7 @@ export class NetworkVisualization {
       .attr("stroke-opacity", 0.5);
 
 
-    d3.select("#nodes").select(".gradient").selectAll("path").data(nodes.filter(node => node.dloss != 0 && node.constructor.name == "Node"))
+    d3.select("#nodes").select(".gradient").selectAll("path").data(nodes.filter(node => node.dloss != 0 && node.adjustable))
       .join("path")
       .attr("d", (node) => {
         const p = d3.path();
@@ -126,8 +126,8 @@ export class NetworkVisualization {
       .attr("fill", "blue")
       .attr("stroke", "black")
       .attr("stroke-width", 2)
-      .attr("fill-opacity", edge => Math.min(0.5, edge.from.getActivation()))
-      .attr("stroke-opacity", edge => Math.min(0.5, edge.from.getActivation()));
+      .attr("fill-opacity", edge => Math.min(0.5, Math.abs(edge.from.getActivation())))
+      .attr("stroke-opacity", edge => Math.min(0.5, Math.abs(edge.from.getActivation())));
 
 
     d3.select("#edges").select(".normalized-parameters").selectAll("circle").data(edges)
@@ -138,8 +138,8 @@ export class NetworkVisualization {
       .attr("fill", "white")
       .attr("stroke", "black")
       .attr("stroke-width", 2)
-      .attr("fill-opacity", edge => 0.5 - (edge.from.getActivation()))
-      .attr("stroke-opacity", edge => 0.5 - (edge.from.getActivation()));
+      .attr("fill-opacity", edge => 0.5 - Math.abs(edge.from.getActivation()))
+      .attr("stroke-opacity", edge => 0.5 - Math.abs(edge.from.getActivation()));
 
     const inputwidth = 60;
 
@@ -173,7 +173,7 @@ export class NetworkVisualization {
       .attr("fill-opacity", 0.5);
 
     d3.select("#outputs").select(".target").selectAll("text")
-      .data(outputnodes.filter(n => n.target))
+      .data(outputnodes.filter(n => typeof n.target == 'number'))
       .join("text")
       .text(n => "target: " + n.format(n.target))
       .attr("x", n => n.x + 50)
@@ -261,22 +261,28 @@ export class NetworkVisualization {
         var current = d3.select(this);
         this.y0 = d3.event.y;
         const node = d3.select(this).data()[0];
-        this.v0 = node.bias;
-        that.network.pauseAnimatedInput();
-        tooltip = d3.select("#tooltip").append("text");
+        if (node.adjustable) {
+          this.v0 = node.bias;
+          that.network.pauseAnimatedInput();
+          tooltip = d3.select("#tooltip").append("text");
+        }
+
       })
       .on("drag", function() {
         const node = d3.select(this).data()[0];
-        if (node.constructor.name == "Node")
+        if (node.adjustable) {
           node.bias = this.v0 - (d3.event.y - this.y0) / unit;
-        //node.y = d3.event.y + this.deltaX;
-        tooltip
-          .attr("x", node.x)
-          .attr("y", node.y - unit * node.bias)
-          .text(`add bias ${node.bias.toFixed(2)}`);
+          //node.y = d3.event.y + this.deltaX;
+          tooltip
+            .attr("x", node.x)
+            .attr("y", node.y - unit * node.bias)
+            .text(`add bias ${node.bias.toFixed(2)}`);
+        }
       })
       .on("end", () => {
+        const node = d3.select(this).data()[0];
         tooltip.remove();
+
       })(d3.select("#nodes").selectAll("circle"));
 
     d3.drag()
@@ -290,7 +296,7 @@ export class NetworkVisualization {
       })
       .on("drag", function() {
         const edge = d3.select(this).data()[0];
-        if (edge.from.getActivation() > 0.001) {
+        if (Math.abs(edge.from.getActivation()) > 0.001) {
           edge.weight = this.weight0 - (d3.event.y - this.y0) / edge.from.getActivation() / unit;
         }
         tooltip
@@ -331,7 +337,7 @@ export class NetworkVisualization {
       })
       .on("drag", function() {
         const node = d3.select(this).data()[0];
-        node.setUserParameter(Math.max(0, this.v0 - (d3.event.y - this.y0) / unit));
+        node.setUserParameter(this.v0 - (d3.event.y - this.y0) / unit);
 
         for (let k in that.network.outputnodes) {
           delete that.network.outputnodes[k].target;
