@@ -11,13 +11,19 @@ export class InputNode extends Node {
   constructor(activationcb = (() => 0)) {
     super();
     this.getActivation = activationcb;
+    this.adjustable = false;
+    this.allownegative = true;
   }
 
   setUserParameter(val) {
     if (!this.hasOwnProperty("userparamter")) {
       this.getActivation = (() => this.userparamter);
     }
+    if (!this.allownegative) {
+      val = Math.max(0, val);
+    }
     this.userparamter = val;
+
     updateDynamicVariables();
   }
 

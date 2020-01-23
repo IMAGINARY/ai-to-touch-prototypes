@@ -18,6 +18,7 @@ export class Node {
     this.dbias = new DynamicVariable(0);
     this.outedges = [];
     this.inedges = [];
+    this.adjustable = true;
   }
 
   addChild(other, weight, reverse = true) {

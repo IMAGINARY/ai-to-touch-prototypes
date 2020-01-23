@@ -12,6 +12,7 @@ import {
 export class OutputNode extends Node {
   constructor() {
     super();
+    this.adjustable = false;
   }
 
   getActivation() {
