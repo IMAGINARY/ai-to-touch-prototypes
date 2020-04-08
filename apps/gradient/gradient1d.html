@@ -43,7 +43,7 @@
       K = 9; //number of fourier coefficents
 
       updatescreenparameters() := (
-          waterh = max(apply(screenbounds(),#.y))-1;
+          waterh = max(apply(screenbounds(),#.y))-2;
           textposition = (screenbounds()_4).xy+(3,2);
           B0 = (screenbounds()_3).xy+(-3,2);
           B0r = 3;
@@ -346,17 +346,23 @@ if(mode=="final",
 
 if(watertheme,
   if(mode!="draw",
-    boat  = [[-2,-1],[2,-1],[2.5,1],[-2.5,1]]*.5;
-    angle = sin(4*seconds())*.04;
+    boat1  = [[-2.57,0.35],[-2.2,0.35],[-2.16,0.23],[-0.16,0.19],[-0.01,0.43],[2.43,0.56],[1.97,-0.35],[-1.83,-0.32],[-1.92,-0.19],[-2.57,-0.04]]*.5;
+    boat2  = [[-1.11,0.19],[-1.11,0.45],[-0.27,0.45],[-0.27,0.68],[0.36,0.68],[0.36,0.92],[0.99,0.92],[0.99,0.47],[-0.01,0.43],[-0.16,0.19]]*.5;
+    boat3  = [[-0.75,0.45],[-0.65,0.92],[-0.39,0.97],[-0.39,0.45]]*.5;
+    boat4  = [[0.51,0.93],[0.51,1.55]]*.5;
+    angle = sin(4*seconds())*.025;
     R = [[cos(angle),-sin(angle)],[sin(angle),cos(angle)]];
-    drawpoly(apply(boat,R*#+(x,waterh)));
+    drawpoly(apply(boat1,R*#+(x,waterh)));
+    drawpoly(apply(boat2,R*#+(x,waterh)));
+    drawpoly(apply(boat3,R*#+(x,waterh)));
+    drawpoly(apply(boat4,R*#+(x,waterh)));
   );
 
 
-  watersize = .2;
+  watersize = .1;
 
 
-  connect(transpose([xvals,apply(xvals,x,waterh+watersize*sin(seconds())*sin(x/watersize-seconds()))]), color->[.6,.6,.3]);
+  connect(transpose([xvals,apply(xvals,x,waterh+watersize*sin(seconds())*sin(x/watersize-seconds())*0.5)]), color->[.6,.6,.3]);
 
 
 );
