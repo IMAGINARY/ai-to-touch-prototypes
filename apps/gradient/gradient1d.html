@@ -3,7 +3,6 @@
 
 <head>
   <meta charset="UTF-8">
-
   <title>Gradient descent</title>
   <style type="text/css">
     body {
@@ -27,15 +26,19 @@
       filter: invert(1);
     }
   </style>
+  <link rel="stylesheet" href="css/touch-controls.css">
   <script type="text/javascript" src="../../common/js/Cindy.js"></script>
   <script type="text/javascript" src="../../common/js/url-parameters.js"></script>
   <script type="text/javascript" src="../../common/js/i18n4js-1.3.0.min.js"></script>
 
   <script id="csinit" type="text/x-cindyscript">
+    touch = geturlparameter("touch", false);
     userdraw = geturlparameter("draw", false);
       autopilot = geturlparameter("autopilot", !userdraw);
       watertheme = geturlparameter("water", false);
 
+
+      boatpos = 3;
 
       //waterh = 7.5;
 
@@ -44,7 +47,7 @@
 
       updatescreenparameters() := (
           waterh = max(apply(screenbounds(),#.y))-2;
-          textposition = (screenbounds()_4).xy+(3,2);
+          textposition = (screenbounds()_4).xy+(0.5,2);
           B0 = (screenbounds()_3).xy+(-3,2);
           B0r = 3;
       );
@@ -145,6 +148,34 @@ t0() := seconds()-l0;
 resett0() := (
   l0 = seconds();
 );
+
+boatmove(delta) := (
+  if(mode=="select" & !autopilot,
+    boatpos = max(min(boatpos + delta, 16), -16);
+  );
+);
+
+boatprobe() := (
+  if(mode=="select" & !autopilot & (N-length(pts))>0,
+     x = boatpos;
+     pts = pts :> x;
+     mode = "compute";
+     resett0();
+  );
+
+
+  if(mode=="final",
+    if(!autopilot,
+      initpt = pts_1;
+      pts = [];
+      mode = "select";
+      autopilot = true;
+      ,
+      reset();
+      autopilot = false;
+    );
+  );
+);
       </script>
   <script id="csdraw" type="text/x-cindyscript">
     updatescreenparameters();
@@ -201,12 +232,12 @@ if(mode=="select",
     msg = msg + newline + "noch $"+(N-length(pts))+"$ Versuch"+if((N-length(pts))==1,"","e"),
     msg = msg + newline + "$"+(N-length(pts))+"$ guess"+if((N-length(pts))==1,"","es")+" left"
   );*/
-  msg = msg + newline + international("guess-1") + "$"+(N-length(pts))+"$" + " " + international("guess-2", (N-length(pts)));
+  msg = msg + newline + international("guess-1") + (N-length(pts))+ " " + international("guess-2", (N-length(pts)));
 
 
 
   if(!autopilot,
-    x = mouse().x;
+    x = if(touch, boatpos, mouse().x);
     ,
     x = if(pts==[], initpt, pts_(-1))*(1-t0()/.5) + gradientdescent()*(t0()/.5);
   );
@@ -346,25 +377,22 @@ if(mode=="final",
 
 if(watertheme,
   if(mode!="draw",
+    boatx = if(touch & !autopilot, boatpos, x);
     boat1  = [[-2.57,0.35],[-2.2,0.35],[-2.16,0.23],[-0.16,0.19],[-0.01,0.43],[2.43,0.56],[1.97,-0.35],[-1.83,-0.32],[-1.92,-0.19],[-2.57,-0.04]]*.5;
     boat2  = [[-1.11,0.19],[-1.11,0.45],[-0.27,0.45],[-0.27,0.68],[0.36,0.68],[0.36,0.92],[0.99,0.92],[0.99,0.47],[-0.01,0.43],[-0.16,0.19]]*.5;
     boat3  = [[-0.75,0.45],[-0.65,0.92],[-0.39,0.97],[-0.39,0.45]]*.5;
     boat4  = [[0.51,0.93],[0.51,1.55]]*.5;
     angle = sin(4*seconds())*.025;
     R = [[cos(angle),-sin(angle)],[sin(angle),cos(angle)]];
-    drawpoly(apply(boat1,R*#+(x,waterh)));
-    drawpoly(apply(boat2,R*#+(x,waterh)));
-    drawpoly(apply(boat3,R*#+(x,waterh)));
-    drawpoly(apply(boat4,R*#+(x,waterh)));
+    drawpoly(apply(boat1,R*#+(boatx,waterh)));
+    drawpoly(apply(boat2,R*#+(boatx,waterh)));
+    drawpoly(apply(boat3,R*#+(boatx,waterh)));
+    drawpoly(apply(boat4,R*#+(boatx,waterh)));
   );
-
 
   watersize = .1;
 
-
   connect(transpose([xvals,apply(xvals,x,waterh+watersize*sin(seconds())*sin(x/watersize-seconds())*0.5)]), color->[.6,.6,.3]);
-
-
 );
 
 forall(if(mode!="compute",1..length(pts),1..(length(pts)-1)), k,
@@ -378,17 +406,17 @@ forall(if(mode!="compute",1..length(pts),1..(length(pts)-1)), k,
   draw((x,y)-v,(x,y)+v,color->c);
 );
 
-drawtext(textposition, msg);
+drawtext(textposition, msg, size->15);
       </script>
   <script id="csmousedown" type="text/x-cindyscript">
-    if(mode=="select" & !autopilot & (N-length(pts))>0,
+    if(mode=="select" & !autopilot & !touch & (N-length(pts))>0,
    x = mouse().x;
    pts = pts :> x;
    mode = "compute";
    resett0();
 );
 
-if(mode=="final",
+if(mode=="final" & !touch,
   if(!autopilot,
     initpt = pts_1;
     pts = [];
@@ -428,7 +456,6 @@ if(mode == "draw",
   );
   </script>
   <script type="text/javascript">
-
     var ready = CindyJS.waitFor('i18n');
     var translations = {};
     IMAGINARY.i18n.init().then(function(lang){
@@ -461,6 +488,7 @@ if(mode == "draw",
 
 <body>
   <div id="CSCanvas"></div>
+  <script type="text/javascript" src="js/touch-controls.js"></script>
 </body>
 
 </html>
