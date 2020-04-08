@@ -1,4 +1,6 @@
 (() => {
+  let gamepad = null;
+  let gamepadButton = false;
   const params = new URLSearchParams(document.location.search.substring(1));
   if (params.get('touch') === 'true') {
     let direction = 0;
@@ -10,6 +12,29 @@
 
     let lastTimestamp = null;
     const controlLoop = (timestamp) => {
+      // Handle gamepad
+      if (gamepad !== null) {
+        const gp = navigator.getGamepads()[gamepad];
+        let newDirection = (gp.axes[0] < -0.5)
+          ? -1
+          : (gp.axes[0] > 0.5)
+            ? 1
+            : 0;
+        if (newDirection !== direction || direction === 0) {
+          acceleration = 0;
+        }
+        direction = newDirection;
+        if (gp.buttons[1].pressed || gp.buttons[2].pressed) {
+          if (!gamepadButton) {
+            cdy.evokeCS('boatprobe();');
+            gamepadButton = true;
+          }
+        } else {
+          gamepadButton = false;
+        }
+      }
+
+      // Boat movement
       if (lastTimestamp && direction !== 0) {
         const speed = minSpeed + (maxSpeed - minSpeed) * acceleration * acceleration;
         const delta = direction * speed * stepSize * (timestamp - lastTimestamp);
@@ -43,7 +68,7 @@
       cdy.evokeCS('boatprobe();');
     }
 
-    function init() {
+    function initTouchControls() {
       const controls = document.createElement('div');
       controls.classList.add('touch-controls');
 
@@ -70,6 +95,16 @@
       document.querySelector('body').appendChild(controls);
     }
 
-    init();
+    initTouchControls();
   }
+
+  window.addEventListener("gamepadconnected", function(e) {
+    console.log(`Gamepad ${e.gamepad.id} connected.`);
+    gamepad = e.gamepad.index;
+  });
+
+  window.addEventListener("gamepaddisconnected", function(e) {
+    console.log(`Gamepad ${e.gamepad.id} disconnected.`);
+    gamepad = null;
+  });
 })();
