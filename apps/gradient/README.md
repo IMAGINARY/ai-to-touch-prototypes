@@ -8,3 +8,4 @@
 - **autopilot** (boolean): If true the computer play first.
 - **draw** (boolean): If true the user can draw the bottom of the ocean before playing.
 - **touch** (boolean): If true on screen touch controls are shown.
+- **gamepad** (boolean): If true gamepad support is enabled.

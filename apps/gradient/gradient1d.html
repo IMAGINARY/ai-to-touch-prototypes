@@ -33,6 +33,8 @@
 
   <script id="csinit" type="text/x-cindyscript">
     touch = geturlparameter("touch", false);
+    gamepad = geturlparameter("gamepad", false);
+    controller = touch % gamepad;
     userdraw = geturlparameter("draw", false);
       autopilot = geturlparameter("autopilot", !userdraw);
       watertheme = geturlparameter("water", false);
@@ -237,7 +239,7 @@ if(mode=="select",
 
 
   if(!autopilot,
-    x = if(touch, boatpos, mouse().x);
+    x = if(controller, boatpos, mouse().x);
     ,
     x = if(pts==[], initpt, pts_(-1))*(1-t0()/.5) + gradientdescent()*(t0()/.5);
   );
@@ -377,7 +379,7 @@ if(mode=="final",
 
 if(watertheme,
   if(mode!="draw",
-    boatx = if(touch & !autopilot, boatpos, x);
+    boatx = if(controller & !autopilot, boatpos, x);
     boat1  = [[-2.57,0.35],[-2.2,0.35],[-2.16,0.23],[-0.16,0.19],[-0.01,0.43],[2.43,0.56],[1.97,-0.35],[-1.83,-0.32],[-1.92,-0.19],[-2.57,-0.04]]*.5;
     boat2  = [[-1.11,0.19],[-1.11,0.45],[-0.27,0.45],[-0.27,0.68],[0.36,0.68],[0.36,0.92],[0.99,0.92],[0.99,0.47],[-0.01,0.43],[-0.16,0.19]]*.5;
     boat3  = [[-0.75,0.45],[-0.65,0.92],[-0.39,0.97],[-0.39,0.45]]*.5;
@@ -409,14 +411,14 @@ forall(if(mode!="compute",1..length(pts),1..(length(pts)-1)), k,
 drawtext(textposition, msg, size->15);
       </script>
   <script id="csmousedown" type="text/x-cindyscript">
-    if(mode=="select" & !autopilot & !touch & (N-length(pts))>0,
+    if(mode=="select" & !autopilot & !controller & (N-length(pts))>0,
    x = mouse().x;
    pts = pts :> x;
    mode = "compute";
    resett0();
 );
 
-if(mode=="final" & !touch,
+if(mode=="final" & !controller,
   if(!autopilot,
     initpt = pts_1;
     pts = [];
